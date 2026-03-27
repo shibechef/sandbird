@@ -1,10 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://klgkftems2xb"]
+[gd_scene load_steps=4 format=3 uid="uid://klgkftems2xb"]
 
 [ext_resource type="Script" uid="uid://fh0543mwcy23" path="res://user/user_preferences.gd" id="1_57t2d"]
 [ext_resource type="Script" uid="uid://cj0jdwoskk87h" path="res://voxel_input/voxel_project.gd" id="1_sb2wc"]
 [ext_resource type="Script" uid="uid://pe00bjvkjlbp" path="res://voxel_visuals/mesh_system.gd" id="3_g3mpy"]
-[ext_resource type="Script" uid="uid://cmhyx88dt02dx" path="res://voxel_input/voxel_object.gd" id="4_dvsgh"]
-[ext_resource type="Material" uid="uid://b7ewvrixgo8ds" path="res://materials/debug.tres" id="5_o46e3"]
 
 [node name="VoxelProject" type="Node3D"]
 script = ExtResource("1_sb2wc")
@@ -13,14 +11,10 @@ script = ExtResource("1_sb2wc")
 unique_name_in_owner = true
 script = ExtResource("1_57t2d")
 
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24359131, 0, 0)
+size = Vector3(1.4871826, 1, 1)
+
 [node name="MeshSystem" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("3_g3mpy")
-
-[node name="Node3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2637148, 0, 4.6527133)
-script = ExtResource("4_dvsgh")
-
-[node name="CSGSphere3D" type="CSGSphere3D" parent="Node3D"]
-transform = Transform3D(0.18654722, 0, 0, 0, 0.29132724, 0, 0, 0, 0.096975625, 0.461, -0.135, -0.12)
-material = ExtResource("5_o46e3")

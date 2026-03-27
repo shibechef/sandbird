@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://klgkftems2xb"]
+
+[ext_resource type="Script" uid="uid://fh0543mwcy23" path="res://user/user_preferences.gd" id="1_57t2d"]
+[ext_resource type="Script" uid="uid://cj0jdwoskk87h" path="res://voxel_input/voxel_project.gd" id="1_sb2wc"]
+
+[node name="VoxelProject" type="Node3D"]
+script = ExtResource("1_sb2wc")
+
+[node name="ProjectPreferences" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_57t2d")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24359131, 0, 0)
+size = Vector3(1.4871826, 1, 1)

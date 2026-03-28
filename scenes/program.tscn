@@ -15,11 +15,6 @@ script = ExtResource("2_h81p0")
 
 [node name="FreeCam" type="Node" parent="CameraSystem"]
 script = ExtResource("2_5h2ur")
-speed_multiplier = null
-max_pitch = null
-min_pitch = null
-look_angles = null
-velocity = null
 
 [node name="PivotCam" type="Node" parent="CameraSystem"]
 script = ExtResource("3_h81p0")

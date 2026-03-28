@@ -37,7 +37,7 @@ func rotate_camera() -> void:
 	camera_system.rotation_degrees = Vector3(look_angles.y, look_angles.x, 0)
 
 func move_camera(delta: float) -> void:
-	var inputting = Input.is_action_pressed("cam_down") or Input.is_action_pressed("free_cam_up") or \
+	var inputting = Input.is_action_pressed("cam_down") or Input.is_action_pressed("cam_up") or \
 	Input.get_vector("cam_left", "cam_right", "cam_forward", "cam_back") != Vector2.ZERO
 	velocity = Vector3.ZERO if velocity.length() < .05 and !inputting else velocity
 	velocity += delta * linear_drag * -velocity.normalized()

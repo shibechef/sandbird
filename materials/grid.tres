@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b2m5kbt5makjk"]
+
+[ext_resource type="Shader" uid="uid://c7iovby81ibty" path="res://shaders/grid.gdshader" id="1_tdk5q"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_tdk5q")
+shader_parameter/grid_size = Vector3(2, 4, 8)
+shader_parameter/line_width = 0.105
+shader_parameter/grid_color = Vector3(0.8, 0.4, 0.95)

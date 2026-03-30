@@ -61,11 +61,6 @@ func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dict
 		var neg_x_z: float = origin.z + (AABB_lower.x - origin.x) * x_slope / z_slope
 		
 		var cols: Array[Vector3]
-		(AABB_lower.z < neg_y_z and neg_y_z < AABB_upper.z) and (AABB_lower.x < neg_y_x and neg_y_x < AABB_upper.x),
-		(AABB_lower.y < pos_z_y and pos_z_y < AABB_upper.y) and (AABB_lower.x < pos_z_x and pos_z_x < AABB_upper.x),
-		(AABB_lower.y < neg_z_y and neg_z_y < AABB_upper.y) and (AABB_lower.x < neg_z_x and neg_z_x < AABB_upper.x),
-		(AABB_lower.y < pos_x_y and pos_x_y < AABB_upper.y) and (AABB_lower.z < pos_x_z and pos_x_z < AABB_upper.z),
-		(AABB_lower.y < neg_x_y and neg_x_y < AABB_upper.y) and (AABB_lower.z < neg_x_z and neg_x_z < AABB_upper.z))
 		## Y+
 		if (AABB_lower.z < pos_y_z and pos_y_z < AABB_upper.z) and (AABB_lower.x < pos_y_x and pos_y_x < AABB_upper.x):
 			cols.append(Vector3(pos_y_x, AABB_upper.y, pos_y_z))

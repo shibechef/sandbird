@@ -6,12 +6,11 @@ render_mode unshaded, fog_disabled, ambient_light_disabled, cull_disabled, depth
 uniform vec3 grid_size = vec3(1.0);
 uniform float line_width = 0.11;
 uniform vec3 grid_color = vec3(0.8, .4, 0.95);
-uniform vec3 origin;
 
 varying vec3 vertex_uv;
 
 void vertex() {
-	vertex_uv = VERTEX - origin;
+	vertex_uv = VERTEX;
 }
 
 void fragment() {

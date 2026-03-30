@@ -25,18 +25,7 @@ func create_BB_outline() -> void:
 	outline_material.set_shader_parameter("grid_color", project_prefs.unselected_outline_color)
 	outline_material.set_shader_parameter("grid_size", dimensions)
 	outline_material.set_shader_parameter("line_width", project_prefs.outline_selection_width)
-	
-	var offset: Vector3
-	match project_prefs.object_creation_centering:
-		"base":
-			offset = -Vector3(dimensions.x, 0.0, dimensions.z) / 2.0
-		"center":
-			offset = -dimensions / 2.0
-		"corner":
-			offset = Vector3.ZERO
-			
-	outline_material.set_shader_parameter("origin", offset)
-	
+		
 	outline_object.mesh.surface_set_material(0, outline_material)
 	add_child(outline_object)
 

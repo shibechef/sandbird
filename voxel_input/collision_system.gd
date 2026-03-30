@@ -25,8 +25,8 @@ func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dict
 		z_slope = direction.y / direction.z
 			
 	for target in targets:		
-		var AABB_lower: Vector3 = targets[target][0] - targets[target][1] / 2.0
-		var AABB_upper: Vector3 = targets[target][0] + targets[target][1] / 2.0
+		var AABB_lower: Vector3 = targets[target][0]
+		var AABB_upper: Vector3 = targets[target][0] + Vector3(targets[target][1])
 		
 		## https://www.youtube.com/shorts/GqwUHXvQ7oA is a good 2D visualization
 		## y+ plane hits
@@ -95,8 +95,8 @@ func get_first_outline_col(collisions: Array[Dictionary]) -> int:
 	var best_obj: int
 	for collision in collisions:
 		var object: VoxelObject = obj_hierarchy.all_objects[collision["id"]]
-		var AABB_upper = object.position + object.dimensions / 2.0
-		var AABB_lower = object.position - object.dimensions / 2.0
+		var AABB_lower = object.position
+		var AABB_upper = object.position + Vector3(object.dimensions) * 2.0
 		
 		var cols = [collision["col_1"], collision["col_2"]]
 		for i in cols.size():

@@ -45,18 +45,9 @@ func create_voxel(origin: Vector3, starting_index: int = 0) -> Array:
 func create_box(origin: Vector3, dimensions: Vector3, starting_index: int = 0) -> Array:
 	var indices: PackedInt32Array = get_cube_indices(starting_index)
 	var vertices: PackedVector3Array 
-	
-	var offset: Vector3
-	match project_prefs.object_creation_centering:
-		"base":
-			offset = origin - Vector3(dimensions.x, 0.0, dimensions.z) / 2.0
-		"center":
-			offset = origin - dimensions / 2.0
-		"corner":
-			offset = origin
-			
+				
 	for vert in offsets:
-		vertices.append(offset + Vector3(vert.x * dimensions.x, vert.y * dimensions.y, vert.z * dimensions.z))
+		vertices.append(origin + Vector3(vert.x * dimensions.x, vert.y * dimensions.y, vert.z * dimensions.z))
 	
 	return [indices, vertices]
 

@@ -8,8 +8,6 @@ class_name ProjectPreferences
 @export var selection_outline_color: Color
 @export var outline_selection_width: float
 
-@export var object_creation_centering: String
-
 func _ready():
 	on_new_scene()
 
@@ -20,5 +18,3 @@ func on_new_scene() -> void:
 	unselected_outline_color = UserPreferences.unselected_outline_color
 	selection_outline_color = UserPreferences.selection_outline_color
 	outline_selection_width = UserPreferences.outline_selection_width
-
-	object_creation_centering = UserPreferences.object_creation_centering

@@ -35,7 +35,7 @@ unique_name_in_owner = true
 script = ExtResource("7_wapjm")
 
 [node name="Node3D2" type="Node3D" parent="Hierarchy"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -46.826725)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -97.41853)
 script = ExtResource("4_dvsgh")
 dimensions = Vector3i(16, 8, 16)
 

@@ -1,6 +1,8 @@
 extends Node
 class_name MeshSystem
 
+var project_prefs: ProjectPreferences
+
 var offsets: Array[Vector3] = [
 	Vector3(0, 0, 0),
 	Vector3(1, 0, 0),
@@ -27,6 +29,9 @@ var cube_indices: PackedInt32Array = [
 	3, 1, 5, 5, 7, 3
 ]
 
+func _ready():
+	project_prefs = get_node("%ProjectPreferences")
+
 ## Slightly stripped down box cause this is called a lot
 func create_voxel(origin: Vector3, starting_index: int = 0) -> Array:
 	var indices: PackedInt32Array = get_cube_indices(starting_index)
@@ -41,8 +46,17 @@ func create_box(origin: Vector3, dimensions: Vector3, starting_index: int = 0) -
 	var indices: PackedInt32Array = get_cube_indices(starting_index)
 	var vertices: PackedVector3Array 
 	
+	var offset: Vector3
+	match project_prefs.object_creation_centering:
+		"base":
+			offset = origin - Vector3(dimensions.x, 0.0, dimensions.z) / 2.0
+		"center":
+			offset = origin - dimensions / 2.0
+		"corner":
+			offset = origin
+			
 	for vert in offsets:
-		vertices.append(origin + Vector3(vert.x * dimensions.x, vert.y * dimensions.y, vert.z * dimensions.z))
+		vertices.append(offset + Vector3(vert.x * dimensions.x, vert.y * dimensions.y, vert.z * dimensions.z))
 	
 	return [indices, vertices]
 

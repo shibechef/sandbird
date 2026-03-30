@@ -1,21 +1,12 @@
 extends Node
 class_name CollisionSystem
 
-func _ready():
-	return
-	#var john_obj4 = [Vector3(5.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0)]
-	#var results4 = get_AABB_line_collisions(Vector3.ZERO, Vector3(1.0, 0.02, -0.01), {0: john_obj4})
-	#
-	#var john_obj = [Vector3(8.0, 4.0, 8.0), Vector3(2.0, 2.0, 2.0)]
-	#var results = get_AABB_line_collisions(Vector3.ZERO, Vector3(1.00, 0.505, 1.1), {0: john_obj})
-#
-	#var john_obj2 = [Vector3(8.0, 8.0, 8.0), Vector3(1.0, 1.0, 1.0)]
-	#var results2 = get_AABB_line_collisions(Vector3.ZERO, Vector3(1.0, .99, 1.02), {0: john_obj2})
-	#
-	###THIS IS SUCCESSFUL
-	#var john_obj3 = [Vector3(0.0, 8.0, 0.0), Vector3(1.0, 1.0, 1.0)]
-	#var results3 = get_AABB_line_collisions(Vector3.ZERO, Vector3(.05, 1.01, .01), {0: john_obj3})
+var obj_hierarchy: Hierarchy
+var project_prefs: ProjectPreferences
 
+func _ready():
+	obj_hierarchy = get_node("%Hierarchy")
+	project_prefs = get_node("%ProjectPreferences")
 
 ## 3D slab technique but by someone that forgot how to do algebra
 func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dictionary[int, Array]) -> Array[Dictionary]:
@@ -82,10 +73,51 @@ func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dict
 
 		## You can hit it once, if you are inside of the box
 		assert(cols.size() <= 2, "magically hit AABB " + str(cols.size()) + " times")
-		
+		 
 		if cols.size() == 0:
 			continue
 		
-		collisions.append({"id" = 0, "col_1" = cols[0], "col_2" = cols[1], "distance" = 2.0})
+		var dist_1: float = origin.distance_to(cols[0])
+		if cols.size() == 1:
+			collisions.append({"id" = target, "col_1" = cols[0], "distance_1" = dist_1})
+			continue
+			
+		var dist_2: float = origin.distance_to(cols[1])
+		
+		if dist_1 > dist_2:
+			collisions.append({"id" = target, "col_1" = cols[0], "col_2" = cols[1], "distance_1" = dist_1, "distance_2" = dist_2})
+		else:
+			collisions.append({"id" = target, "col_1" = cols[1], "col_2" = cols[0], "distance_1" = dist_2, "distance_2" = dist_1})
 	
 	return collisions
+
+## Do not use this for anything but voxel objects of course O_O
+func get_first_outline_col(collisions: Array[Dictionary]) -> int:
+	var margin: float = project_prefs.outline_selection_width
+	var closest_collision: float = 10000.0
+	var best_obj: int
+	for collision in collisions:
+		var object: VoxelObject = obj_hierarchy.all_objects[collision["id"]]
+		var AABB_upper = object.position + object.dimensions / 2.0
+		var AABB_lower = object.position - object.dimensions / 2.0
+		
+		var cols = [collision["col_1"], collision["col_2"]]
+		for i in cols.size():
+			var col = cols[i]
+			if (AABB_lower.x > col.x + margin or col.x - margin > AABB_upper.x or
+			AABB_lower.y > col.y + margin or col.y - margin > AABB_upper.y or
+			AABB_lower.z > col.z + margin or col.z - margin > AABB_upper.z):
+				continue
+				
+			var dist: float
+			if i == 0:
+				dist = collision["distance_1"]
+			else:
+				dist = collision["distance_2"]
+				
+			if closest_collision < dist:
+				continue
+			closest_collision = dist
+			best_obj = collision["id"]
+	
+	return best_obj

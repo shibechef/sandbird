@@ -8,4 +8,6 @@ class_name UserPreference
 @export var selection_outline_color: Color = Color.PINK
 @export var outline_selection_width: float = .11
 
+@export var object_creation_centering: String = "base"
+
 @export var free_cam_sensitivity: float = 1.0

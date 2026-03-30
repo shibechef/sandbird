@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://klgkftems2xb"]
+[gd_scene load_steps=9 format=3 uid="uid://klgkftems2xb"]
 
 [ext_resource type="Script" uid="uid://cj0jdwoskk87h" path="res://voxel_input/voxel_project.gd" id="1_sb2wc"]
 [ext_resource type="Script" uid="uid://81a2nxrx8cf5" path="res://user/project_preference.gd" id="2_dvsgh"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://cq72t00uw47bq" path="res://voxel_input/collision_system.gd" id="4_o46e3"]
 [ext_resource type="Script" uid="uid://cw07yos5ueqli" path="res://voxel_input/paint_system.gd" id="5_5ubjp"]
 [ext_resource type="Script" uid="uid://db6h5eik3hk6p" path="res://voxel_input/object_selection.gd" id="6_wapjm"]
+[ext_resource type="Script" uid="uid://b1jlrdrtghd7" path="res://voxel_input/hierarchy.gd" id="7_wapjm"]
 
 [node name="VoxelProject" type="Node3D"]
 script = ExtResource("1_sb2wc")
@@ -29,5 +30,19 @@ script = ExtResource("5_5ubjp")
 [node name="Node" type="Node" parent="."]
 script = ExtResource("6_wapjm")
 
-[node name="Node3D" type="Node3D" parent="."]
+[node name="Hierarchy" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("7_wapjm")
+
+[node name="Node3D2" type="Node3D" parent="Hierarchy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -46.826725)
+script = ExtResource("4_dvsgh")
+dimensions = Vector3i(16, 8, 16)
+
+[node name="Node3D3" type="Node3D" parent="Hierarchy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
+script = ExtResource("4_dvsgh")
+dimensions = Vector3i(35, 4, 1)
+
+[node name="Node3D" type="Node3D" parent="Hierarchy"]
 script = ExtResource("4_dvsgh")

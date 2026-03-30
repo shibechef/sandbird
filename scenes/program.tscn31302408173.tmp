@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://clulcc4a4dbod"]
+
+[ext_resource type="PackedScene" uid="uid://klgkftems2xb" path="res://scenes/voxel_project.tscn" id="1_mxm13"]
+[ext_resource type="Script" uid="uid://dw1s15v6e33gx" path="res://input/free_cam.gd" id="2_5h2ur"]
+[ext_resource type="Script" uid="uid://bfhr0cglnjbyq" path="res://input/camera_system.gd" id="2_h81p0"]
+[ext_resource type="Script" uid="uid://dqviapsa3ecm1" path="res://input/pivot_cam.gd" id="3_h81p0"]
+
+[node name="Program" type="Node3D"]
+
+[node name="VoxelProject" parent="." instance=ExtResource("1_mxm13")]
+
+[node name="CameraSystem" type="Camera3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_h81p0")
+
+[node name="FreeCam" type="Node" parent="CameraSystem"]
+script = ExtResource("2_5h2ur")
+
+[node name="PivotCam" type="Node" parent="CameraSystem"]
+script = ExtResource("3_h81p0")
+
+[node name="OrthoPivotCam" type="Node" parent="CameraSystem"]
+
+[node name="OrthoSideCam" type="Node" parent="CameraSystem"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.9041944, -0.3771116, 0.20054756, 0, 0.46953318, 0.88291484, -0.42712116, -0.7983267, 0.42454928, 0, 0, 6.043182)

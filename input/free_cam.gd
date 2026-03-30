@@ -5,9 +5,9 @@ class_name FreeCam
 var acceleration: float = 50
 var drag: float = 3.0
 var linear_drag: float = 5
-var sensitivity_multiplier: float = .5
+var sensitivity_multiplier: float = .4
 
-@export var speed_multiplier: float = .5
+@export var speed_multiplier: float = 7.0
 @export var max_pitch: float = .95
 @export var min_pitch: float = -.95
 @export var look_angles: Vector2

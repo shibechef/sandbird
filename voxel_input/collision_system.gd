@@ -36,8 +36,6 @@ func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dict
 	for target in targets:		
 		var AABB_lower: Vector3 = targets[target][0] - targets[target][1] / 2.0
 		var AABB_upper: Vector3 = targets[target][0] + targets[target][1] / 2.0
-		print(x_slope, " ", z_slope)
-		print("AABB: ", AABB_lower, AABB_upper)
 		
 		## Where the y/x and y/z components of the line hit
 		## the x line hits the z axis, the z line hits the x axis
@@ -62,12 +60,7 @@ func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dict
 		var neg_x_y: float = origin.y + x_slope * (AABB_lower.x - origin.x)
 		var neg_x_z: float = origin.z + (AABB_lower.x - origin.x) * x_slope / z_slope
 		
-		#print("Y: ", String.num(pos_y_z, 1), " ", String.num(pos_y_x, 1), " ", String.num(neg_y_z, 1), " ", String.num(neg_y_x, 1))
-		print("Z: ", String.num(pos_z_y, 1), " ", String.num(pos_z_x, 1), " ", String.num(neg_z_y, 1), " ", String.num(neg_z_x, 1))
-		print("X: ", String.num(pos_x_y, 1), " ", String.num(pos_x_z, 1), " ", String.num(neg_x_y, 1), " ", String.num(neg_x_z, 1))
-
 		var cols: Array[Vector3]
-		print((AABB_lower.z < pos_y_z and pos_y_z < AABB_upper.z) and (AABB_lower.x < pos_y_x and pos_y_x < AABB_upper.x),
 		(AABB_lower.z < neg_y_z and neg_y_z < AABB_upper.z) and (AABB_lower.x < neg_y_x and neg_y_x < AABB_upper.x),
 		(AABB_lower.y < pos_z_y and pos_z_y < AABB_upper.y) and (AABB_lower.x < pos_z_x and pos_z_x < AABB_upper.x),
 		(AABB_lower.y < neg_z_y and neg_z_y < AABB_upper.y) and (AABB_lower.x < neg_z_x and neg_z_x < AABB_upper.x),
@@ -95,7 +88,6 @@ func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dict
 		## You can hit it once, if you are inside of the box
 		assert(cols.size() <= 2, "magically hit AABB " + str(cols.size()) + " times")
 		
-		print("COLLISIONS: ", cols)
 		if cols.size() == 0:
 			continue
 		

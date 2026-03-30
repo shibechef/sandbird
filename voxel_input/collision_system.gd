@@ -28,10 +28,7 @@ func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dict
 		var AABB_lower: Vector3 = targets[target][0] - targets[target][1] / 2.0
 		var AABB_upper: Vector3 = targets[target][0] + targets[target][1] / 2.0
 		
-		## Where the y/x and y/z components of the line hit
-		## the x line hits the z axis, the z line hits the x axis
 		## https://www.youtube.com/shorts/GqwUHXvQ7oA is a good 2D visualization
-		
 		## y+ plane hits
 		var pos_y_z: float = (AABB_upper.y - origin.y) / z_slope + origin.z
 		var pos_y_x: float = (AABB_upper.y - origin.y) / x_slope + origin.x

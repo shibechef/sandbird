@@ -33,5 +33,6 @@ func _process(delta):
 		if result[0].has("col_2"):
 			col2.position = result[0]["col_2"]
 
-	#var hit_obj = collision_system.get_first_outline_col(result)
-	#print(hit_obj)
+	var hit_obj: int = collision_system.get_first_outline_col(result)
+	if hit_obj != 0:
+		hierarchy.all_objects[hit_obj].toggle_selection(true)

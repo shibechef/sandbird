@@ -37,6 +37,7 @@ func toggle_selection(selected: bool) -> void:
 		outline_material.set_shader_parameter("grid_color", project_prefs.selection_outline_color)
 	else:
 		outline_material.set_shader_parameter("grid_color", project_prefs.unselected_outline_color)
+	outline_object.mesh.surface_set_material(0, outline_material)
 
 func toggle_outline(on: bool) -> void:
 	if on:

@@ -67,6 +67,11 @@ func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dict
 		## X-
 		if (AABB_lower.y < neg_x_y and neg_x_y < AABB_upper.y) and (AABB_lower.z < neg_x_z and neg_x_z < AABB_upper.z):
 			cols.append(Vector3(AABB_lower.x, neg_x_y, neg_x_z))
+		
+		## Don't hit things behind you as lines travel both ways
+		for i in range(cols.size() - 1, -1, -1):
+			if (origin - cols[i]).normalized().dot(direction.normalized()) < 0.0:
+				cols.remove_at(i)
 
 		## You can hit it once, if you are inside of the box
 		assert(cols.size() <= 2, "magically hit AABB " + str(cols.size()) + " times")
@@ -90,22 +95,29 @@ func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dict
 
 ## Do not use this for anything but voxel objects of course O_O
 func get_first_outline_col(collisions: Array[Dictionary]) -> int:
-	var margin: float = project_prefs.outline_selection_width
+	var margin: float = max(project_prefs.outline_selection_width * 1.1, 1.0)
 	var closest_collision: float = 10000.0
 	var best_obj: int
 	for collision in collisions:
 		var object: VoxelObject = obj_hierarchy.all_objects[collision["id"]]
 		var AABB_lower = object.position
-		var AABB_upper = object.position + Vector3(object.dimensions) * 2.0
+		var AABB_upper = object.position + Vector3(object.dimensions)
 		
-		var cols = [collision["col_1"], collision["col_2"]]
+		var cols = [collision["col_1"]]
+		if collision.has("col_2"):
+			cols.append(collision["col_2"])
+			
 		for i in cols.size():
 			var col = cols[i]
-			if (AABB_lower.x > col.x + margin or col.x - margin > AABB_upper.x or
-			AABB_lower.y > col.y + margin or col.y - margin > AABB_upper.y or
-			AABB_lower.z > col.z + margin or col.z - margin > AABB_upper.z):
+			var near: int = 0
+			near += int(AABB_lower.x > col.x - margin or col.x + margin > AABB_upper.x)
+			near += int(AABB_lower.y > col.y - margin or col.y + margin > AABB_upper.y)
+			near += int(AABB_lower.z > col.z - margin or col.z + margin > AABB_upper.z)
+			
+			## Needs to be near 2 axises to be a corner
+			if near < 2:
 				continue
-				
+			
 			var dist: float
 			if i == 0:
 				dist = collision["distance_1"]
@@ -114,7 +126,8 @@ func get_first_outline_col(collisions: Array[Dictionary]) -> int:
 				
 			if closest_collision < dist:
 				continue
+				
 			closest_collision = dist
 			best_obj = collision["id"]
-	
+			
 	return best_obj

@@ -1,38 +1,48 @@
 extends Node
 class_name ObjectSelectionSystem
 
-var currently_selected_objects: Array[VoxelObject]
+var currently_selected_objects: Dictionary[int, VoxelObject]
 
 var collision_system: CollisionSystem
 var camera_system: CameraSystem
 var hierarchy: Hierarchy
 
-var col1: Node3D = CSGSphere3D.new()
-var col2: Node3D = CSGSphere3D.new()
-
 func _ready():
 	camera_system = get_parent().get_parent().get_node("%CameraSystem")
 	collision_system = get_node("%CollisionSystem")
 	hierarchy = get_node("%Hierarchy")
-	add_child(col1)
-	add_child(col2)
-
-## testing shitcode
-func _process(delta):
-	var result: Array[Dictionary]
-	if Input.is_action_just_pressed("select"):
-		var objs: Dictionary[int, Array]
-		for obj in hierarchy.all_objects:
-			objs[obj] = [hierarchy.all_objects[obj].position, hierarchy.all_objects[obj].dimensions]
-		result = collision_system.get_AABB_line_collisions(camera_system.position, camera_system.get_global_transform().basis.z, objs)
-	else:
-		return
 	
-	if !result.is_empty():
-		col1.position = result[0]["col_1"]
-		if result[0].has("col_2"):
-			col2.position = result[0]["col_2"]
+func _process(delta):
+	if Input.is_action_just_pressed("select"):
+		try_click()
 
+func try_click() -> void:
+	if !Input.is_action_pressed("select_several") && !Input.is_action_pressed("select_one"):
+		deselect_all()
+	
+	var result: Array[Dictionary]
+	var objs: Dictionary[int, Array]
+	for obj in hierarchy.all_objects:
+		objs[obj] = [hierarchy.all_objects[obj].position, hierarchy.all_objects[obj].dimensions]
+	
+	var click_data = get_parent().get_node("%WorldClick").get_mouse_world_pos()
+	
+	result = collision_system.get_AABB_line_collisions(click_data[0], click_data[1], objs)
+	
 	var hit_obj: int = collision_system.get_first_outline_col(result)
 	if hit_obj != 0:
-		hierarchy.all_objects[hit_obj].toggle_selection(true)
+		select_object(hit_obj)
+
+func select_object(id: int) -> void:
+	if Input.is_action_pressed("select_one") && currently_selected_objects.has(id):
+		hierarchy.all_objects[id].toggle_selection(false)
+		currently_selected_objects.erase(id)
+		return
+	
+	hierarchy.all_objects[id].toggle_selection(true)
+	currently_selected_objects[id] = hierarchy.all_objects[id]
+
+func deselect_all() -> void:
+	for id in currently_selected_objects:
+		currently_selected_objects[id].toggle_selection(false)
+	currently_selected_objects.clear()

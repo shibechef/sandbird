@@ -12,10 +12,6 @@ func _ready():
 	collision_system = get_node("%CollisionSystem")
 	hierarchy = get_node("%Hierarchy")
 	
-func _process(delta):
-	if Input.is_action_just_pressed("select"):
-		try_click()
-
 func try_click() -> void:
 	if !Input.is_action_pressed("select_several") && !Input.is_action_pressed("select_one"):
 		deselect_all()
@@ -46,3 +42,16 @@ func deselect_all() -> void:
 	for id in currently_selected_objects:
 		currently_selected_objects[id].toggle_selection(false)
 	currently_selected_objects.clear()
+
+func hide_unselected_borders() -> void:
+	for id in hierarchy.all_objects:
+		if currently_selected_objects.has(id):
+			continue
+		var obj: VoxelObject = hierarchy.all_objects[id]
+		obj.outline_object.hide()
+
+func unhide_all_borders() -> void:
+	for id in hierarchy.all_objects:
+		var obj: VoxelObject = hierarchy.all_objects[id]
+		obj.outline_object.show()
+	

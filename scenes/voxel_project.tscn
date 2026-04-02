@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://klgkftems2xb"]
+[gd_scene load_steps=10 format=3 uid="uid://klgkftems2xb"]
 
 [ext_resource type="Script" uid="uid://cj0jdwoskk87h" path="res://voxel_input/voxel_project.gd" id="1_sb2wc"]
 [ext_resource type="Script" uid="uid://81a2nxrx8cf5" path="res://user/project_preference.gd" id="2_dvsgh"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cmhyx88dt02dx" path="res://voxel_input/voxel_object.gd" id="4_dvsgh"]
 [ext_resource type="Script" uid="uid://cq72t00uw47bq" path="res://voxel_input/collision_system.gd" id="4_o46e3"]
 [ext_resource type="Script" uid="uid://cw07yos5ueqli" path="res://voxel_input/paint_system.gd" id="5_5ubjp"]
+[ext_resource type="Script" uid="uid://cm1ndittglsvb" path="res://input/input_manager.gd" id="5_55qs4"]
 [ext_resource type="Script" uid="uid://db6h5eik3hk6p" path="res://voxel_input/object_selection.gd" id="6_wapjm"]
 [ext_resource type="Script" uid="uid://b1jlrdrtghd7" path="res://voxel_input/hierarchy.gd" id="7_wapjm"]
 
@@ -24,10 +25,16 @@ script = ExtResource("3_g3mpy")
 unique_name_in_owner = true
 script = ExtResource("4_o46e3")
 
+[node name="InputManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_55qs4")
+
 [node name="PaintSystem" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("5_5ubjp")
 
-[node name="Node" type="Node" parent="."]
+[node name="ObjectSelectionSystem" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("6_wapjm")
 
 [node name="Hierarchy" type="Node" parent="."]

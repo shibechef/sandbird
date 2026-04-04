@@ -131,3 +131,10 @@ func get_first_outline_col(collisions: Array[Dictionary]) -> int:
 			best_obj = collision["id"]
 			
 	return best_obj
+
+func is_within_AABB(point: Vector3i, AABB_lower: Vector3i, AABB_higher: Vector3i) -> bool:
+	if (AABB_lower.x > point.x or point.x > AABB_higher.x or
+	 AABB_lower.y > point.y or point.y > AABB_higher.y or
+	 AABB_lower.y > point.z or point.z > AABB_higher.z):
+		return false
+	return true

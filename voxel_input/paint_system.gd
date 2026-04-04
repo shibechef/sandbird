@@ -10,7 +10,35 @@ func _ready():
 
 func try_click() -> void:
 	var position: Vector3 = get_collision_pos()
-	print(position)
+	get_adjusted_tiles(position)
+
+func paint_tiles(tiles: Array[Vector3i]) -> void:
+	var object_importance_order: Array[VoxelObject]
+	var object_importance_dict: Dictionary[VoxelObject, int]
+	for id in object_selection.currently_selected_objects:
+		var obj = object_selection.currently_selected_objects[id]
+		if id == object_selection.highest_priority_selection:
+			object_importance_dict[obj] = 0
+		else:
+			object_importance_dict[obj] = object_selection.currently_selected_objects[id].dimensions.length_squared()
+	
+	object_importance_dict.sort()
+	object_importance_order = object_importance_dict.keys()
+	
+	for tile in tiles:
+		## check if this tile is in the highest priority grid, otherwise do the smallest grid -> biggest grid that it's in
+		for selected_obj in object_importance_order:
+			var pos = Vector3i(selected_obj.position)
+			if collision_system.is_within_AABB(tile, pos, pos + selected_obj.dimensions):
+				paint_tile(tile, pos)
+			
+
+func paint_tile(tile: Vector3i, object: VoxelData) -> void:
+	print(tile, " ", object)
+
+func get_adjusted_tiles(paint_position: Vector3i) -> Array[Vector3i]:
+	## For now!
+	return [paint_position]
 
 func get_collision_pos() -> Vector3i:
 	var closest_collision: Vector3i

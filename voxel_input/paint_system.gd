@@ -39,7 +39,6 @@ func paint_tile(tile: Vector3i, object: VoxelObject) -> void:
 	var voxel_data: VoxelData = VoxelData.new()
 	voxel_data.material_reference = 0
 	object.voxel_grid[tile] = voxel_data
-	print(object.voxel_grid)
 
 func get_adjusted_tiles(paint_position: Vector3i) -> Array[Vector3i]:
 	## For now!

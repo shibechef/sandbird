@@ -2,7 +2,7 @@ extends Node3D
 class_name VoxelObject
 
 @export var voxel_grid: Dictionary[Vector3i, VoxelData]
-@export var dimensions: Vector3i = Vector3(32, 8, 16)
+@export var dimensions: Vector3i
 @export var outline_material = preload("res://materials/grid.tres")
 
 @export var outline_object: Node3D
@@ -11,12 +11,16 @@ var project_prefs: ProjectPreferences
 var mesh_system: MeshSystem
 
 func on_created() -> void:
-	dimensions = get_node("%ScenePreferences").default_object_size
+	dimensions = project_prefs.default_object_size
 
-func _ready():
-	mesh_system = get_node("%MeshSystem")
-	project_prefs = get_node("%ProjectPreferences")
+func _ready():	
+	mesh_system = get_parent().get_node("%MeshSystem")
+	project_prefs = get_parent().get_node("%ProjectPreferences")
 	outline_material = outline_material.duplicate()
+	
+	if dimensions == Vector3i.ZERO:
+		dimensions = project_prefs.default_object_size
+	
 	create_BB_outline()
 
 func create_BB_outline() -> void:

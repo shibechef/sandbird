@@ -6,10 +6,12 @@ class_name InputManager
 
 var selection_system: ObjectSelectionSystem
 var paint_system: PaintSystem
+var creation_system: ObjectCreationSystem
 
 func _ready():
 	selection_system = get_node("%ObjectSelectionSystem")
 	paint_system = get_node("%PaintSystem")
+	creation_system = get_node("%ObjectCreationSystem")
 
 func _process(delta):
 	handle_interaction()
@@ -26,6 +28,9 @@ func handle_interaction() -> void:
 	if interaction_mode == InteractionMode.object:
 		if Input.is_action_just_pressed("select"):
 			selection_system.try_click()
+	if Input.is_action_just_pressed("create_new_object"):
+		creation_system.create_new_object()
+		
 	elif interaction_mode == InteractionMode.voxel:
 		if Input.is_action_just_pressed("select"):
 			paint_system.try_click()

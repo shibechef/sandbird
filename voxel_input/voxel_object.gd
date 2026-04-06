@@ -44,3 +44,6 @@ func toggle_outline(on: bool) -> void:
 		outline_object.show()
 	else:
 		outline_object.hide()
+
+func edit_voxel(coords: Vector3i, material: Material, unique: bool = true):
+	return

@@ -10,7 +10,8 @@ func _ready():
 
 func try_click() -> void:
 	var position: Vector3 = get_collision_pos()
-	get_adjusted_tiles(position)
+	var tiles = get_adjusted_tiles(position)
+	paint_tiles(tiles)
 
 func paint_tiles(tiles: Array[Vector3i]) -> void:
 	var object_importance_order: Array[VoxelObject]
@@ -30,11 +31,15 @@ func paint_tiles(tiles: Array[Vector3i]) -> void:
 		for selected_obj in object_importance_order:
 			var pos = Vector3i(selected_obj.position)
 			if collision_system.is_within_AABB(tile, pos, pos + selected_obj.dimensions):
-				paint_tile(tile, pos)
+				var local_space = tile - pos
+				paint_tile(local_space, selected_obj)
 			
 
-func paint_tile(tile: Vector3i, object: VoxelData) -> void:
-	print(tile, " ", object)
+func paint_tile(tile: Vector3i, object: VoxelObject) -> void:
+	var voxel_data: VoxelData = VoxelData.new()
+	voxel_data.material_reference = 0
+	object.voxel_grid[tile] = voxel_data
+	print(object.voxel_grid)
 
 func get_adjusted_tiles(paint_position: Vector3i) -> Array[Vector3i]:
 	## For now!

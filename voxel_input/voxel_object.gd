@@ -28,7 +28,8 @@ func _ready():
 
 func create_BB_outline() -> void:
 	var mesh_data = mesh_system.create_box(Vector3.ZERO, dimensions)
-	outline_object = mesh_system.create_mesh_instance(mesh_data[0], mesh_data[1])
+	outline_object = mesh_system.create_mesh_instance(mesh_data)
+	print(mesh_data)
 	outline_material.set_shader_parameter("grid_color", project_prefs.unselected_outline_color)
 	outline_material.set_shader_parameter("grid_size", dimensions)
 	outline_material.set_shader_parameter("line_width", project_prefs.outline_selection_width)

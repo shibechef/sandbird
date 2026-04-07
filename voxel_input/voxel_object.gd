@@ -7,9 +7,8 @@ class_name VoxelObject
 
 @export var outline_object: Node3D
 
-@export var visual_mesh_grids: Dictionary[Vector3i, Dictionary]
+@export var visual_mesh_grids: Dictionary[Vector3i, ArrayMesh]
 @export var visual_offset: Vector3i
-
 
 var project_prefs: ProjectPreferences
 var mesh_system: MeshSystem
@@ -38,9 +37,13 @@ func create_BB_outline() -> void:
 	add_child(outline_object)
 
 func on_size_change() -> void:
+	## Needs to change the mesh offset
+	
 	create_BB_outline()
 	
 func toggle_selection(selected: bool) -> void:
+	## Need to redo all effected edge chunk meshes
+	
 	if selected:
 		outline_material.set_shader_parameter("grid_color", project_prefs.selection_outline_color)
 	else:

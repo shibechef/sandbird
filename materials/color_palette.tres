@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://dcndt1kov3l77"]
+
+[ext_resource type="Shader" uid="uid://b212dtvlhkifu" path="res://shaders/color_palette.gdshader" id="1_r5ttl"]
+
+[sub_resource type="Gradient" id="Gradient_mbd8w"]
+offsets = PackedFloat32Array(0, 0.54347825, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.15013623, 0.0030878584, 0.08880594, 1, 0.094674684, 0.40236807, 0.3511511, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0tiq4"]
+gradient = SubResource("Gradient_mbd8w")
+fill_from = Vector2(0.62616825, 0.27102804)
+fill_to = Vector2(0.20093457, 0.76635516)
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_r5ttl")
+shader_parameter/color_palette_tex = SubResource("GradientTexture2D_0tiq4")

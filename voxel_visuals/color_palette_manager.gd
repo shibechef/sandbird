@@ -5,6 +5,9 @@ var all_palettes: Dictionary[String, VoxelColorPalette]
 ## For finding which palette a color belongs to quickly
 var palette_by_color: Dictionary[int, String]
 
+var currently_selected_palette: int
+var currently_selected_UVs: Array[int]
+
 func add_new_color(palette: VoxelColorPalette) -> void:
 	var id = randi()
 	while palette.has(id):

@@ -25,11 +25,13 @@ func _ready():
 		dimensions = project_prefs.default_object_size
 	
 	create_BB_outline()
+	
+	if !voxel_grid.is_empty():
+		mesh_system.generate_chunk_meshes(dimensions, voxel_grid)
 
 func create_BB_outline() -> void:
 	var mesh_data = mesh_system.create_box(Vector3.ZERO, dimensions)
 	outline_object = mesh_system.create_mesh_instance(mesh_data)
-	print(mesh_data)
 	outline_material.set_shader_parameter("grid_color", project_prefs.unselected_outline_color)
 	outline_material.set_shader_parameter("grid_size", dimensions)
 	outline_material.set_shader_parameter("line_width", project_prefs.outline_selection_width)

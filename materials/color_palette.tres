@@ -8,8 +8,9 @@ colors = PackedColorArray(0, 0, 0, 1, 0.15013623, 0.0030878584, 0.08880594, 1, 0
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_0tiq4"]
 gradient = SubResource("Gradient_mbd8w")
-fill_from = Vector2(0.62616825, 0.27102804)
-fill_to = Vector2(0.20093457, 0.76635516)
+height = 1
+fill_from = Vector2(0.63917524, 1)
+fill_to = Vector2(0.16494845, 0)
 
 [resource]
 render_priority = 0

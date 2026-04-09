@@ -1,6 +1,7 @@
 extends Resource
 class_name PaletteColor
 
-var color: Color
-var uv_index: int
-var parent_uv_index: int = -1
+@export var color: Color
+var id: int
+var parent_id: int = -1
+@export var current_uv_index: int

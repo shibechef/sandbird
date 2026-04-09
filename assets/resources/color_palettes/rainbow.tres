@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="VoxelColorPalette" load_steps=10 format=3 uid="uid://ce3m077vbf1hg"]
+
+[ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="1_g256n"]
+[ext_resource type="Script" uid="uid://c4cxqovgpocot" path="res://voxel_visuals/palette_color.gd" id="1_uw4dn"]
+[ext_resource type="Material" uid="uid://dcndt1kov3l77" path="res://materials/color_palette.tres" id="2_q7h0j"]
+
+[sub_resource type="Resource" id="Resource_q7h0j"]
+script = ExtResource("1_uw4dn")
+color = Color(0.85490197, 0.21568628, 0.21176471, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_ahkma"]
+script = ExtResource("1_uw4dn")
+color = Color(0.8862745, 0.4745098, 0, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_afnbf"]
+script = ExtResource("1_uw4dn")
+color = Color(0.8669961, 0.8366127, 0.42738742, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_xwo0n"]
+script = ExtResource("1_uw4dn")
+color = Color(0.21080884, 0.8419087, 0.211243, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_f23kq"]
+script = ExtResource("1_uw4dn")
+color = Color(0.29922208, 0.5077467, 0.86921954, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_paus5"]
+script = ExtResource("1_uw4dn")
+color = Color(0.5057815, 0.5168111, 0.9883327, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[resource]
+script = ExtResource("1_g256n")
+name = "rainbow"
+material = ExtResource("2_q7h0j")
+colors = Dictionary[int, ExtResource("1_uw4dn")]({
+-1140: SubResource("Resource_q7h0j"),
+-935: SubResource("Resource_paus5"),
+-125: SubResource("Resource_f23kq"),
+170: SubResource("Resource_afnbf"),
+275: SubResource("Resource_ahkma"),
+2690: SubResource("Resource_xwo0n")
+})
+metadata/_custom_type_script = "uid://ciubgxcnuov46"

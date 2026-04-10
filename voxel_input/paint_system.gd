@@ -3,10 +3,14 @@ class_name PaintSystem
 
 var object_selection: ObjectSelectionSystem
 var collision_system: CollisionSystem
+var palette_manager: ColorPaletteManager
+var mesh_system: MeshSystem
 
 func _ready():
 	object_selection = get_node("%ObjectSelectionSystem")
 	collision_system = get_node("%CollisionSystem")
+	palette_manager = get_node("%ColorPaletteManager")
+	mesh_system = get_node("%MeshSystem")
 
 func try_click() -> void:
 	var position: Vector3 = get_collision_pos()
@@ -37,8 +41,12 @@ func paint_tiles(tiles: Array[Vector3i]) -> void:
 
 func paint_tile(tile: Vector3i, object: VoxelObject) -> void:
 	var voxel_data: VoxelData = VoxelData.new()
-	voxel_data.material_reference = 0
+	for face in voxel_data.face_colors:
+		face.color_id = palette_manager.get_current_color()
+		face.palette_id = palette_manager.palette_by_color[face.color_id]
 	object.voxel_grid[tile] = voxel_data
+	
+	mesh_system.generate_chunk_meshes(object.dimensions, object.voxel_grid)
 
 func get_adjusted_tiles(paint_position: Vector3i) -> Array[Vector3i]:
 	## For now!

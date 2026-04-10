@@ -46,12 +46,19 @@ func handle_interaction() -> void:
 func handle_color_selection_inputs() -> void:
 	if !Input.is_action_just_released("color_selection"):
 		return
-	
+		
 	if color_palette_manager.currently_selected_palette == 0:
 		return
 	var palette: VoxelColorPalette = color_palette_manager.all_palettes[color_palette_manager.currently_selected_palette]
 	
-	var color_num = int(number_selection_sequence)
+	var color_num = int(number_selection_sequence) - 1
+	if color_num < 0:
+		color_num = 10
+	
+	if palette.color_order.size() <= color_num:
+		## Maybe an out of bounds popup here
+		return
+		
 	var color_id: int = palette.color_order[color_num]
 	
 	if Input.is_action_pressed("select_one"):
@@ -64,6 +71,7 @@ func handle_color_selection_inputs() -> void:
 			color_palette_manager.currently_selected_colors.append(color_id)
 	else:
 		color_palette_manager.currently_selected_colors = [color_id]
+	print(color_palette_manager.currently_selected_colors)
 		
 func save_number_input_chain() -> void:
 	## Get any other action like moving or resizing

@@ -9,19 +9,9 @@ script = ExtResource("1_uw4dn")
 color = Color(0.85490197, 0.21568628, 0.21176471, 1)
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
-[sub_resource type="Resource" id="Resource_ahkma"]
+[sub_resource type="Resource" id="Resource_paus5"]
 script = ExtResource("1_uw4dn")
-color = Color(0.8862745, 0.4745098, 0, 1)
-metadata/_custom_type_script = "uid://c4cxqovgpocot"
-
-[sub_resource type="Resource" id="Resource_afnbf"]
-script = ExtResource("1_uw4dn")
-color = Color(0.8669961, 0.8366127, 0.42738742, 1)
-metadata/_custom_type_script = "uid://c4cxqovgpocot"
-
-[sub_resource type="Resource" id="Resource_xwo0n"]
-script = ExtResource("1_uw4dn")
-color = Color(0.21080884, 0.8419087, 0.211243, 1)
+color = Color(0.5057815, 0.5168111, 0.9883327, 1)
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_f23kq"]
@@ -29,15 +19,26 @@ script = ExtResource("1_uw4dn")
 color = Color(0.29922208, 0.5077467, 0.86921954, 1)
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
-[sub_resource type="Resource" id="Resource_paus5"]
+[sub_resource type="Resource" id="Resource_afnbf"]
 script = ExtResource("1_uw4dn")
-color = Color(0.5057815, 0.5168111, 0.9883327, 1)
+color = Color(0.8669961, 0.8366127, 0.42738742, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_ahkma"]
+script = ExtResource("1_uw4dn")
+color = Color(0.8862745, 0.4745098, 0, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_xwo0n"]
+script = ExtResource("1_uw4dn")
+color = Color(0.21080884, 0.8419087, 0.211243, 1)
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [resource]
 script = ExtResource("1_g256n")
 name = "rainbow"
 material = ExtResource("2_q7h0j")
+id = 1
 colors = Dictionary[int, ExtResource("1_uw4dn")]({
 -1140: SubResource("Resource_q7h0j"),
 -935: SubResource("Resource_paus5"),
@@ -46,4 +47,5 @@ colors = Dictionary[int, ExtResource("1_uw4dn")]({
 275: SubResource("Resource_ahkma"),
 2690: SubResource("Resource_xwo0n")
 })
+color_order = Array[int]([-1140, -935, -125, 170, 275, 2690])
 metadata/_custom_type_script = "uid://ciubgxcnuov46"

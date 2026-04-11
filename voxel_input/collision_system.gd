@@ -132,6 +132,47 @@ func get_first_outline_col(collisions: Array[Dictionary]) -> int:
 			
 	return best_obj
 
+## https://web.archive.org/web/20121024081332/www.xnawiki.com/index.php?title=Voxel_traversal
+func get_grid_traversal_collisions(origin: Vector3, direction: Vector3, grids: Array[Dictionary], distance: float, col_max: int = 1) -> Array[Vector3i]:
+	var step: Vector3i = sign(direction)
+	direction = direction.normalized()
+	var end_pos: Vector3i = Vector3i(origin + direction * distance)
+	
+	var max: Vector3 = Vector3(
+		(1 if step.x == 1 else 0 - origin.x) / direction.x,
+		(1 if step.y == 1 else 0 - origin.y) / direction.y,
+		(1 if step.z == 1 else 0 - origin.z) / direction.z)
+	if is_nan(step.x): step.x = INF
+	if is_nan(step.y): step.y = INF
+	if is_nan(step.z): step.z = INF
+	
+	var delta: Vector3 = Vector3(
+		step.x / direction.x,
+		step.y / direction.y,
+		step.z / direction.z)
+	if is_nan(delta.x): delta.x = INF
+	if is_nan(delta.y): delta.y = INF
+	if is_nan(delta.z): delta.z = INF
+	
+	var current_pos: Vector3i = origin
+	var cols: Array[Vector3i]
+	
+	while current_pos != end_pos or cols.size() == col_max:
+		if max.x < max.y and max.x < max.z:
+			current_pos.x += step.x
+			max.x += delta.x
+		elif max.y < max.z:
+			current_pos.y += step.y
+			max.y += delta.y
+		else:
+			current_pos.z += step.z
+			max.z += delta.z
+		
+		for grid: Dictionary[Vector3i, VoxelData] in grids:
+			if grid.has(current_pos):
+				cols.append(current_pos)
+	return cols
+
 func is_within_AABB(point: Vector3i, AABB_lower: Vector3i, AABB_higher: Vector3i) -> bool:
 	if (AABB_lower.x > point.x or point.x > AABB_higher.x or
 	 AABB_lower.y > point.y or point.y > AABB_higher.y or

@@ -7,8 +7,9 @@ class_name VoxelObject
 
 @export var outline_object: Node3D
 
-@export var visual_mesh_grids: Dictionary[Vector3i, ArrayMesh]
-@export var visual_offset: Vector3i
+var visual_mesh_grids: Dictionary[Vector3i, ArrayMesh]
+var visual_offset: Vector3i
+var edited_chunks: Array[Vector3]
 
 var project_prefs: ProjectPreferences
 var mesh_system: MeshSystem

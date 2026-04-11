@@ -59,7 +59,7 @@ currently_selected_palette = 1
 unique_name_in_owner = true
 script = ExtResource("15_tnig6")
 
-[node name="Hierarchy" type="Node" parent="."]
+[node name="Hierarchy" type="Node3D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("7_wapjm")
 

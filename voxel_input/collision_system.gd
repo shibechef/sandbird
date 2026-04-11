@@ -86,7 +86,7 @@ func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dict
 			
 		var dist_2: float = origin.distance_to(cols[1])
 		
-		if dist_1 > dist_2:
+		if dist_1 < dist_2:
 			collisions.append({"id" = target, "col_1" = cols[0], "col_2" = cols[1], "distance_1" = dist_1, "distance_2" = dist_2})
 		else:
 			collisions.append({"id" = target, "col_1" = cols[1], "col_2" = cols[0], "distance_1" = dist_2, "distance_2" = dist_1})

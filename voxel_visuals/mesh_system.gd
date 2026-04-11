@@ -73,14 +73,12 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 		mesh_arrays.resize(Mesh.ARRAY_MAX)
 		mesh_arrays[Mesh.ARRAY_VERTEX] = mesh_vertex_list[surface]
 		mesh_arrays[Mesh.ARRAY_TEX_UV] = mesh_UV_list[surface]
-
+		
 		array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_arrays)
 		
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.mesh = array_mesh
-	
-	print("SURFACE COUNT: ", array_mesh.get_surface_count())
-		
+			
 	return mesh_instance
 
 ## Slightly stripped down box cause this is called a lot

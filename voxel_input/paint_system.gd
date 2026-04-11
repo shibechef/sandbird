@@ -46,10 +46,13 @@ func paint_tile(tile: Vector3i, object: VoxelObject) -> void:
 		face.palette_id = palette_manager.palette_by_color[face.color_id]
 	object.voxel_grid[tile] = voxel_data
 	
+	print(tile)
+	
+	## for now!
 	var meshes = mesh_system.generate_chunk_meshes(object.dimensions, object.voxel_grid)
-	for mesh_pos: Vector3i in meshes:
-		var mesh: MeshInstance3D = meshes[mesh_pos]
-		add_child(mesh)
+	for chunk_pos: Vector3i in meshes:
+		var mesh: MeshInstance3D = meshes[chunk_pos]
+		object.add_child(mesh)
 
 
 func get_adjusted_tiles(paint_position: Vector3i) -> Array[Vector3i]:
@@ -71,7 +74,7 @@ func get_collision_pos() -> Vector3i:
 	
 	
 	
-	## Bound box collision if nothing is before it
+	## Bounding box collision if nothing is before it
 	var furthest_distance: float = -1.0
 	var furthest_point: Vector3
 	

@@ -17,6 +17,9 @@ var mesh_system: MeshSystem
 func on_created() -> void:
 	dimensions = project_prefs.default_object_size
 
+func _process(delta):
+	update_mesh_chunks()
+
 func _ready():	
 	mesh_system = get_parent().get_node("%MeshSystem")
 	project_prefs = get_parent().get_node("%ProjectPreferences")
@@ -27,10 +30,20 @@ func _ready():
 	
 	create_BB_outline()
 	
-	if !voxel_grid.is_empty():
-		var meshes = mesh_system.generate_chunk_meshes(dimensions, voxel_grid)
-		for mesh in meshes:
-			add_child(mesh)
+	create_mesh_grid()
+
+func create_mesh_grid() -> void:
+	visual_mesh_grids.clear()
+	
+	var meshes = mesh_system.generate_chunk_meshes(dimensions, voxel_grid)
+	for chunk_pos in meshes:
+		var mesh: MeshInstance3D = meshes[chunk_pos]
+		add_child(mesh)
+
+func update_mesh_chunks() -> void:
+	for chunk in edited_chunks:
+		continue
+		#mesh_system.get_chunk_mesh()
 
 func create_BB_outline() -> void:
 	var mesh_data = mesh_system.create_box(Vector3.ZERO, dimensions)

@@ -27,7 +27,9 @@ func _ready():
 	create_BB_outline()
 	
 	if !voxel_grid.is_empty():
-		mesh_system.generate_chunk_meshes(dimensions, voxel_grid)
+		var meshes = mesh_system.generate_chunk_meshes(dimensions, voxel_grid)
+		for mesh in meshes:
+			add_child(mesh)
 
 func create_BB_outline() -> void:
 	var mesh_data = mesh_system.create_box(Vector3.ZERO, dimensions)

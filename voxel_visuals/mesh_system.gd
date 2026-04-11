@@ -62,17 +62,18 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 						mesh_vertex_list[face_color.palette_id] = PackedVector3Array()
 						mesh_UV_list[face_color.palette_id] = PackedVector2Array()
 					
-					mesh_vertex_list[face_color.palette_id].append_array(get_face_array(n))
-					mesh_UV_list[face_color.palette_id].append_array([face_color.color_id, 0])
-	
+					mesh_vertex_list[face_color.palette_id].append_array(get_face_array(n, pos))
+					mesh_UV_list[face_color.palette_id].append_array(
+						[face_color.color_id, face_color.color_id, face_color.color_id, face_color.color_id, face_color.color_id, face_color.color_id])
+		
 	var array_mesh = ArrayMesh.new()
-	var mesh_arrays: Array = [] 
-	mesh_arrays.resize(Mesh.ARRAY_MAX)
 			
 	for surface in mesh_vertex_list:
+		var mesh_arrays: Array = [] 
+		mesh_arrays.resize(Mesh.ARRAY_MAX)
 		mesh_arrays[Mesh.ARRAY_VERTEX] = mesh_vertex_list[surface]
 		mesh_arrays[Mesh.ARRAY_TEX_UV] = mesh_UV_list[surface]
-		
+
 		array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_arrays)
 		
 	var mesh_instance = MeshInstance3D.new()
@@ -99,11 +100,12 @@ func create_box(origin: Vector3, dimensions: Vector3) -> PackedVector3Array:
 	
 	return vertices
 
-func get_face_array(face_num: int) -> PackedVector3Array:
+func get_face_array(face_num: int, origin: Vector3) -> PackedVector3Array:
 	assert(face_num >= 0 and face_num < 8, " face " + str(face_num) + " is out of bounds")
+	face_num *= 6
 	return PackedVector3Array([
-		cube_vertices[face_num], cube_vertices[face_num + 1], cube_vertices[face_num + 2], 
-		cube_vertices[face_num + 3], cube_vertices[face_num + 4], cube_vertices[face_num + 5]])
+		cube_vertices[face_num] + origin, cube_vertices[face_num + 1] + origin, cube_vertices[face_num + 2] + origin, 
+		cube_vertices[face_num + 3] + origin, cube_vertices[face_num + 4] + origin, cube_vertices[face_num + 5] + origin])
 		
 
 ## Bottom left, bottom right, top right, top left

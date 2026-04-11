@@ -71,7 +71,6 @@ func handle_color_selection_inputs() -> void:
 			color_palette_manager.currently_selected_colors.append(color_id)
 	else:
 		color_palette_manager.currently_selected_colors = [color_id]
-	print(color_palette_manager.currently_selected_colors)
 		
 func save_number_input_chain() -> void:
 	## Get any other action like moving or resizing

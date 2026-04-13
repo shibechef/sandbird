@@ -102,6 +102,7 @@ func save_number_input_chain() -> void:
 
 func enter_edit_mode() -> void:
 	interaction_mode = InteractionMode.voxel
+	selection_system.deselect_all_but_recent()
 	selection_system.hide_unselected_borders()
 
 func enter_object_mode() -> void:

@@ -2,7 +2,6 @@ extends Node
 class_name ObjectSelectionSystem
 
 var currently_selected_objects: Dictionary[int, VoxelObject]
-var highest_priority_selection: int
 
 var collision_system: CollisionSystem
 var camera_system: CameraSystem
@@ -38,15 +37,18 @@ func select_object(id: int) -> void:
 		currently_selected_objects.erase(id)
 		return
 		
-	highest_priority_selection = id
 	object.toggle_selection(true)
 	currently_selected_objects[id] = object
+
+func deselect_all_but_recent() -> void:
+	var last_selected: VoxelObject = currently_selected_objects[currently_selected_objects.keys().back()]
+	currently_selected_objects.clear()
+	currently_selected_objects[last_selected.get_instance_id()] = last_selected
 
 func deselect_all() -> void:
 	for id in currently_selected_objects:
 		currently_selected_objects[id].toggle_selection(false)
 	currently_selected_objects.clear()
-	highest_priority_selection = 0
 
 func hide_unselected_borders() -> void:
 	for id in hierarchy.all_objects:

@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://pe00bjvkjlbp" path="res://voxel_visuals/mesh_system.gd" id="3_g3mpy"]
 [ext_resource type="Script" uid="uid://cmhyx88dt02dx" path="res://voxel_input/voxel_object.gd" id="4_dvsgh"]
 [ext_resource type="Script" uid="uid://cq72t00uw47bq" path="res://voxel_input/collision_system.gd" id="4_o46e3"]
-[ext_resource type="Script" uid="uid://cw07yos5ueqli" path="res://voxel_input/paint_system.gd" id="5_5ubjp"]
+[ext_resource type="Script" uid="uid://cw07yos5ueqli" path="res://voxel_painting/paint_system.gd" id="5_5ubjp"]
 [ext_resource type="Script" uid="uid://cm1ndittglsvb" path="res://input/input_manager.gd" id="5_55qs4"]
 [ext_resource type="Script" uid="uid://db6h5eik3hk6p" path="res://voxel_input/object_selection.gd" id="6_wapjm"]
 [ext_resource type="Script" uid="uid://b1jlrdrtghd7" path="res://voxel_input/hierarchy.gd" id="7_wapjm"]
@@ -27,13 +27,15 @@ script = ExtResource("2_dvsgh")
 unique_name_in_owner = true
 script = ExtResource("3_g3mpy")
 
-[node name="CollisionSystem" type="Node" parent="."]
+[node name="SceneCollision" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_o46e3")
 
 [node name="InputManager" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5_55qs4")
+interaction_mode = null
+focus_mode = null
 
 [node name="PaintSystem" type="Node" parent="."]
 unique_name_in_owner = true

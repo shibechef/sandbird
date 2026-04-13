@@ -125,3 +125,7 @@ func create_mesh_instance(vertices: PackedVector3Array, UVs: PackedVector2Array 
 	mesh_instance.mesh = array_mesh
 	
 	return mesh_instance
+
+func get_chunk_pos(pos: Vector3i, offset: Vector3i) -> Vector3i:
+	var chunk_pos: Vector3 = Vector3(pos + offset) / project_prefs.mesh_chunk_size
+	return Vector3i(floori(chunk_pos.x), floori(chunk_pos.x), floori(chunk_pos.x))

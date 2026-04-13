@@ -9,7 +9,7 @@ func _ready():
 	project_prefs = get_node("%ProjectPreferences")
 
 ## 3D slab technique but by someone that forgot how to do algebra
-func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dictionary[int, Array]) -> Array[Dictionary]:
+static func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dictionary[int, Array]) -> Array[Dictionary]:
 	var collisions: Array[Dictionary]
 
 	var x_slope: float
@@ -70,7 +70,7 @@ func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dict
 		
 		## Don't hit things behind you as lines travel both ways
 		for i in range(cols.size() - 1, -1, -1):
-			if (origin - cols[i]).normalized().dot(direction.normalized()) < 0.0:
+			if (origin - cols[i]).normalized().dot(direction.normalized()) > 0.0:
 				cols.remove_at(i)
 
 		## You can hit it once, if you are inside of the box
@@ -133,47 +133,61 @@ func get_first_outline_col(collisions: Array[Dictionary]) -> int:
 	return best_obj
 
 ## https://web.archive.org/web/20121024081332/www.xnawiki.com/index.php?title=Voxel_traversal
-func get_grid_traversal_collisions(origin: Vector3, direction: Vector3, grids: Array[Dictionary], distance: float, col_max: int = 1) -> Array[Vector3i]:
+static func get_grid_traversal_collisions(origin: Vector3, direction: Vector3, grid: Dictionary[Vector3i, VoxelData], distance: float, previous: bool = true, col_max: int = 1) -> Array[Vector3i]:
 	var step: Vector3i = sign(direction)
 	direction = direction.normalized()
-	var end_pos: Vector3i = Vector3i(origin + direction * distance)
 	
 	var max: Vector3 = Vector3(
-		(1 if step.x == 1 else 0 - origin.x) / direction.x,
-		(1 if step.y == 1 else 0 - origin.y) / direction.y,
-		(1 if step.z == 1 else 0 - origin.z) / direction.z)
-	if is_nan(step.x): step.x = INF
-	if is_nan(step.y): step.y = INF
-	if is_nan(step.z): step.z = INF
-	
+		(1.0 if step.x == 1 else 0.0) / direction.x,
+		(1.0 if step.y == 1 else 0.0) / direction.y,
+		(1.0 if step.z == 1 else 0.0) / direction.z)
+	if is_nan(max.x): max.x = INF
+	if is_nan(max.y): max.y = INF
+	if is_nan(max.z): max.z = INF
+	max = abs(max)
+		
 	var delta: Vector3 = Vector3(
-		step.x / direction.x,
-		step.y / direction.y,
-		step.z / direction.z)
+		float(step.x) / direction.x,
+		float(step.y) / direction.y,
+		float(step.z) / direction.z)
 	if is_nan(delta.x): delta.x = INF
 	if is_nan(delta.y): delta.y = INF
 	if is_nan(delta.z): delta.z = INF
 	
-	var current_pos: Vector3i = origin
-	var cols: Array[Vector3i]
+	var goal: Vector3 = abs(Vector3(origin + delta * distance))
 	
-	while current_pos != end_pos or cols.size() == col_max:
+	var current_pos: Vector3i = origin
+	var last_pos: Vector3i
+	
+	var cols: Array[Vector3i]
+		
+	while cols.size() < col_max or col_max == 0:
+		last_pos = current_pos
 		if max.x < max.y and max.x < max.z:
 			current_pos.x += step.x
 			max.x += delta.x
+			if abs(current_pos.x) > goal.x:
+				break
 		elif max.y < max.z:
 			current_pos.y += step.y
 			max.y += delta.y
+			if abs(current_pos.y) > goal.y:
+				break
 		else:
 			current_pos.z += step.z
 			max.z += delta.z
+			if abs(current_pos.z) > goal.z:
+				break
 		
-		for grid: Dictionary[Vector3i, VoxelData] in grids:
-			if grid.has(current_pos):
+		if grid.has(current_pos) or col_max == 0:
+			if previous:
+				cols.append(last_pos)
+			else:
 				cols.append(current_pos)
+				
 	return cols
 
-func is_within_AABB(point: Vector3i, AABB_lower: Vector3i, AABB_higher: Vector3i) -> bool:
+static func is_within_AABB(point: Vector3i, AABB_lower: Vector3i, AABB_higher: Vector3i) -> bool:
 	if (AABB_lower.x > point.x or point.x > AABB_higher.x or
 	 AABB_lower.y > point.y or point.y > AABB_higher.y or
 	 AABB_lower.z > point.z or point.z > AABB_higher.z):

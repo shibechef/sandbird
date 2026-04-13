@@ -30,6 +30,3 @@ script = ExtResource("5_xnlas")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.9041944, -0.3771116, 0.20054756, 0, 0.46953318, 0.88291484, -0.42712116, -0.7983267, 0.42454928, 0, 0, 6.043182)
-
-[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.2183895)

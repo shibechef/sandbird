@@ -50,10 +50,13 @@ func update_mesh_chunks() -> void:
 		var AABB_upper: Vector3i = AABB_lower + Vector3i.ONE * project_prefs.mesh_chunk_size
 		visual_mesh_chunks[chunk] = mesh_system.get_chunk_mesh(AABB_lower, AABB_upper, voxel_grid, visual_offset)
 
-func add_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
+func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
 	for pos in voxels:
 		if !collision_system.is_within_AABB(pos, position, Vector3i(position) + dimensions):
 			continue
+			
+		if voxels[pos] == null and voxel_grid.has(pos):
+			voxel_grid.erase(pos)
 		
 		var mesh_chunk = mesh_system.get_chunk_number()
 		if !edited_chunks.has(mesh_chunk):

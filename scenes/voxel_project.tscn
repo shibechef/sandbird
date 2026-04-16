@@ -27,7 +27,7 @@ script = ExtResource("2_dvsgh")
 unique_name_in_owner = true
 script = ExtResource("3_g3mpy")
 
-[node name="SceneCollision" type="Node" parent="."]
+[node name="CollisionSystem" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_o46e3")
 

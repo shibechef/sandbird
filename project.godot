@@ -18,6 +18,7 @@ config/features=PackedStringArray("4.5", "GL Compatibility")
 UserPreferences="*res://user/user_preferences.gd"
 ProjectManager="*res://user/project_manager.gd"
 CurrentScene="*res://voxel_input/current_scene.gd"
+FileReader="*res://user/file_reader.gd"
 
 [input]
 

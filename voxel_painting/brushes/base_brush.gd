@@ -2,6 +2,8 @@ extends Resource
 class_name BaseBrush
 
 @export var depth: float = 300.0
+@export var inspector_name: String
+@export var inspector_color: Color
 
 func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject) -> Dictionary[Vector3i, VoxelData]:
 	var voxels: Dictionary[Vector3i, VoxelData]
@@ -27,3 +29,9 @@ func get_first_border_collision(origin: Vector3, direction: Vector3, object: Vox
 	else:
 		return result[0]["col_1"]
 		
+func get_monochrome_voxel(voxel: VoxelData, color: VoxelColor) -> VoxelData:
+	for face in voxel.face_colors:
+		face.color_id = color.color_id
+		face.palette_id = color.palette_id
+	
+	return voxel

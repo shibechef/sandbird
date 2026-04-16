@@ -36,7 +36,6 @@ metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [resource]
 script = ExtResource("1_g256n")
-name = "rainbow"
 material = ExtResource("2_q7h0j")
 id = 1
 colors = Dictionary[int, ExtResource("1_uw4dn")]({

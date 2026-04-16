@@ -1,6 +1,7 @@
 extends Node
 class_name ColorPaletteManager
 
+@export var palette_paths: Dictionary[String, String]
 @export var all_palettes: Dictionary[int, VoxelColorPalette]
 var palettes_by_order: Array[int]
 ## For finding which palette a color belongs to quickly
@@ -12,16 +13,7 @@ var currently_selected_colors: Array[int]
 @export var currently_selected_palette: int
 
 func _ready():
-	for palette_id in all_palettes:
-		if !palettes_by_order.has(palette_id):
-			palettes_by_order.append(palette_id)
-		
-		var palette = all_palettes[palette_id]
-		for color_id in palette.colors:
-			palette_by_color[color_id] = palette_id
-
-	var first_palette = all_palettes[palettes_by_order[0]]
-	currently_selected_colors.append(first_palette.color_order[0])
+	ready_palettes()
 
 func get_current_color() -> int:
 	return currently_selected_colors[randi_range(0, currently_selected_colors.size() - 1)]
@@ -47,9 +39,21 @@ func add_new_palette() -> void:
 	while all_palettes.has(palette_name):
 		palette_name = str(int(palette_name) + 1)
 	new_palette.name = palette_name
+	new_palette.id = id
 	
 	all_palettes[id] = new_palette
 	add_new_color(new_palette)
 
 func delete_palette(palette_id: int) -> void:
 	all_palettes.erase(palette_id)
+
+func ready_palettes() -> void:
+	palette_paths = FileReader.get_brushes()
+	
+	for palette_id in all_palettes:
+		if !palettes_by_order.has(palette_id):
+			palettes_by_order.append(palette_id)
+		
+		var palette = all_palettes[palette_id]
+		for color_id in palette.colors:
+			palette_by_color[color_id] = palette_id

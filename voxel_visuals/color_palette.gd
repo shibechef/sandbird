@@ -1,7 +1,7 @@
 extends Resource
 class_name VoxelColorPalette
 
-@export var name: String
+@export var palette_name: String
 @export var material: Material
 @export var id: int
 @export var colors: Dictionary[int, PaletteColor]

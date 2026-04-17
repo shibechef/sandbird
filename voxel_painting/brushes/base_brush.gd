@@ -1,13 +1,12 @@
 extends Resource
 class_name BaseBrush
 
+@export var named_as: String
 @export var depth: float = 300.0
-@export var inspector_name: String
-@export var inspector_color: Color
 
 func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject) -> Dictionary[Vector3i, VoxelData]:
 	var voxels: Dictionary[Vector3i, VoxelData]
-	assert(false, " brush " + resource_name + " using default logic!!")
+	assert(false, "brush " + resource_name + " using default logic!!")
 	
 	return voxels
 

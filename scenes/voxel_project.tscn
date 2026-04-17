@@ -81,3 +81,11 @@ script = ExtResource("4_dvsgh")
 [node name="CSGBox3D" type="CSGBox3D" parent="Hierarchy"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 122.323)
 material = ExtResource("12_1kmbx")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

@@ -1,0 +1,17 @@
+{
+	"BaseBrush":
+		{
+			"inspector name": "Base Brush",
+			"texture file path": ""
+		},
+	"PointBrush":
+		{
+			"inspector name": "Regular Brush",
+			"texture file path": ""
+		},
+	"BeamBrush":
+		{
+			"inspector name": "Beam Brush",
+			"texture file path": ""
+		}
+}

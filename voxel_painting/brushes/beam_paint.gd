@@ -1,7 +1,5 @@
 extends BaseBrush
-class_name RailgunBrush
-
-## Genuinely stupid name but it reminds me of a railgun!!
+class_name BeamBrush
 
 @export var size: float = 1.0
 

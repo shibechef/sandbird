@@ -1,38 +1,33 @@
-[gd_scene load_steps=5 format=3 uid="uid://b02bj4xvnsmrq"]
+[gd_scene load_steps=6 format=3 uid="uid://b02bj4xvnsmrq"]
 
 [ext_resource type="Theme" uid="uid://d36i1d6pb5k2f" path="res://UI/data/text_theme.tres" id="1_rv7sa"]
-[ext_resource type="StyleBox" uid="uid://0olhqqyc1w1i" path="res://UI/data/amazing_style_box.tres" id="2_y6k63"]
 
-[sub_resource type="Gradient" id="Gradient_uqi68"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rilc8"]
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_d7xkp"]
-gradient = SubResource("Gradient_uqi68")
-width = 234
-height = 159
-fill_to = Vector2(0.7056075, 0.5364133)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rilc8"]
 
-[node name="BrushVisual" type="Control"]
+[sub_resource type="Gradient" id="Gradient_rv7sa"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.32098764, 0.67901236)
+colors = PackedColorArray(0, 0, 0, 1, 0.1583412, 0.009129164, 0.19589639, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_y6k63"]
+gradient = SubResource("Gradient_rv7sa")
+
+[node name="PaletteVisual" type="Control"]
 layout_mode = 3
-anchor_right = 0.031000001
-anchor_bottom = 0.056
-offset_right = 0.2879982
-offset_bottom = -0.288002
-grow_horizontal = 2
-grow_vertical = 2
+size_flags_vertical = 4
 theme = ExtResource("1_rv7sa")
+metadata/_edit_use_anchors_ = true
 
 [node name="Button" type="Button" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.94400007
-anchor_bottom = 0.94400007
-offset_right = 84.016
-offset_bottom = 0.01599884
-theme_override_styles/normal = ExtResource("2_y6k63")
-theme_override_styles/pressed = ExtResource("2_y6k63")
-theme_override_styles/hover = ExtResource("2_y6k63")
-theme_override_styles/disabled = ExtResource("2_y6k63")
-theme_override_styles/focus = ExtResource("2_y6k63")
+offset_right = 80.0
+offset_bottom = 16.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_rilc8")
+theme_override_styles/hover = SubResource("StyleBoxFlat_rilc8")
 
 [node name="MarginContainer" type="MarginContainer" parent="Button"]
 layout_mode = 1
@@ -49,5 +44,5 @@ theme_override_constants/margin_bottom = 2
 [node name="Texture" type="TextureRect" parent="Button/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-texture = SubResource("GradientTexture2D_d7xkp")
+texture = SubResource("GradientTexture1D_y6k63")
 expand_mode = 2

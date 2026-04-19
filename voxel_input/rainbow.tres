@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="VoxelColorPalette" load_steps=9 format=3 uid="uid://cbg2adg0o3gib"]
+
+[ext_resource type="Script" uid="uid://c4cxqovgpocot" path="res://voxel_visuals/palette_color.gd" id="1_35t6x"]
+[ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="2_ktowp"]
+
+[sub_resource type="Resource" id="Resource_35t6x"]
+script = ExtResource("1_35t6x")
+color = Color(0.95869654, 0.11914294, 0.22591347, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_ktowp"]
+script = ExtResource("1_35t6x")
+color = Color(0.9754825, 0.43699265, 0.3161142, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_h2jqh"]
+script = ExtResource("1_35t6x")
+color = Color(0.9813599, 0.76669145, 0.37475014, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_f1y3n"]
+script = ExtResource("1_35t6x")
+color = Color(0.3711128, 0.82195354, 0.40580273, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_7sxrp"]
+script = ExtResource("1_35t6x")
+color = Color(0.31599018, 0.69691014, 0.8881332, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_cs361"]
+script = ExtResource("1_35t6x")
+color = Color(0.5556567, 0.33022225, 0.76278734, 1)
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[resource]
+script = ExtResource("2_ktowp")
+palette_name = "gaybow"
+id = 5151
+colors = Dictionary[int, ExtResource("1_35t6x")]({
+11111: SubResource("Resource_f1y3n"),
+41416: SubResource("Resource_7sxrp"),
+52525: SubResource("Resource_35t6x"),
+72472: SubResource("Resource_h2jqh"),
+77237: SubResource("Resource_ktowp"),
+734743: SubResource("Resource_cs361")
+})
+metadata/_custom_type_script = "uid://ciubgxcnuov46"

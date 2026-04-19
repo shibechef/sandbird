@@ -10,8 +10,8 @@ func refresh_available_brushes():
 
 ## No native yaml support. i cry.
 func cache_brush_metadata() -> void:
-	var path := "res://UI/brush_inspector_data.json"
-	var text := FileAccess.get_file_as_string(path)
+	var path: String = "res://UI/brush_inspector_data.json"
+	var text: String = FileAccess.get_file_as_string(path)
 	var json := JSON.new()
 	
 	var error = json.parse(text)

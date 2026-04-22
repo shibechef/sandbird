@@ -20,6 +20,11 @@ ProjectManager="*res://user/project_manager.gd"
 CurrentScene="*res://voxel_input/current_scene.gd"
 FileReader="*res://user/file_reader.gd"
 
+[display]
+
+window/size/viewport_width=2560
+window/size/viewport_height=1440
+
 [input]
 
 free_cam_look={

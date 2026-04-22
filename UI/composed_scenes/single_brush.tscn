@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://dkpe87xxdua08"]
+[gd_scene load_steps=3 format=3 uid="uid://dkpe87xxdua08"]
 
 [ext_resource type="Theme" uid="uid://d36i1d6pb5k2f" path="res://UI/data/text_theme.tres" id="1_6r84c"]
-[ext_resource type="StyleBox" uid="uid://0olhqqyc1w1i" path="res://UI/data/empty_style_box.tres" id="2_k8q2m"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_3xogv"]
 size = Vector2(32, 32)
@@ -20,11 +19,6 @@ theme = ExtResource("1_6r84c")
 layout_mode = 0
 offset_right = 36.0
 offset_bottom = 36.0
-theme_override_styles/normal = ExtResource("2_k8q2m")
-theme_override_styles/pressed = ExtResource("2_k8q2m")
-theme_override_styles/hover = ExtResource("2_k8q2m")
-theme_override_styles/disabled = ExtResource("2_k8q2m")
-theme_override_styles/focus = ExtResource("2_k8q2m")
 
 [node name="MarginContainer" type="MarginContainer" parent="Button"]
 layout_mode = 0

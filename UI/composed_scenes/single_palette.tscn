@@ -16,6 +16,7 @@ gradient = SubResource("Gradient_rv7sa")
 
 [node name="PaletteVisual" type="Control"]
 layout_mode = 3
+anchors_preset = 0
 size_flags_vertical = 4
 theme = ExtResource("1_rv7sa")
 metadata/_edit_use_anchors_ = true

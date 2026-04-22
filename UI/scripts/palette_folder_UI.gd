@@ -13,10 +13,14 @@ func _ready():
 	v_box = get_node("%VBox")
 	refresh_available_brushes()
 	refresh_UI()
-	var text = RadialMenu.create_texture(90.0, .4, .4)
+	
+	var resolution: float = 4.0
+	var text = RadialMenu.create_texture(resolution, 40.0, .4, .2, .5)
 	var sprite = Sprite2D.new()
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	sprite.texture = text
 	sprite.position = Vector2(500.0, 500.0)
+	sprite.scale *= 5.0 / resolution
 	add_child(sprite)
 
 func refresh_available_brushes() -> void:

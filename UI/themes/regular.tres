@@ -1,0 +1,10 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dl8xa7speql3q"]
+
+[ext_resource type="FontFile" uid="uid://dcy5iy52pir2s" path="res://UI/font/UncutSans-Regular.otf" id="1_afoaw"]
+
+[resource]
+default_font = ExtResource("1_afoaw")
+default_font_size = 100
+Label/colors/font_color = Color(0, 0, 0, 1)
+Label/colors/font_outline_color = Color(1, 1, 1, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 1)

@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://cjsn4j2sjhnlo"]
+
+[ext_resource type="FontFile" uid="uid://bgqra73vy23m3" path="res://UI/font/UncutSans-Medium.otf" id="1_ibblo"]
+
+[resource]
+default_font = ExtResource("1_ibblo")
+default_font_size = 100

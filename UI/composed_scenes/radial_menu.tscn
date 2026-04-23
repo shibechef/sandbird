@@ -13,3 +13,6 @@ offset_bottom = 271.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_h4c4a")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2

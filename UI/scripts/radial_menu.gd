@@ -5,32 +5,27 @@ class_name RadialMenu
 @export var incomplete_rings: bool = true
 
 ## None of these options really work as they all change other properties!
-@export var wheel_size: float = 3.0
-@export var text_size: int = 300
+@export var wheel_size: float = 2.0
+@export var text_size: int = 500
 @export var hole_size: float = 1.0
 @export var thickness: float = 0.6
 @export var gap_percent: float = 8.0
-@export var selected_outline_thickness = .01
+@export var selected_outline_thickness = .015
 
 func _ready():
-	make_children(64)
+	make_children(32)
 	scale *= 50.0 / text_size * wheel_size
 
-var angle: float
+func button_pressed(index: int):
+	print(index)
 
-func _process(delta):
-	for child in get_children():
-		continue
-		angle += delta * .01
-		child.scale = Vector2(abs(cos(angle)), abs(cos(angle))) * 10.0
-		#child.rotation += delta
+func button_hovered(index: int):
+	print(index)
 
 func make_children(amount: int) -> void:	
 	var children: Array[TextureButton]
 	for i in amount: 
 		var butt = TextureButton.new()
-		var random_col = Color(randf(), randf(), randf())
-		butt.modulate = random_col
 		children.append(butt)
 		add_child(butt)
 
@@ -41,14 +36,12 @@ func make_children(amount: int) -> void:
 	var adjusted_scale: float
 	var current_ring: float = 0.0
 	var current_index: int = 0
-	
-	var img = create_image(text_size, 360.0 / max_ring_size, hole_size, thickness, Color.WHITE, Color.BLACK, 0.0)
-	
+		
 	for i in amount:
 		if current_index == 0:
 			var in_current_ring: float = min(amount - max_ring_size * current_ring, max_ring_size)
 			angle = 360.0 / in_current_ring
-			var adjusted_outline_thickness: float = selected_outline_thickness / (1 + current_ring)
+			var adjusted_outline_thickness: float = selected_outline_thickness / (2 + current_ring)
 			var adjusted_hole_size: float = hole_size + (gap_percent / 100.0 + thickness) * (1 + current_ring)
 			adjusted_scale = (adjusted_hole_size + thickness) * 2
 			var adjusted_angle: float = angle - gap_percent / 2.0 / (1 + current_ring)
@@ -58,12 +51,20 @@ func make_children(amount: int) -> void:
 			texture = ImageTexture.create_from_image(normal_image)
 			selected_texture = ImageTexture.create_from_image(selected_image)
 			selection_bitmap = BitMap.new()
-			selection_bitmap.create_from_image_alpha(normal_image, .2)
+			selection_bitmap.create_from_image_alpha(normal_image)
 		
 		var child: TextureButton = children[i]
 		child.texture_normal = texture
 		child.texture_hover = selected_texture
 		child.texture_click_mask = selection_bitmap
+		
+		var random_col = Color(randf(), randf(), randf())
+		#butt.modulate = random_col
+		child.material = load("res://materials/replace_UI_color.tres")
+		child.set_instance_shader_parameter("white_replacement", random_col)
+		child.set_instance_shader_parameter("black_replacement", Vector3(0.0, 0.0, 0.0))
+		child.pressed.connect(button_pressed.bind(i))
+		child.mouse_entered.connect(button_hovered.bind(i))
 		
 		var current_angle = current_index * deg_to_rad(angle)
 		child.pivot_offset = child.texture_normal.get_size() / 2.0
@@ -73,7 +74,6 @@ func make_children(amount: int) -> void:
 		if angle != 360.0:
 			child.position = distance * Vector2(cos(current_angle), sin(current_angle)) * adjusted_scale
 		child.scale *= adjusted_scale
-		print(child.scale)
 		
 		current_index += 1
 		if current_index == max_ring_size:
@@ -113,7 +113,6 @@ static func create_image(text_size: int, angle: float, distance: float, thicknes
 			elif dist < 0:
 				color = Color(inside_color, 1.0)				
 			else:
-				#color = Color(Color.ORANGE, 0.0)				
 				continue
 			image.set_pixel(x + text_size / 2, y + text_size / 2 + adjusted_y, color)
 		

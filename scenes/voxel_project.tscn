@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://klgkftems2xb"]
+[gd_scene load_steps=18 format=3 uid="uid://klgkftems2xb"]
 
 [ext_resource type="Script" uid="uid://cj0jdwoskk87h" path="res://voxel_input/voxel_project.gd" id="1_sb2wc"]
 [ext_resource type="Script" uid="uid://81a2nxrx8cf5" path="res://user/project_preference.gd" id="2_dvsgh"]
@@ -14,7 +14,9 @@
 [ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="10_2l07e"]
 [ext_resource type="Resource" uid="uid://ce3m077vbf1hg" path="res://assets/resources/color_palettes/rainbow.tres" id="11_tnig6"]
 [ext_resource type="Material" uid="uid://dcndt1kov3l77" path="res://materials/color_palette.tres" id="12_1kmbx"]
+[ext_resource type="Script" uid="uid://ctyp21ixuvmen" path="res://input/color_selection_input.gd" id="13_gqylq"]
 [ext_resource type="Script" uid="uid://cvfpnpo0eu04j" path="res://voxel_input/edit_logging.gd" id="15_tnig6"]
+[ext_resource type="Script" uid="uid://sou14aoubqus" path="res://UI/scripts/UI_manager.gd" id="17_dhmkn"]
 
 [node name="VoxelProject" type="Node3D"]
 script = ExtResource("1_sb2wc")
@@ -55,11 +57,14 @@ script = ExtResource("9_6fg1y")
 all_palettes = Dictionary[int, ExtResource("10_2l07e")]({
 1: ExtResource("11_tnig6")
 })
-currently_selected_palette = 1
 
 [node name="EditLogger" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("15_tnig6")
+
+[node name="ColorSelectionInput" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("13_gqylq")
 
 [node name="Hierarchy" type="Node3D" parent="."]
 unique_name_in_owner = true
@@ -89,3 +94,4 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("17_dhmkn")

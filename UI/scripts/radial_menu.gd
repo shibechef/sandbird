@@ -12,15 +12,18 @@ class_name RadialMenu
 @export var gap_percent: float = 8.0
 @export var selected_outline_thickness = .015
 
+signal on_press
+signal on_hover
+
 func _ready():
 	make_children(32)
 	scale *= 50.0 / text_size * wheel_size
 
 func button_pressed(index: int):
-	print(index)
+	on_press.emit(index)
 
 func button_hovered(index: int):
-	print(index)
+	on_hover.emit(index)
 
 func make_children(amount: int) -> void:	
 	var children: Array[TextureButton]
@@ -62,7 +65,7 @@ func make_children(amount: int) -> void:
 		#butt.modulate = random_col
 		child.material = load("res://materials/replace_UI_color.tres")
 		child.set_instance_shader_parameter("white_replacement", random_col)
-		child.set_instance_shader_parameter("black_replacement", Vector3(0.0, 0.0, 0.0))
+		child.set_instance_shader_parameter("black_replacement", UserPreferences.unselected_outline_color)
 		child.pressed.connect(button_pressed.bind(i))
 		child.mouse_entered.connect(button_hovered.bind(i))
 		

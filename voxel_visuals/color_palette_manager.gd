@@ -8,15 +8,9 @@ var palettes_by_order: Array[int]
 var palette_by_color: Dictionary[int, int]
 
 var currently_selected_colors: Array[int]
-## Only for selecting colors with keys
-## Also maybe have UI showing color numbers after selecting a palette
-@export var currently_selected_palette: int
 
 func _ready():
 	ready_palettes()
-
-func get_current_color() -> int:
-	return currently_selected_colors[randi_range(0, currently_selected_colors.size() - 1)]
 
 func add_new_color(palette: VoxelColorPalette) -> void:
 	var id = randi()

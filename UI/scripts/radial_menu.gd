@@ -16,7 +16,6 @@ signal on_press
 signal on_hover
 
 func _ready():
-	make_children(32)
 	scale *= 50.0 / text_size * wheel_size
 
 func button_pressed(index: int):
@@ -25,8 +24,10 @@ func button_pressed(index: int):
 func button_hovered(index: int):
 	on_hover.emit(index)
 
-func make_children(amount: int) -> void:	
+func make_children(colors: Array[Color]) -> void:	
+	var amount = colors.size()
 	var children: Array[TextureButton]
+	
 	for i in amount: 
 		var butt = TextureButton.new()
 		children.append(butt)
@@ -39,7 +40,7 @@ func make_children(amount: int) -> void:
 	var adjusted_scale: float
 	var current_ring: float = 0.0
 	var current_index: int = 0
-		
+	
 	for i in amount:
 		if current_index == 0:
 			var in_current_ring: float = min(amount - max_ring_size * current_ring, max_ring_size)
@@ -61,10 +62,10 @@ func make_children(amount: int) -> void:
 		child.texture_hover = selected_texture
 		child.texture_click_mask = selection_bitmap
 		
-		var random_col = Color(randf(), randf(), randf())
-		#butt.modulate = random_col
+		var color = colors[i]
+		
 		child.material = load("res://materials/replace_UI_color.tres")
-		child.set_instance_shader_parameter("white_replacement", random_col)
+		child.set_instance_shader_parameter("white_replacement", color)
 		child.set_instance_shader_parameter("black_replacement", UserPreferences.unselected_outline_color)
 		child.pressed.connect(button_pressed.bind(i))
 		child.mouse_entered.connect(button_hovered.bind(i))

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="VoxelColorPalette" load_steps=10 format=3 uid="uid://ce3m077vbf1hg"]
+[gd_resource type="Resource" script_class="VoxelColorPalette" format=3 uid="uid://ce3m077vbf1hg"]
 
 [ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="1_g256n"]
 [ext_resource type="Script" uid="uid://c4cxqovgpocot" path="res://voxel_visuals/palette_color.gd" id="1_uw4dn"]

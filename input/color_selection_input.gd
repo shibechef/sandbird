@@ -7,9 +7,22 @@ var palette_UIs: Dictionary[int, RadialMenu]
 ## Only for selecting colors with keys
 @export var currently_selected_palette: int
 
-func add_palette_UI(palette: int, menu: RadialMenu):
-	palette_UIs[palette] = menu
+func _ready():
+	manager = get_node("%ColorPaletteManager")
+
+func add_palette_UI(palette_id: int, menu: RadialMenu):
+	palette_UIs[palette_id] = menu
+
+	var colors: Array[Color]
+	var palette = manager.all_palettes[palette_id]
+		
+	for color_id in palette.color_order:
+		colors.append(palette.colors[color_id].color)
+	
+	menu.make_children(colors)
+	
 	menu.on_press.connect(press_UI_button)
+
 
 func press_UI_button(id: int) -> void:
 	print(id)

@@ -43,4 +43,3 @@ func refresh_UI() -> void:
 		
 		add_child(palette_UI)
 		
-		print(palette.colors)

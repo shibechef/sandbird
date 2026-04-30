@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://hfkxg126virg"]
+[gd_scene format=3 uid="uid://hfkxg126virg"]
 
 [ext_resource type="Script" uid="uid://cjxd4idknlynl" path="res://UI/scripts/radial_menu.gd" id="1_h4c4a"]
 
-[node name="RadialMenu" type="Container"]
+[node name="RadialMenu" type="Container" unique_id=12413051]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,6 +13,3 @@ offset_bottom = 271.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_h4c4a")
-
-[node name="Button" type="Button" parent="."]
-layout_mode = 2

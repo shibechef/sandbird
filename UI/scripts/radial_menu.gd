@@ -31,6 +31,8 @@ func make_children(colors: Dictionary[int, Color]) -> void:
 	for i in amount: 
 		var butt = TextureButton.new()
 		butt.toggle_mode = true
+		butt.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
+		butt.focus_mode = Control.FOCUS_NONE
 		children.append(butt)
 		add_child(butt)
 

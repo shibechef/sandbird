@@ -32,8 +32,7 @@ func press_UI_button(id: int) -> void:
 		else:
 			select_color(id)
 	elif Input.is_action_pressed("select_several"):
-		if !selected:
-			select_color(id)
+		select_color(id)
 	else:
 		deselect_all()
 		select_color(id)
@@ -49,11 +48,13 @@ func select_color(id: int) -> void:
 	var palette = manager.palette_by_color[id]
 	var index = manager.all_palettes[palette].color_order.find(id)
 	
-	manager.currently_selected_colors.append(id)
+	if !manager.currently_selected_colors.has(id):
+		manager.currently_selected_colors.append(id)
 	if palette_UIs.has(palette):
 		var ui_element: TextureButton = palette_UIs[palette].get_child(index)
 		ui_element.set_instance_shader_parameter("black_replacement", UserPreferences.selection_color)
-
+		ui_element.set_pressed_no_signal(true)
+	
 func deselect_color(id: int) -> void:
 	var palette = manager.palette_by_color[id]
 	var index = manager.all_palettes[palette].color_order.find(id)

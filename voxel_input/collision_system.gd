@@ -95,7 +95,7 @@ static func get_AABB_line_collisions(origin: Vector3, direction: Vector3, target
 
 ## Do not use this for anything but voxel objects of course O_O
 func get_first_outline_col(collisions: Array[Dictionary]) -> int:
-	var margin: float = max(project_prefs.outline_selection_width * 1.1, 1.0)
+	var margin: float = max(UserPreferences.outline_selection_width * 1.1, 1.0)
 	var closest_collision: float = 10000.0
 	var best_obj: int
 	for collision in collisions:

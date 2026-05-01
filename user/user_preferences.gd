@@ -10,7 +10,7 @@ class_name UserPreference
 
 @export var unselected_color: Color = Color(.05, .02, .04)
 @export var selection_color: Color = Color.ALICE_BLUE
-@export var hover_color: Color = Color.LIGHT_SKY_BLUE
+@export var hover_color: Color = Color(.6, .8, 9)
 @export var outline_selection_width: float = .11
 
 @export var free_cam_sensitivity: float = 1.0

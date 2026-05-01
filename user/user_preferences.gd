@@ -8,8 +8,9 @@ class_name UserPreference
 ## So higher = more time for each reconstruction but less draw calls which has trade offs maybe.
 @export var mesh_chunk_size: int = 40
 
-@export var unselected_outline_color: Color = Color(.05, .02, .04)
-@export var selection_outline_color: Color = Color.ALICE_BLUE
+@export var unselected_color: Color = Color(.05, .02, .04)
+@export var selection_color: Color = Color.ALICE_BLUE
+@export var hover_color: Color = Color.LIGHT_SKY_BLUE
 @export var outline_selection_width: float = .11
 
 @export var free_cam_sensitivity: float = 1.0

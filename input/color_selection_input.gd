@@ -13,11 +13,11 @@ func _ready():
 func add_palette_UI(palette_id: int, menu: RadialMenu):
 	palette_UIs[palette_id] = menu
 
-	var colors: Array[Color]
+	var colors: Dictionary[int, Color]
 	var palette = manager.all_palettes[palette_id]
 	
 	for color_id in palette.color_order:
-		colors.append(palette.colors[color_id].color)
+		colors[color_id] = palette.colors[color_id].color
 	
 	menu.make_children(colors)
 	
@@ -28,25 +28,38 @@ func press_UI_button(id: int) -> void:
 	
 	if Input.is_action_pressed("select_one"):
 		if selected:
-			manager.currently_selected_colors.erase(id)
+			deselect_color(id)
 		else:
-			manager.currently_selected_colors.append(id)
+			select_color(id)
 	elif Input.is_action_pressed("select_several"):
 		if !selected:
-			manager.currently_selected_colors.append(id)
+			select_color(id)
 	else:
-		manager.currently_selected_colors = [id]
+		deselect_all()
+		select_color(id)
 	
 	print(manager.currently_selected_colors)
 
+func deselect_all() -> void:
+	var colors = manager.currently_selected_colors.duplicate()
+	for color in colors:
+		deselect_color(color)
+
 func select_color(id: int) -> void:
-	var palette: int = manager.palette_by_color[id]
+	var palette = manager.palette_by_color[id]
+	var index = manager.all_palettes[palette].color_order.find(id)
+	
+	manager.currently_selected_colors.append(id)
 	if palette_UIs.has(palette):
-		var ui_element = palette_UIs[palette].get_child(id)
-		ui_element.set_instance_shader_parameter("black_replacement", UserPreferences.selection_outline_color)
+		var ui_element: TextureButton = palette_UIs[palette].get_child(index)
+		ui_element.set_instance_shader_parameter("black_replacement", UserPreferences.selection_color)
 
 func deselect_color(id: int) -> void:
-	var palette: int = manager.palette_by_color[id]
+	var palette = manager.palette_by_color[id]
+	var index = manager.all_palettes[palette].color_order.find(id)
+	
+	manager.currently_selected_colors.erase(id)
 	if palette_UIs.has(palette):
-		var ui_element = palette_UIs[palette].get_child(id)
-		ui_element.set_instance_shader_parameter("black_replacement", UserPreferences.unselected_outline_color)
+		var ui_element: TextureButton = palette_UIs[palette].get_child(index)
+		ui_element.set_instance_shader_parameter("black_replacement", UserPreferences.hover_color)
+		ui_element.set_pressed_no_signal(false)

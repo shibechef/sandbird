@@ -24,12 +24,13 @@ func button_pressed(index: int):
 func button_hovered(index: int):
 	on_hover.emit(index)
 
-func make_children(colors: Array[Color]) -> void:	
+func make_children(colors: Dictionary[int, Color]) -> void:	
 	var amount = colors.size()
 	var children: Array[TextureButton]
 	
 	for i in amount: 
 		var butt = TextureButton.new()
+		butt.toggle_mode = true
 		children.append(butt)
 		add_child(butt)
 
@@ -42,6 +43,7 @@ func make_children(colors: Array[Color]) -> void:
 	var current_index: int = 0
 	
 	for i in amount:
+		var color_id = colors.keys()[i]
 		if current_index == 0:
 			var in_current_ring: float = min(amount - max_ring_size * current_ring, max_ring_size)
 			angle = 360.0 / in_current_ring
@@ -62,13 +64,13 @@ func make_children(colors: Array[Color]) -> void:
 		child.texture_hover = selected_texture
 		child.texture_click_mask = selection_bitmap
 		
-		var color = colors[i]
+		var color = colors[color_id]
 		
 		child.material = load("res://materials/replace_UI_color.tres")
 		child.set_instance_shader_parameter("white_replacement", color)
-		child.set_instance_shader_parameter("black_replacement", UserPreferences.unselected_outline_color)
-		child.pressed.connect(button_pressed.bind(i))
-		child.mouse_entered.connect(button_hovered.bind(i))
+		child.set_instance_shader_parameter("black_replacement", UserPreferences.hover_color)
+		child.pressed.connect(button_pressed.bind(color_id))
+		child.mouse_entered.connect(button_hovered.bind(color_id))
 		
 		var current_angle = current_index * deg_to_rad(angle)
 		child.pivot_offset = child.texture_normal.get_size() / 2.0

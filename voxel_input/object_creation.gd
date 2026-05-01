@@ -25,7 +25,7 @@ func get_placement() -> Vector3i:
 	var dir: Vector3 = click_data[1]
 	dir *= (dimensions.x + dimensions.y + dimensions.z) / 3.0 * 1.25
 	var offset = click_data[0] - dimensions / 2.0	
-	var pos: Vector3i = Vector3i(offset + dir)
+	var pos: Vector3i = Vector3i(offset - dir)
 	
 	if UserPreferences.object_creation_point == UserPreference.ObjectCreationPoint.y_zero_cursor:
 		pos.y = 0

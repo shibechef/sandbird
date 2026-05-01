@@ -6,12 +6,12 @@
 
 [sub_resource type="Resource" id="Resource_q7h0j"]
 script = ExtResource("1_uw4dn")
-color = Color(0.85490197, 0.21568628, 0.21176471, 1)
+color = Color(0.87857217, 0.15302941, 0.24035037, 1)
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_paus5"]
 script = ExtResource("1_uw4dn")
-color = Color(0.5057815, 0.5168111, 0.9883327, 1)
+color = Color(0.502008, 0.048163645, 0.6950024, 1)
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_f23kq"]
@@ -26,7 +26,7 @@ metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_ahkma"]
 script = ExtResource("1_uw4dn")
-color = Color(0.8862745, 0.4745098, 0, 1)
+color = Color(0.9662083, 0.5409966, 0.10832695, 1)
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_xwo0n"]
@@ -46,5 +46,5 @@ colors = Dictionary[int, ExtResource("1_uw4dn")]({
 275: SubResource("Resource_ahkma"),
 2690: SubResource("Resource_xwo0n")
 })
-color_order = Array[int]([-1140, -935, -125, 170, 275, 2690])
+color_order = Array[int]([-1140, 275, 170, 2690, -125, -935])
 metadata/_custom_type_script = "uid://ciubgxcnuov46"

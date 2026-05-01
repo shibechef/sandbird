@@ -14,3 +14,4 @@ func add_palette_menu(palette_ID: int) -> void:
 	var menu = RadialMenu.new()
 	add_child(menu)
 	color_selection.add_palette_UI(palette_ID, menu)	
+	menu.position += Vector2(500., 500.)

@@ -15,7 +15,7 @@ func add_palette_UI(palette_id: int, menu: RadialMenu):
 
 	var colors: Array[Color]
 	var palette = manager.all_palettes[palette_id]
-		
+	
 	for color_id in palette.color_order:
 		colors.append(palette.colors[color_id].color)
 	
@@ -23,13 +23,21 @@ func add_palette_UI(palette_id: int, menu: RadialMenu):
 	
 	menu.on_press.connect(press_UI_button)
 
-
 func press_UI_button(id: int) -> void:
-	print(id)
+	var selected = manager.currently_selected_colors.has(id)
+	
 	if Input.is_action_pressed("select_one"):
-		return
-	if Input.is_action_just_pressed("select_several"):
-		return
+		if selected:
+			manager.currently_selected_colors.erase(id)
+		else:
+			manager.currently_selected_colors.append(id)
+	elif Input.is_action_pressed("select_several"):
+		if !selected:
+			manager.currently_selected_colors.append(id)
+	else:
+		manager.currently_selected_colors = [id]
+	
+	print(manager.currently_selected_colors)
 
 func select_color(id: int) -> void:
 	var palette: int = manager.palette_by_color[id]

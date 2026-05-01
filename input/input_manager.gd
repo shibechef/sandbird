@@ -18,7 +18,7 @@ func _ready():
 	color_palette_manager = get_node("%ColorPaletteManager")
 
 func _process(delta):
-	handle_interaction()
+	handle_key_interaction()
 	## Need to make this unique with other things that use 0-9
 	handle_color_selection_inputs()
 	save_number_input_chain()
@@ -31,16 +31,19 @@ func _process(delta):
 				enter_edit_mode()
 			## TODO: Add a pop-up if nothing is selected
 		
+func _unhandled_input(event: InputEvent):
+	handle_mouse_interaction(event)
 
-func handle_interaction() -> void:
-	if interaction_mode == InteractionMode.object:
-		if Input.is_action_just_pressed("select"):
-			selection_system.try_click()
+func handle_key_interaction():
 	if Input.is_action_just_pressed("create_new_object"):
 		creation_system.create_new_object()
-		
+
+func handle_mouse_interaction(event: InputEvent) -> void:
+	if interaction_mode == InteractionMode.object:
+		if event.is_action_pressed("select"):
+			selection_system.try_click()
 	elif interaction_mode == InteractionMode.voxel:
-		if Input.is_action_just_pressed("select"):
+		if event.is_action_pressed("select"):
 			paint_system.try_click()
 
 func handle_color_selection_inputs() -> void:

@@ -40,8 +40,6 @@ metadata/_custom_type_script = "uid://cq72t00uw47bq"
 [node name="InputManager" type="Node" parent="." unique_id=123845880]
 unique_name_in_owner = true
 script = ExtResource("5_55qs4")
-interaction_mode = null
-focus_mode = null
 metadata/_custom_type_script = "uid://cm1ndittglsvb"
 
 [node name="PaintSystem" type="Node" parent="." unique_id=1285157098]
@@ -102,10 +100,6 @@ material = ExtResource("12_1kmbx")
 [node name="UI_manager" type="Control" parent="." unique_id=956425776]
 unique_name_in_owner = true
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 script = ExtResource("17_dhmkn")
 metadata/_custom_type_script = "uid://sou14aoubqus"

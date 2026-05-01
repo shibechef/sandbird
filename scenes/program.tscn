@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://clulcc4a4dbod"]
+[gd_scene format=3 uid="uid://clulcc4a4dbod"]
 
 [ext_resource type="PackedScene" uid="uid://klgkftems2xb" path="res://scenes/voxel_project.tscn" id="1_mxm13"]
 [ext_resource type="Script" uid="uid://dw1s15v6e33gx" path="res://input/free_cam.gd" id="2_5h2ur"]
@@ -6,30 +6,30 @@
 [ext_resource type="Script" uid="uid://dqviapsa3ecm1" path="res://input/pivot_cam.gd" id="3_h81p0"]
 [ext_resource type="Script" uid="uid://kbvuo850mvoe" path="res://input/world_click.gd" id="5_xnlas"]
 
-[node name="Program" type="Node3D"]
+[node name="Program" type="Node3D" unique_id=1116754525]
 
-[node name="VoxelProject" parent="." instance=ExtResource("1_mxm13")]
+[node name="VoxelProject" parent="." unique_id=690339630 instance=ExtResource("1_mxm13")]
 
-[node name="CameraSystem" type="Camera3D" parent="."]
+[node name="CameraSystem" type="Camera3D" parent="." unique_id=937751454]
 unique_name_in_owner = true
 script = ExtResource("2_h81p0")
 
-[node name="FreeCam" type="Node" parent="CameraSystem"]
+[node name="FreeCam" type="Node" parent="CameraSystem" unique_id=1526513214]
 script = ExtResource("2_5h2ur")
 
-[node name="PivotCam" type="Node" parent="CameraSystem"]
+[node name="PivotCam" type="Node" parent="CameraSystem" unique_id=1701783979]
 script = ExtResource("3_h81p0")
 
-[node name="OrthoPivotCam" type="Node" parent="CameraSystem"]
+[node name="OrthoPivotCam" type="Node" parent="CameraSystem" unique_id=575900334]
 
-[node name="OrthoSideCam" type="Node" parent="CameraSystem"]
+[node name="OrthoSideCam" type="Node" parent="CameraSystem" unique_id=1143592456]
 
-[node name="WorldClick" type="Node" parent="."]
+[node name="WorldClick" type="Node" parent="." unique_id=1368336890]
 unique_name_in_owner = true
 script = ExtResource("5_xnlas")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=429697777]
 transform = Transform3D(0.9041944, -0.3771116, 0.20054756, 0, 0.46953318, 0.88291484, -0.42712116, -0.7983267, 0.42454928, 0, 0, 6.043182)
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+[node name="CSGSphere3D" type="CSGSphere3D" parent="." unique_id=1493556316]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.2183895)

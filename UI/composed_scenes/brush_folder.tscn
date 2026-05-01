@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://ci2a1sku318o4"]
+[gd_scene format=3 uid="uid://ci2a1sku318o4"]
 
 [ext_resource type="Script" uid="uid://brisagjk1y3ob" path="res://UI/scripts/brush_folder_UI.gd" id="1_7q4lx"]
 
-[node name="AllBrushes" type="Control"]
+[node name="AllBrushes" type="Control" unique_id=1018679008]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_7q4lx")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1518529949]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,5 +21,5 @@ grow_vertical = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 4
 
-[node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer" unique_id=2041515778]
 layout_mode = 2

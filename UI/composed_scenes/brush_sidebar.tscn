@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://rs2nmydu4gxx"]
+
+[ext_resource type="Script" uid="uid://b60c8y1bdhusc" path="res://UI/scripts/brush_sidebar_UI.gd" id="1_6q7k1"]
+[ext_resource type="PackedScene" uid="uid://dkpe87xxdua08" path="res://UI/composed_scenes/single_brush.tscn" id="1_dglvy"]
+
+[node name="BrushSidebarUI" type="Control" unique_id=201940366]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6q7k1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2093866990]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 333.0
+offset_bottom = 481.0
+theme_override_constants/separation = 66
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1813756040]
+layout_mode = 2
+theme_override_constants/separation = 53
+
+[node name="BrushVisual" parent="VBoxContainer/HBoxContainer" unique_id=1404525813 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+
+[node name="BrushVisual2" parent="VBoxContainer/HBoxContainer" unique_id=1913299602 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+
+[node name="BrushVisual3" parent="VBoxContainer/HBoxContainer" unique_id=1259082359 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+
+[node name="BrushVisual4" parent="VBoxContainer/HBoxContainer" unique_id=1323624098 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+
+[node name="BrushVisual5" parent="VBoxContainer/HBoxContainer" unique_id=715854380 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+
+[node name="BrushVisual6" parent="VBoxContainer/HBoxContainer" unique_id=402233623 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1646338490]
+layout_mode = 2
+theme_override_constants/separation = 53
+
+[node name="BrushVisual" parent="VBoxContainer/HBoxContainer2" unique_id=1058319413 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+
+[node name="BrushVisual2" parent="VBoxContainer/HBoxContainer2" unique_id=715210921 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+
+[node name="BrushVisual3" parent="VBoxContainer/HBoxContainer2" unique_id=874488528 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+
+[node name="BrushVisual4" parent="VBoxContainer/HBoxContainer2" unique_id=1744602735 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+
+[node name="BrushVisual5" parent="VBoxContainer/HBoxContainer2" unique_id=1061595173 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+
+[node name="BrushVisual6" parent="VBoxContainer/HBoxContainer2" unique_id=1822818793 instance=ExtResource("1_dglvy")]
+layout_mode = 2

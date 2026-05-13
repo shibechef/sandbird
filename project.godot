@@ -23,6 +23,7 @@ UserPreferences="*res://user/user_preferences.gd"
 ProjectManager="*res://user/project_manager.gd"
 CurrentScene="*res://voxel_input/current_scene.gd"
 FileReader="*res://user/file_reader.gd"
+BrushManager="*uid://batrs30ou03un"
 
 [display]
 

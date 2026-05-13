@@ -8,15 +8,28 @@
 [ext_resource type="Script" uid="uid://cw07yos5ueqli" path="res://voxel_painting/paint_system.gd" id="5_5ubjp"]
 [ext_resource type="Script" uid="uid://cm1ndittglsvb" path="res://input/input_manager.gd" id="5_55qs4"]
 [ext_resource type="Script" uid="uid://db6h5eik3hk6p" path="res://voxel_input/object_selection.gd" id="6_wapjm"]
+[ext_resource type="Script" uid="uid://doicsuyh58fhn" path="res://voxel_painting/brushes/base_brush.gd" id="7_2n8ou"]
 [ext_resource type="Script" uid="uid://b1jlrdrtghd7" path="res://voxel_input/hierarchy.gd" id="7_wapjm"]
+[ext_resource type="Script" uid="uid://cabu1sttj61yr" path="res://voxel_painting/brushes/point_brush.gd" id="8_2epbo"]
 [ext_resource type="Script" uid="uid://cdbapr8i4wu3k" path="res://voxel_input/object_creation.gd" id="8_7tecl"]
 [ext_resource type="Script" uid="uid://b4aeqlytrf1fx" path="res://voxel_visuals/color_palette_manager.gd" id="9_6fg1y"]
+[ext_resource type="Script" uid="uid://rrg3dhpf3gdf" path="res://voxel_painting/brushes/beam_paint.gd" id="9_ayq5r"]
 [ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="10_2l07e"]
 [ext_resource type="Resource" uid="uid://ce3m077vbf1hg" path="res://assets/resources/color_palettes/rainbow.tres" id="11_tnig6"]
 [ext_resource type="Material" uid="uid://dcndt1kov3l77" path="res://materials/color_palette.tres" id="12_1kmbx"]
-[ext_resource type="Script" uid="uid://ctyp21ixuvmen" path="res://input/color_selection_input.gd" id="13_gqylq"]
+[ext_resource type="Script" uid="uid://ctyp21ixuvmen" path="res://input/color_selection.gd" id="13_gqylq"]
 [ext_resource type="Script" uid="uid://cvfpnpo0eu04j" path="res://voxel_input/edit_logging.gd" id="15_tnig6"]
 [ext_resource type="Script" uid="uid://sou14aoubqus" path="res://UI/scripts/UI_manager.gd" id="17_dhmkn"]
+
+[sub_resource type="Resource" id="Resource_uif21"]
+script = ExtResource("8_2epbo")
+named_as = "pee"
+metadata/_custom_type_script = "uid://cabu1sttj61yr"
+
+[sub_resource type="Resource" id="Resource_4inyy"]
+script = ExtResource("9_ayq5r")
+named_as = "poo"
+metadata/_custom_type_script = "uid://rrg3dhpf3gdf"
 
 [node name="VoxelProject" type="Node" unique_id=1360043111]
 script = ExtResource("1_sb2wc")
@@ -45,6 +58,10 @@ metadata/_custom_type_script = "uid://cm1ndittglsvb"
 [node name="PaintSystem" type="Node" parent="." unique_id=1285157098]
 unique_name_in_owner = true
 script = ExtResource("5_5ubjp")
+brush_list = Dictionary[String, ExtResource("7_2n8ou")]({
+"pee": SubResource("Resource_uif21"),
+"poo": SubResource("Resource_4inyy")
+})
 metadata/_custom_type_script = "uid://cw07yos5ueqli"
 
 [node name="ObjectSelectionSystem" type="Node" parent="." unique_id=953585129]

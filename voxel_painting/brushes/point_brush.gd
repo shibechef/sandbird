@@ -14,7 +14,6 @@ func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject) -> Dic
 	
 	positions.append(col_pos[0])
 	
-	
 	var col: VoxelColor = get_selected_colors()[0]
 	for pos in positions:
 		var voxel = get_monochrome_voxel(VoxelData.new(), col)

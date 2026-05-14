@@ -1,44 +1,50 @@
 [gd_resource type="Resource" script_class="VoxelColorPalette" format=3 uid="uid://ce3m077vbf1hg"]
 
-[ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="1_g256n"]
-[ext_resource type="Script" uid="uid://c4cxqovgpocot" path="res://voxel_visuals/palette_color.gd" id="1_uw4dn"]
-[ext_resource type="Material" uid="uid://dcndt1kov3l77" path="res://materials/color_palette.tres" id="2_q7h0j"]
+[ext_resource type="Script" uid="uid://c4cxqovgpocot" path="res://voxel_visuals/palette_color.gd" id="1_ktowp"]
+[ext_resource type="Material" uid="uid://dcndt1kov3l77" path="res://materials/color_palette.tres" id="2_h2jqh"]
+[ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="3_f1y3n"]
 
 [sub_resource type="Resource" id="Resource_q7h0j"]
-script = ExtResource("1_uw4dn")
+script = ExtResource("1_ktowp")
 color = Color(0.87857217, 0.15302941, 0.24035037, 1)
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_paus5"]
-script = ExtResource("1_uw4dn")
+script = ExtResource("1_ktowp")
 color = Color(0.502008, 0.048163645, 0.6950024, 1)
+current_uv_index = 1
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_f23kq"]
-script = ExtResource("1_uw4dn")
+script = ExtResource("1_ktowp")
 color = Color(0.29922208, 0.5077467, 0.86921954, 1)
+current_uv_index = 2
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_afnbf"]
-script = ExtResource("1_uw4dn")
-color = Color(0.8669961, 0.8366127, 0.42738742, 1)
+script = ExtResource("1_ktowp")
+color = Color(0.97889835, 0.8471011, 0.16050273, 1)
+current_uv_index = 3
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_ahkma"]
-script = ExtResource("1_uw4dn")
+script = ExtResource("1_ktowp")
 color = Color(0.9662083, 0.5409966, 0.10832695, 1)
+current_uv_index = 4
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_xwo0n"]
-script = ExtResource("1_uw4dn")
+script = ExtResource("1_ktowp")
 color = Color(0.21080884, 0.8419087, 0.211243, 1)
+current_uv_index = 5
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [resource]
-script = ExtResource("1_g256n")
-material = ExtResource("2_q7h0j")
+script = ExtResource("3_f1y3n")
+palette_name = "rainbow"
+material = ExtResource("2_h2jqh")
 id = 1
-colors = Dictionary[int, ExtResource("1_uw4dn")]({
+colors = Dictionary[int, ExtResource("1_ktowp")]({
 -1140: SubResource("Resource_q7h0j"),
 -935: SubResource("Resource_paus5"),
 -125: SubResource("Resource_f23kq"),

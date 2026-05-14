@@ -62,8 +62,10 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 						mesh_UV_list[face_color.palette_id] = PackedVector2Array()
 					
 					mesh_vertex_list[face_color.palette_id].append_array(get_face_array(n, pos))
+					var palette = color_palette_manager.all_palettes[face_color.palette_id]
+					var UV_index = Vector2(palette.colors[face_color.color_id].current_uv_index, 0)
 					mesh_UV_list[face_color.palette_id].append_array(
-						[face_color.color_id, face_color.color_id, face_color.color_id, face_color.color_id, face_color.color_id, face_color.color_id])
+						[UV_index, UV_index, UV_index, UV_index, UV_index, UV_index])
 		
 	var array_mesh = ArrayMesh.new()
 	

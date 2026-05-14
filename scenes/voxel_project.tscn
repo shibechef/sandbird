@@ -15,11 +15,10 @@
 [ext_resource type="Script" uid="uid://b4aeqlytrf1fx" path="res://voxel_visuals/color_palette_manager.gd" id="9_6fg1y"]
 [ext_resource type="Script" uid="uid://rrg3dhpf3gdf" path="res://voxel_painting/brushes/beam_paint.gd" id="9_ayq5r"]
 [ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="10_2l07e"]
-[ext_resource type="Resource" uid="uid://ce3m077vbf1hg" path="res://assets/resources/color_palettes/rainbow.tres" id="11_tnig6"]
+[ext_resource type="Resource" uid="uid://ce3m077vbf1hg" path="res://user/palettes/rainbow.tres" id="11_tnig6"]
 [ext_resource type="Material" uid="uid://dcndt1kov3l77" path="res://materials/color_palette.tres" id="12_1kmbx"]
 [ext_resource type="Script" uid="uid://ctyp21ixuvmen" path="res://input/color_selection.gd" id="13_gqylq"]
 [ext_resource type="Script" uid="uid://cvfpnpo0eu04j" path="res://voxel_input/edit_logging.gd" id="15_tnig6"]
-[ext_resource type="Script" uid="uid://rvjasli85np5" path="res://user/current_project_setter.gd" id="17_2epbo"]
 [ext_resource type="Script" uid="uid://sou14aoubqus" path="res://UI/scripts/UI_manager.gd" id="17_dhmkn"]
 
 [sub_resource type="Resource" id="Resource_uif21"]
@@ -94,8 +93,6 @@ script = ExtResource("13_gqylq")
 metadata/_custom_type_script = "uid://ctyp21ixuvmen"
 
 [node name="CurrentProjectSetter" type="Node" parent="." unique_id=1312332489]
-script = ExtResource("17_2epbo")
-metadata/_custom_type_script = "uid://rvjasli85np5"
 
 [node name="Hierarchy" type="Node" parent="." unique_id=1297333066]
 unique_name_in_owner = true

@@ -137,6 +137,7 @@ static func get_grid_traversal_collisions(origin: Vector3, direction: Vector3, g
 	var step: Vector3i = sign(direction)
 	direction = direction.normalized()
 	
+	origin += Vector3(0.0, 0.0, 0.0)
 	var max: Vector3 = Vector3(
 		(1.0 if step.x == 1 else 0.0) / direction.x,
 		(1.0 if step.y == 1 else 0.0) / direction.y,

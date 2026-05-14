@@ -19,6 +19,7 @@
 [ext_resource type="Material" uid="uid://dcndt1kov3l77" path="res://materials/color_palette.tres" id="12_1kmbx"]
 [ext_resource type="Script" uid="uid://ctyp21ixuvmen" path="res://input/color_selection.gd" id="13_gqylq"]
 [ext_resource type="Script" uid="uid://cvfpnpo0eu04j" path="res://voxel_input/edit_logging.gd" id="15_tnig6"]
+[ext_resource type="Script" uid="uid://rvjasli85np5" path="res://user/current_project_setter.gd" id="17_2epbo"]
 [ext_resource type="Script" uid="uid://sou14aoubqus" path="res://UI/scripts/UI_manager.gd" id="17_dhmkn"]
 
 [sub_resource type="Resource" id="Resource_uif21"]
@@ -91,6 +92,10 @@ metadata/_custom_type_script = "uid://cvfpnpo0eu04j"
 unique_name_in_owner = true
 script = ExtResource("13_gqylq")
 metadata/_custom_type_script = "uid://ctyp21ixuvmen"
+
+[node name="CurrentProjectSetter" type="Node" parent="." unique_id=1312332489]
+script = ExtResource("17_2epbo")
+metadata/_custom_type_script = "uid://rvjasli85np5"
 
 [node name="Hierarchy" type="Node" parent="." unique_id=1297333066]
 unique_name_in_owner = true

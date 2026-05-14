@@ -23,7 +23,7 @@ func try_click() -> void:
 	
 	var click_data = get_parent().get_node("%WorldClick").get_mouse_world_pos()
 	
-	result = collision_system.get_AABB_line_collisions(click_data[0], click_data[1], objs)
+	result = CollisionSystem.get_AABB_line_collisions(click_data[0], click_data[1], objs)
 	
 	var hit_obj: int = collision_system.get_first_outline_col(result)
 	if hit_obj != 0:

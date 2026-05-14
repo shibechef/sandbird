@@ -2,7 +2,7 @@ extends Node
 class_name VoxelProject
 
 func _ready():
-	CurrentScene.root = self
+	ProjectManager.current_project = self
 
 func on_new_project() -> void:
 	var scene_preferences: ProjectPreferences = get_node("%ProjectPreferences")

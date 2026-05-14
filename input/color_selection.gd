@@ -37,8 +37,6 @@ func press_UI_button(id: int) -> void:
 		deselect_all()
 		select_color(id)
 	
-	print(manager.currently_selected_colors)
-
 func deselect_all() -> void:
 	var colors = manager.currently_selected_colors.duplicate()
 	for color in colors:

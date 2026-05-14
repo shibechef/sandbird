@@ -34,7 +34,7 @@ func generate_chunk_meshes(dimensions: Vector3i, voxel_grid: Dictionary[Vector3i
 				var AABB_lower = Vector3i(x_chunk, y_chunk, z_chunk) * chunk_size
 				var AABB_upper = AABB_lower + Vector3i.ONE * chunk_size
 				chunks[Vector3i(x_chunk, y_chunk, z_chunk)] = get_chunk_mesh(AABB_lower, AABB_upper, voxel_grid)
-		
+	
 	return chunks
 
 func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dictionary[Vector3i, VoxelData], offset: Vector3i = Vector3i.ZERO) -> MeshInstance3D:
@@ -45,7 +45,6 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 	
 	var mesh_vertex_list: Dictionary[int, PackedVector3Array]
 	var mesh_UV_list: Dictionary[int, PackedVector2Array]
-	
 	for x in range(AABB_lower.x, AABB_upper.x):
 		for y in range(AABB_lower.y, AABB_upper.y):
 			for z in range(AABB_lower.z, AABB_upper.z):
@@ -67,7 +66,8 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 						[face_color.color_id, face_color.color_id, face_color.color_id, face_color.color_id, face_color.color_id, face_color.color_id])
 		
 	var array_mesh = ArrayMesh.new()
-			
+	
+	var n: int = 0
 	for surface in mesh_vertex_list:
 		var mesh_arrays: Array = [] 
 		mesh_arrays.resize(Mesh.ARRAY_MAX)
@@ -75,6 +75,8 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 		mesh_arrays[Mesh.ARRAY_TEX_UV] = mesh_UV_list[surface]
 		
 		array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_arrays)
+		array_mesh.surface_set_material(n, color_palette_manager.all_palettes[surface].material)
+		n += 1
 		
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.mesh = array_mesh
@@ -128,4 +130,4 @@ func create_mesh_instance(vertices: PackedVector3Array, UVs: PackedVector2Array 
 
 func get_chunk_pos(pos: Vector3i, offset: Vector3i) -> Vector3i:
 	var chunk_pos: Vector3 = Vector3(pos + offset) / project_prefs.mesh_chunk_size
-	return Vector3i(floori(chunk_pos.x), floori(chunk_pos.x), floori(chunk_pos.x))
+	return Vector3i(floori(chunk_pos.x), floori(chunk_pos.y), floori(chunk_pos.z))

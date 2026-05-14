@@ -46,22 +46,28 @@ func create_mesh_grid() -> void:
 
 func update_mesh_chunks() -> void:
 	for chunk in edited_chunks:
+		if visual_mesh_chunks.has(chunk):
+			remove_child(visual_mesh_chunks[chunk])
+		
 		var AABB_lower: Vector3i = visual_offset + chunk * project_prefs.mesh_chunk_size
 		var AABB_upper: Vector3i = AABB_lower + Vector3i.ONE * project_prefs.mesh_chunk_size
 		visual_mesh_chunks[chunk] = mesh_system.get_chunk_mesh(AABB_lower, AABB_upper, voxel_grid, visual_offset)
+		add_child(visual_mesh_chunks[chunk])
+	edited_chunks.clear()
 
 func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
 	for pos in voxels:
-		if !collision_system.is_within_AABB(pos, position, Vector3i(position) + dimensions):
+		pos = Vector3i(pos)
+		if !CollisionSystem.is_within_AABB(pos, pos, pos + dimensions):
 			continue
 			
 		if voxels[pos] == null and voxel_grid.has(pos):
 			voxel_grid.erase(pos)
 		
-		var mesh_chunk = mesh_system.get_chunk_number()
+		var mesh_chunk = mesh_system.get_chunk_pos(pos, visual_offset)
 		if !edited_chunks.has(mesh_chunk):
 			edited_chunks.append(mesh_chunk)
-		
+
 		voxel_grid[pos] = voxels[pos]
 
 func create_BB_outline() -> void:
@@ -93,6 +99,4 @@ func toggle_outline(on: bool) -> void:
 		outline_object.show()
 	else:
 		outline_object.hide()
-
-func edit_voxel(coords: Vector3i, material: Material, unique: bool = true):
-	return
+		

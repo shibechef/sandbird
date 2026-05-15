@@ -56,9 +56,13 @@ func update_mesh_chunks() -> void:
 	edited_chunks.clear()
 
 func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
+	var AABB_lower: Vector3 = position
+	var AABB_upper: Vector3 = AABB_lower + Vector3(dimensions)
+
 	for pos in voxels:
 		pos = Vector3i(pos)
-		if !CollisionSystem.is_within_AABB(pos, pos, pos + dimensions):
+		
+		if !CollisionSystem.is_within_AABB(pos, AABB_lower, AABB_upper):
 			continue
 			
 		if voxels[pos] == null and voxel_grid.has(pos):

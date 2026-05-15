@@ -5,7 +5,13 @@ class_name BeamBrush
 
 func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject) -> Dictionary[Vector3i, VoxelData]:
 	var voxels: Dictionary[Vector3i, VoxelData]
+	
+	var positions = get_straight_collision(origin, direction, object)
+	var col: VoxelColor = get_selected_colors()[0]
+	for pos in positions:
+		var voxel = get_monochrome_voxel(VoxelData.new(), col)
+		voxels[pos] = voxel	
 	return voxels
 	
-func get_straight_collision(origin: Vector3, direction: Vector3, object: VoxelObject):
-	return CollisionSystem.get_grid_traversal_collisions(origin, direction, object.voxel_grid, 32.0, false, 0)
+func get_straight_collision(origin: Vector3, direction: Vector3, object: VoxelObject) -> Array[Vector3i]:
+	return CollisionSystem.get_grid_traversal_collisions(origin, direction, object.voxel_grid, depth, false, 0)

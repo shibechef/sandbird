@@ -133,59 +133,51 @@ func get_first_outline_col(collisions: Array[Dictionary]) -> int:
 	return best_obj
 
 ## https://web.archive.org/web/20121024081332/www.xnawiki.com/index.php?title=Voxel_traversal
+## https://www.shadertoy.com/view/4dX3zl
 static func get_grid_traversal_collisions(origin: Vector3, direction: Vector3, grid: Dictionary[Vector3i, VoxelData], distance: float, previous: bool = true, col_max: int = 1) -> Array[Vector3i]:
 	var step: Vector3i = sign(direction)
+	var dist_squared: float = distance * distance
 	direction = direction.normalized()
-	
-	origin += Vector3(0.0, 0.0, 0.0)
-	var max: Vector3 = Vector3(
-		(1.0 if step.x == 1 else 0.0) / direction.x,
-		(1.0 if step.y == 1 else 0.0) / direction.y,
-		(1.0 if step.z == 1 else 0.0) / direction.z)
-	if is_nan(max.x): max.x = INF
-	if is_nan(max.y): max.y = INF
-	if is_nan(max.z): max.z = INF
-	max = abs(max)
-		
-	var delta: Vector3 = Vector3(
-		float(step.x) / direction.x,
-		float(step.y) / direction.y,
-		float(step.z) / direction.z)
+			
+	var delta: Vector3 = Vector3(step) / direction
 	if is_nan(delta.x): delta.x = INF
 	if is_nan(delta.y): delta.y = INF
 	if is_nan(delta.z): delta.z = INF
 	
-	var goal: Vector3 = abs(Vector3(origin + delta * distance))
-	
-	var current_pos: Vector3i = origin
+	var origin_fract: Vector3 = floor(origin) - origin
+	var side_dist: Vector3 = (sign(direction) * origin_fract + (sign(direction) * 0.5) + Vector3(0.5, 0.5, 0.5)) * delta; 
+		
+	var current_pos: Vector3i = floor(origin)
 	var last_pos: Vector3i
 	
 	var cols: Array[Vector3i]
+	var traveled: float = 0.0
+	
+	while col_max == 0 or cols.size() < col_max:
+		traveled += 1.0
+		last_pos = current_pos		
 		
-	while cols.size() < col_max or col_max == 0:
-		last_pos = current_pos
-		if max.x < max.y and max.x < max.z:
+		if side_dist.x < side_dist.y and side_dist.x < side_dist.z:
 			current_pos.x += step.x
-			max.x += delta.x
-			if abs(current_pos.x) > goal.x:
-				break
-		elif max.y < max.z:
+			side_dist.x += delta.x
+		elif side_dist.y < side_dist.z:
 			current_pos.y += step.y
-			max.y += delta.y
-			if abs(current_pos.y) > goal.y:
-				break
+			side_dist.y += delta.y
 		else:
 			current_pos.z += step.z
-			max.z += delta.z
-			if abs(current_pos.z) > goal.z:
-				break
+			side_dist.z += delta.z
 		
-		if grid.has(current_pos) or col_max == 0:
+		if col_max == 0 or grid.has(current_pos):
 			if previous:
 				cols.append(last_pos)
 			else:
 				cols.append(current_pos)
-				
+		
+		## Only check for distance after reaching min distance 
+		if traveled >= distance:
+			if origin.distance_squared_to(current_pos) > dist_squared:
+				break
+		
 	return cols
 
 static func is_within_AABB(point: Vector3i, AABB_lower: Vector3i, AABB_higher: Vector3i) -> bool:

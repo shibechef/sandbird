@@ -16,7 +16,6 @@
 [ext_resource type="Script" uid="uid://rrg3dhpf3gdf" path="res://voxel_painting/brushes/beam_paint.gd" id="9_ayq5r"]
 [ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="10_2l07e"]
 [ext_resource type="Resource" uid="uid://ce3m077vbf1hg" path="res://user/palettes/rainbow.tres" id="11_tnig6"]
-[ext_resource type="Material" uid="uid://dcndt1kov3l77" path="res://materials/color_palette.tres" id="12_1kmbx"]
 [ext_resource type="Script" uid="uid://ctyp21ixuvmen" path="res://input/color_selection.gd" id="13_gqylq"]
 [ext_resource type="Script" uid="uid://cvfpnpo0eu04j" path="res://voxel_input/edit_logging.gd" id="15_tnig6"]
 [ext_resource type="Script" uid="uid://sou14aoubqus" path="res://UI/scripts/UI_manager.gd" id="17_dhmkn"]
@@ -111,10 +110,6 @@ dimensions = Vector3i(35, 4, 1)
 
 [node name="Node3D" type="Node3D" parent="Hierarchy" unique_id=1238180466]
 script = ExtResource("4_dvsgh")
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Hierarchy" unique_id=1368699612]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 122.323)
-material = ExtResource("12_1kmbx")
 
 [node name="UI_manager" type="Control" parent="." unique_id=956425776]
 unique_name_in_owner = true

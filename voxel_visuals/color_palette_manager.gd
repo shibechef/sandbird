@@ -57,7 +57,7 @@ func delete_palette(palette_id: int) -> void:
 	all_palettes.erase(palette_id)
 
 func ready_palettes() -> void:
-	palette_paths = FileReader.get_brushes()
+	palette_paths = FileReader.get_palettes()
 	
 	for palette_id in all_palettes:
 		if !palettes_by_order.has(palette_id):

@@ -17,7 +17,8 @@ func on_created() -> void:
 	update_texture()
 
 func update_texture() -> void:	
-	material.set_shader_parameter("color_palette_tex", make_texture_for_shader())
+	color_texture = make_texture_for_shader()
+	material.set_shader_parameter("color_palette_tex", color_texture)
 	
 func make_texture_for_UI() -> ImageTexture:
 	for color_id in colors:
@@ -34,8 +35,8 @@ func make_texture_for_UI() -> ImageTexture:
 	
 	return texture
 
-func make_texture_for_shader() -> Texture2DArray:		
-	var textures := Texture2DArray.new()
+func make_texture_for_shader() -> ImageTexture:		
+	var texture := ImageTexture.new()
 	var image := Image.new()
 	
 	var max_UV: int = 0
@@ -44,13 +45,12 @@ func make_texture_for_shader() -> Texture2DArray:
 		if color.current_uv_index > max_UV:
 			max_UV = color.current_uv_index
 			
-	image = Image.create_empty(max_UV + 1, 1, false, Image.FORMAT_RGBF)
+	image = Image.create_empty(max_UV + 1, 1, false, Image.FORMAT_RGBA8)
 	
 	for color_id in colors:
 		var color: PaletteColor = colors[color_id]
-		print(color.color)
 		image.set_pixel(color.current_uv_index, 0, color.color)
 	
-	textures.create_from_images([image])
+	texture = ImageTexture.create_from_image(image)
 	
-	return textures
+	return texture

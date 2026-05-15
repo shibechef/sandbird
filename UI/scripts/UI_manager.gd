@@ -11,6 +11,7 @@ var color_selection: ColorSelectionInput
 
 func _ready():
 	color_selection = get_node("%ColorSelectionInput")
+	## Remove this later
 	add_palette_menu(1)
 	add_brush_sidebar()
 

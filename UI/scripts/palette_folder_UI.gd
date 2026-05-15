@@ -41,5 +41,5 @@ func refresh_UI() -> void:
 		
 		texture.texture = palette.make_texture_for_UI()
 		
-		add_child(palette_UI)
+		h_box.add_child(palette_UI)
 		

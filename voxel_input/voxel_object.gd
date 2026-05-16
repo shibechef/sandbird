@@ -21,7 +21,7 @@ func on_created() -> void:
 func _process(delta):
 	update_mesh_chunks()
 
-func _ready():	
+func _ready():		
 	mesh_system = get_parent().get_node("%MeshSystem")
 	project_prefs = get_parent().get_node("%ProjectPreferences")
 	collision_system = get_parent().get_node("%CollisionSystem")
@@ -33,21 +33,9 @@ func _ready():
 	
 	create_BB_outline()
 	
-	create_mesh_grid()
-
-func create_mesh_grid() -> void:
-	visual_mesh_chunks.clear()
-	
-	var meshes = mesh_system.generate_chunk_meshes(dimensions, voxel_grid)
-	for chunk_pos in meshes:
-		var mesh: MeshInstance3D = meshes[chunk_pos]
-		visual_mesh_chunks[chunk_pos] = mesh
-		add_child(mesh)
-
 func update_mesh_chunks() -> void:
 	for chunk in edited_chunks:
-		var thread = Thread.new()
-		thread.start(update_chunk.bind(chunk))
+		WorkerThreadPool.add_task(update_chunk.bind(chunk), true)
 
 	edited_chunks.clear()
 
@@ -61,7 +49,7 @@ func update_chunk(chunk: Vector3i) -> void:
 	visual_mesh_chunks[chunk] = mesh_system.get_chunk_mesh(AABB_lower, AABB_upper, voxel_grid, visual_offset)
 	call_thread_safe("add_child", visual_mesh_chunks[chunk])
 	if removed_chunk != null:
-		call_thread_safe("remove_child", removed_chunk)
+		removed_chunk.queue_free()
 	
 func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
 	var AABB_lower: Vector3 = position
@@ -111,4 +99,3 @@ func toggle_outline(on: bool) -> void:
 		outline_object.show()
 	else:
 		outline_object.hide()
-		

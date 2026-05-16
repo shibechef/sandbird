@@ -2,7 +2,7 @@ extends Resource
 class_name BaseBrush
 
 @export var named_as: String
-@export var depth: float = 100.0
+@export var depth: float = 300.0
 
 func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject) -> Dictionary[Vector3i, VoxelData]:
 	var voxels: Dictionary[Vector3i, VoxelData]

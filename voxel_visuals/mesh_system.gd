@@ -45,7 +45,6 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 	
 	var mesh_vertex_list: Dictionary[int, PackedVector3Array]
 	var mesh_UV_list: Dictionary[int, PackedVector2Array]
-	var start = Time.get_ticks_usec()
 	for x in range(AABB_lower.x, AABB_upper.x):
 		for y in range(AABB_lower.y, AABB_upper.y):
 			for z in range(AABB_lower.z, AABB_upper.z):
@@ -70,8 +69,6 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 					var UV_index = Vector2(palette.colors[face_color].current_uv_index + 0.5, 0)
 					mesh_UV_list[face_palette].append_array(
 						[UV_index, UV_index, UV_index, UV_index, UV_index, UV_index])
-	var end = Time.get_ticks_usec()
-	print((end-start)/1000000.0)
 	var array_mesh = ArrayMesh.new()
 	
 	var n: int = 0

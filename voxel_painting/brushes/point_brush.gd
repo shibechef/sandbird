@@ -1,7 +1,7 @@
 extends BaseBrush
 class_name PointBrush
 
-@export var size: float = 14.2
+@export var size: float = 5.2
 @export var requires_end: bool = true
 
 func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject) -> Dictionary[Vector3i, VoxelData]:

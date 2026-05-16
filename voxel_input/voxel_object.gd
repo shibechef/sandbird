@@ -46,15 +46,23 @@ func create_mesh_grid() -> void:
 
 func update_mesh_chunks() -> void:
 	for chunk in edited_chunks:
-		if visual_mesh_chunks.has(chunk):
-			remove_child(visual_mesh_chunks[chunk])
-		
-		var AABB_lower: Vector3i = visual_offset + chunk * project_prefs.mesh_chunk_size
-		var AABB_upper: Vector3i = AABB_lower + Vector3i.ONE * project_prefs.mesh_chunk_size
-		visual_mesh_chunks[chunk] = mesh_system.get_chunk_mesh(AABB_lower, AABB_upper, voxel_grid, visual_offset)
-		add_child(visual_mesh_chunks[chunk])
+		var thread = Thread.new()
+		thread.start(update_chunk.bind(chunk))
+
 	edited_chunks.clear()
 
+func update_chunk(chunk: Vector3i) -> void:
+	var removed_chunk: Node
+	if visual_mesh_chunks.has(chunk):
+		removed_chunk = visual_mesh_chunks[chunk]
+	
+	var AABB_lower: Vector3i = visual_offset + chunk * project_prefs.mesh_chunk_size
+	var AABB_upper: Vector3i = AABB_lower + Vector3i.ONE * project_prefs.mesh_chunk_size
+	visual_mesh_chunks[chunk] = mesh_system.get_chunk_mesh(AABB_lower, AABB_upper, voxel_grid, visual_offset)
+	call_thread_safe("add_child", visual_mesh_chunks[chunk])
+	if removed_chunk != null:
+		call_thread_safe("remove_child", removed_chunk)
+	
 func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
 	var AABB_lower: Vector3 = position
 	var AABB_upper: Vector3 = AABB_lower + Vector3(dimensions)

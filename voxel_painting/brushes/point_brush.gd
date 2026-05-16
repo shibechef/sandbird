@@ -13,12 +13,13 @@ func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject) -> Dic
 		return voxels
 	
 	positions.append_array(ShapeGeneration.create_sphere(col_pos[0], size))
+	var AABB_lower = Vector3i(object.position)
+	var AABB_upper = AABB_lower + object.dimensions
+	positions = CollisionSystem.get_within_AABB(positions, AABB_lower, AABB_upper)
 	
-	var col: VoxelColor = get_selected_colors()[0]
+	var col: PaletteColor = get_selected_colors()[0]
 	for pos in positions:
-		var voxel = get_monochrome_voxel(VoxelData.new(), col)
-		voxels[pos] = voxel
-	
+		voxels[pos] = get_monochrome_voxel(VoxelData.new(), col.color_id, col.palette_id)
 	return voxels
 
 func get_collision_point(origin: Vector3, direction: Vector3, object: VoxelObject) -> Array[Vector3i]:

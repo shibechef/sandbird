@@ -45,6 +45,7 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 	
 	var mesh_vertex_list: Dictionary[int, PackedVector3Array]
 	var mesh_UV_list: Dictionary[int, PackedVector2Array]
+	var start = Time.get_ticks_usec()
 	for x in range(AABB_lower.x, AABB_upper.x):
 		for y in range(AABB_lower.y, AABB_upper.y):
 			for z in range(AABB_lower.z, AABB_upper.z):
@@ -55,18 +56,22 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 					
 				var voxel: VoxelData = voxel_grid[pos]
 				
-				for n in voxel.face_colors.size():
-					var face_color: VoxelColor = voxel.face_colors[n]
-					if !mesh_vertex_list.has(face_color.palette_id):
-						mesh_vertex_list[face_color.palette_id] = PackedVector3Array()
-						mesh_UV_list[face_color.palette_id] = PackedVector2Array()
+				## Create the 6 faces
+				var multi = 0 if voxel.face_colors.size() == 1 else 1
+				for n in 6:
+					var face_color: int = voxel.face_colors[n * multi]
+					var face_palette: int = voxel.face_palettes[n * multi]
+					if !mesh_vertex_list.has(face_palette):
+						mesh_vertex_list[face_palette] = PackedVector3Array()
+						mesh_UV_list[face_palette] = PackedVector2Array()
 					
-					mesh_vertex_list[face_color.palette_id].append_array(get_face_array(n, pos))
-					var palette = color_palette_manager.all_palettes[face_color.palette_id]
-					var UV_index = Vector2(palette.colors[face_color.color_id].current_uv_index + 0.5, 0)
-					mesh_UV_list[face_color.palette_id].append_array(
+					mesh_vertex_list[face_palette].append_array(get_face_array(n, pos))
+					var palette = color_palette_manager.all_palettes[face_palette]
+					var UV_index = Vector2(palette.colors[face_color].current_uv_index + 0.5, 0)
+					mesh_UV_list[face_palette].append_array(
 						[UV_index, UV_index, UV_index, UV_index, UV_index, UV_index])
-		
+	var end = Time.get_ticks_usec()
+	print((end-start)/1000000.0)
 	var array_mesh = ArrayMesh.new()
 	
 	var n: int = 0
@@ -79,7 +84,6 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 		array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_arrays)
 		array_mesh.surface_set_material(n, color_palette_manager.all_palettes[surface].material)
 		n += 1
-		
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.mesh = array_mesh
 			

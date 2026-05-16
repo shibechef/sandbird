@@ -7,35 +7,47 @@
 [sub_resource type="Resource" id="Resource_q7h0j"]
 script = ExtResource("1_ktowp")
 color = Color(0.87857217, 0.15302941, 0.24035037, 1)
+palette_id = 1
+color_id = -1140
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_paus5"]
 script = ExtResource("1_ktowp")
 color = Color(0.502008, 0.048163645, 0.6950024, 1)
+palette_id = 1
+color_id = -935
 current_uv_index = 1
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_f23kq"]
 script = ExtResource("1_ktowp")
 color = Color(0.29922208, 0.5077467, 0.86921954, 1)
+palette_id = 1
+color_id = -125
 current_uv_index = 2
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_afnbf"]
 script = ExtResource("1_ktowp")
 color = Color(0.97889835, 0.8471011, 0.16050273, 1)
+palette_id = 1
+color_id = 170
 current_uv_index = 3
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_ahkma"]
 script = ExtResource("1_ktowp")
 color = Color(0.9662083, 0.5409966, 0.10832695, 1)
+palette_id = 1
+color_id = 275
 current_uv_index = 4
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_xwo0n"]
 script = ExtResource("1_ktowp")
 color = Color(0.21080884, 0.8419087, 0.211243, 1)
+palette_id = 1
+color_id = 2690
 current_uv_index = 5
 metadata/_custom_type_script = "uid://c4cxqovgpocot"
 

@@ -28,19 +28,15 @@ func get_first_border_collision(origin: Vector3, direction: Vector3, object: Vox
 	else:
 		return [Vector3i(result[0]["col_1"])]
 		
-func get_monochrome_voxel(voxel: VoxelData, color: VoxelColor) -> VoxelData:
-	for face in voxel.face_colors:
-		face.color_id = color.color_id
-		face.palette_id = color.palette_id
+func get_monochrome_voxel(voxel: VoxelData, color_id: int, palette_id: int) -> VoxelData:
+	voxel.face_colors = [color_id]
+	voxel.face_palettes = [palette_id]
 	
 	return voxel
 
-func get_selected_colors() -> Array[VoxelColor]:
-	var colors: Array[VoxelColor]
+func get_selected_colors() -> Array[PaletteColor]:
+	var colors: Array[PaletteColor]
 	var manager: ColorPaletteManager = ProjectManager.current_project.get_node("%ColorPaletteManager")
 	for color in manager.currently_selected_colors:
-		var voxel_color = VoxelColor.new()
-		voxel_color.color_id = color
-		voxel_color.palette_id = manager.palette_by_color[color]
-		colors.append(voxel_color)
+		colors.append(manager.get_color_from_id(color))
 	return colors

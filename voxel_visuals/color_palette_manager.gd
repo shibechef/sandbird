@@ -66,3 +66,10 @@ func ready_palettes() -> void:
 		var palette = all_palettes[palette_id]
 		for color_id in palette.colors:
 			palette_by_color[color_id] = palette_id
+
+func get_color_from_id(color_id: int) -> PaletteColor:
+	var palette = get_palette_from_color(color_id)
+	return palette.colors[color_id]
+
+func get_palette_from_color(color_id: int) -> VoxelColorPalette:
+	return all_palettes[palette_by_color[color_id]]

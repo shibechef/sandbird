@@ -186,3 +186,10 @@ static func is_within_AABB(point: Vector3i, AABB_lower: Vector3i, AABB_higher: V
 	 AABB_lower.z > point.z or point.z > AABB_higher.z):
 		return false
 	return true
+
+static func get_within_AABB(points: Array[Vector3i], AABB_lower: Vector3i, AABB_higher: Vector3i):
+	var passed_points: Array[Vector3i]
+	for point in points:
+		if is_within_AABB(point, AABB_lower, AABB_higher):
+			passed_points.append(point)
+	return passed_points

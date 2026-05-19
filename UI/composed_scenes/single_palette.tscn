@@ -1,7 +1,5 @@
 [gd_scene format=3 uid="uid://b3c800ak8in7u"]
 
-[ext_resource type="PackedScene" uid="uid://dlvu7ftyatecw" path="res://UI/composed_scenes/single_color.tscn" id="3_y6k63"]
-
 [node name="SinglePalette" type="Control" unique_id=1804888296]
 custom_minimum_size = Vector2(154, 62)
 layout_mode = 3
@@ -13,10 +11,25 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="VBoxContainer" unique_id=1365945987]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=777012560]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1365945987]
 layout_mode = 2
 theme_override_font_sizes/font_size = 8
 text = "Hello Boss"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer" unique_id=126225092]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=672308475]
+layout_mode = 2
+text = "-"
+
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1252311522]
+layout_mode = 2
+text = "options or soemthing"
 
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer" unique_id=1651693203]
 unique_name_in_owner = true
@@ -24,30 +37,3 @@ layout_mode = 2
 theme_override_constants/h_separation = 2
 theme_override_constants/v_separation = 2
 columns = 6
-
-[node name="SingleColor" parent="VBoxContainer/GridContainer" unique_id=879457170 instance=ExtResource("3_y6k63")]
-layout_mode = 2
-
-[node name="SingleColor2" parent="VBoxContainer/GridContainer" unique_id=1344901552 instance=ExtResource("3_y6k63")]
-layout_mode = 2
-
-[node name="SingleColor3" parent="VBoxContainer/GridContainer" unique_id=2005586573 instance=ExtResource("3_y6k63")]
-layout_mode = 2
-
-[node name="SingleColor4" parent="VBoxContainer/GridContainer" unique_id=1229440776 instance=ExtResource("3_y6k63")]
-layout_mode = 2
-
-[node name="SingleColor5" parent="VBoxContainer/GridContainer" unique_id=963262303 instance=ExtResource("3_y6k63")]
-layout_mode = 2
-
-[node name="SingleColor6" parent="VBoxContainer/GridContainer" unique_id=1008621188 instance=ExtResource("3_y6k63")]
-layout_mode = 2
-
-[node name="SingleColor7" parent="VBoxContainer/GridContainer" unique_id=699484791 instance=ExtResource("3_y6k63")]
-layout_mode = 2
-
-[node name="SingleColor8" parent="VBoxContainer/GridContainer" unique_id=1476031084 instance=ExtResource("3_y6k63")]
-layout_mode = 2
-
-[node name="SingleColor9" parent="VBoxContainer/GridContainer" unique_id=633025506 instance=ExtResource("3_y6k63")]
-layout_mode = 2

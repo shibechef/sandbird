@@ -7,6 +7,8 @@ func _ready():
 	paint_system = ProjectManager.current_project.get_node("%PaintSystem")
 
 func add_item(item: Resource, parent: Control) -> void:
+	## okay maybe just make this a group of brushes and each group is a grid container
+	
 	var brush_scene: Control = item_scene.instantiate()
 	parent.add_child(brush_scene)
 	var text: LineEdit = brush_scene.get_node("%Text")

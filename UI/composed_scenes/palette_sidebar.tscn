@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bmunx10p2xtwq" path="res://UI/scripts/palette_sidebar_UI.gd" id="1_ysmn4"]
 [ext_resource type="PackedScene" uid="uid://dlvu7ftyatecw" path="res://UI/composed_scenes/single_color.tscn" id="2_mqkag"]
 [ext_resource type="PackedScene" uid="uid://b3c800ak8in7u" path="res://UI/composed_scenes/single_palette.tscn" id="2_q7c4r"]
+[ext_resource type="PackedScene" uid="uid://b1jp0cikowbly" path="res://UI/composed_scenes/add_color.tscn" id="3_mqkag"]
 
 [node name="PaletteSidebarUI" type="Control" unique_id=201940366]
 custom_minimum_size = Vector2(155, 194)
@@ -12,6 +13,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_ysmn4")
 single_color_scene = ExtResource("2_mqkag")
+addition_scene = ExtResource("3_mqkag")
 item_scene = ExtResource("2_q7c4r")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2093866990]

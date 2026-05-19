@@ -91,8 +91,6 @@ unique_name_in_owner = true
 script = ExtResource("13_gqylq")
 metadata/_custom_type_script = "uid://ctyp21ixuvmen"
 
-[node name="CurrentProjectSetter" type="Node" parent="." unique_id=1312332489]
-
 [node name="Hierarchy" type="Node" parent="." unique_id=1297333066]
 unique_name_in_owner = true
 script = ExtResource("7_wapjm")

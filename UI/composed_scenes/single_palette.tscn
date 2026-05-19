@@ -1,49 +1,53 @@
-[gd_scene load_steps=6 format=3 uid="uid://b02bj4xvnsmrq"]
+[gd_scene format=3 uid="uid://b3c800ak8in7u"]
 
-[ext_resource type="Theme" uid="uid://d36i1d6pb5k2f" path="res://UI/data/text_theme.tres" id="1_rv7sa"]
+[ext_resource type="PackedScene" uid="uid://dlvu7ftyatecw" path="res://UI/composed_scenes/single_color.tscn" id="3_y6k63"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rilc8"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rilc8"]
-
-[sub_resource type="Gradient" id="Gradient_rv7sa"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0, 0.32098764, 0.67901236)
-colors = PackedColorArray(0, 0, 0, 1, 0.1583412, 0.009129164, 0.19589639, 1, 1, 1, 1, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_y6k63"]
-gradient = SubResource("Gradient_rv7sa")
-
-[node name="PaletteVisual" type="Control"]
+[node name="SinglePalette" type="Control" unique_id=1804888296]
+custom_minimum_size = Vector2(154, 62)
 layout_mode = 3
 anchors_preset = 0
-size_flags_vertical = 4
-theme = ExtResource("1_rv7sa")
-metadata/_edit_use_anchors_ = true
 
-[node name="Button" type="Button" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = -1
-offset_right = 80.0
-offset_bottom = 16.0
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rilc8")
-theme_override_styles/hover = SubResource("StyleBoxFlat_rilc8")
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=253494368]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="Button"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 2
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1365945987]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Hello Boss"
 
-[node name="Texture" type="TextureRect" parent="Button/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer" unique_id=1651693203]
 unique_name_in_owner = true
 layout_mode = 2
-texture = SubResource("GradientTexture1D_y6k63")
-expand_mode = 2
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 6
+
+[node name="SingleColor" parent="VBoxContainer/GridContainer" unique_id=879457170 instance=ExtResource("3_y6k63")]
+layout_mode = 2
+
+[node name="SingleColor2" parent="VBoxContainer/GridContainer" unique_id=1344901552 instance=ExtResource("3_y6k63")]
+layout_mode = 2
+
+[node name="SingleColor3" parent="VBoxContainer/GridContainer" unique_id=2005586573 instance=ExtResource("3_y6k63")]
+layout_mode = 2
+
+[node name="SingleColor4" parent="VBoxContainer/GridContainer" unique_id=1229440776 instance=ExtResource("3_y6k63")]
+layout_mode = 2
+
+[node name="SingleColor5" parent="VBoxContainer/GridContainer" unique_id=963262303 instance=ExtResource("3_y6k63")]
+layout_mode = 2
+
+[node name="SingleColor6" parent="VBoxContainer/GridContainer" unique_id=1008621188 instance=ExtResource("3_y6k63")]
+layout_mode = 2
+
+[node name="SingleColor7" parent="VBoxContainer/GridContainer" unique_id=699484791 instance=ExtResource("3_y6k63")]
+layout_mode = 2
+
+[node name="SingleColor8" parent="VBoxContainer/GridContainer" unique_id=1476031084 instance=ExtResource("3_y6k63")]
+layout_mode = 2
+
+[node name="SingleColor9" parent="VBoxContainer/GridContainer" unique_id=633025506 instance=ExtResource("3_y6k63")]
+layout_mode = 2

@@ -19,8 +19,8 @@ func _ready():
 	call_deferred("late_ready")
 
 func late_ready():
-	brush_sidebar = get_node("%UI_manager").get_node("BrushSidebarUI")
-	brush_sidebar.fill_list(brush_list.values())
+	brush_sidebar = get_node("%UI_manager").brush_sidebar
+	brush_sidebar.fill_list_vertical(brush_list.values())
 
 func try_click() -> void:
 	if current_brush.is_empty():

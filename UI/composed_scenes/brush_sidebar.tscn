@@ -4,25 +4,22 @@
 [ext_resource type="PackedScene" uid="uid://dkpe87xxdua08" path="res://UI/composed_scenes/single_brush.tscn" id="1_dglvy"]
 
 [node name="BrushSidebarUI" type="Control" unique_id=201940366]
+custom_minimum_size = Vector2(348, 124)
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_6q7k1")
+item_scene = ExtResource("1_dglvy")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2093866990]
 layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 333.0
-offset_bottom = 481.0
-theme_override_constants/separation = 66
+offset_right = 347.0
+offset_bottom = 132.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1813756040]
 layout_mode = 2
-theme_override_constants/separation = 53
+theme_override_constants/separation = 7
 
 [node name="BrushVisual" parent="VBoxContainer/HBoxContainer" unique_id=1404525813 instance=ExtResource("1_dglvy")]
 layout_mode = 2
@@ -44,7 +41,7 @@ layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1646338490]
 layout_mode = 2
-theme_override_constants/separation = 53
+theme_override_constants/separation = 7
 
 [node name="BrushVisual" parent="VBoxContainer/HBoxContainer2" unique_id=1058319413 instance=ExtResource("1_dglvy")]
 layout_mode = 2

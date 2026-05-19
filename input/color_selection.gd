@@ -62,3 +62,6 @@ func deselect_color(id: int) -> void:
 		var ui_element: TextureButton = palette_UIs[palette].get_child(index)
 		ui_element.set_instance_shader_parameter("black_replacement", UserPreferences.hover_color)
 		ui_element.set_pressed_no_signal(false)
+
+func select_palette(id: int) -> void:
+	return

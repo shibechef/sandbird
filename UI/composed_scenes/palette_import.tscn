@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://qhlka6qln6eh"]
+
+[ext_resource type="Script" uid="uid://b0paqvusxsnfq" path="res://UI/scripts/palette_import_UI.gd" id="1_ysmn4"]
+[ext_resource type="PackedScene" uid="uid://b02bj4xvnsmrq" path="res://UI/composed_scenes/palette_preview.tscn" id="2_q7c4r"]
+
+[node name="PaletteImport" type="Control" unique_id=1804888296]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_ysmn4")
+item_scene = ExtResource("2_q7c4r")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=997958691]
+layout_mode = 0
+offset_right = 204.0
+offset_bottom = 128.0
+theme_override_constants/separation = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1568070219]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PaletteVisual" parent="VBoxContainer/HBoxContainer" unique_id=879457170 instance=ExtResource("2_q7c4r")]
+layout_mode = 2
+
+[node name="PaletteVisual2" parent="VBoxContainer/HBoxContainer" unique_id=64188291 instance=ExtResource("2_q7c4r")]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1519691286]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PaletteVisual" parent="VBoxContainer/HBoxContainer2" unique_id=1330392797 instance=ExtResource("2_q7c4r")]
+layout_mode = 2
+
+[node name="PaletteVisual2" parent="VBoxContainer/HBoxContainer2" unique_id=1176136243 instance=ExtResource("2_q7c4r")]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer" unique_id=970018730]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PaletteVisual" parent="VBoxContainer/HBoxContainer3" unique_id=411400149 instance=ExtResource("2_q7c4r")]
+layout_mode = 2
+
+[node name="PaletteVisual2" parent="VBoxContainer/HBoxContainer3" unique_id=1020422072 instance=ExtResource("2_q7c4r")]
+layout_mode = 2

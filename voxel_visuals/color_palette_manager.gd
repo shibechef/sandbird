@@ -11,6 +11,10 @@ var currently_selected_colors: Array[int]
 
 func _ready():
 	ready_palettes()
+	call_deferred("update_palette_UI")
+
+func late_ready():
+	update_palette_UI()
 
 func add_new_color(palette: VoxelColorPalette) -> void:
 	var id = randi()
@@ -66,6 +70,10 @@ func ready_palettes() -> void:
 		var palette = all_palettes[palette_id]
 		for color_id in palette.colors:
 			palette_by_color[color_id] = palette_id
+
+func update_palette_UI() -> void:
+	var palette_sidebar = get_node("%UI_manager").palette_sidebar
+	palette_sidebar.fill_list_vertical(all_palettes.values())
 
 func get_color_from_id(color_id: int) -> PaletteColor:
 	var palette = get_palette_from_color(color_id)

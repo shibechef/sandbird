@@ -1,7 +1,7 @@
 extends Node
 class_name VoxelProject
 
-func _ready():
+func _init():
 	ProjectManager.current_project = self
 
 func on_new_project() -> void:

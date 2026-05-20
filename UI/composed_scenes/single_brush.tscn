@@ -6,16 +6,17 @@
 [ext_resource type="StyleBox" uid="uid://cdrajy0hbo8vq" path="res://UI/data/stylebox/selected_brush.tres" id="3_f5qfw"]
 [ext_resource type="StyleBox" uid="uid://dl517e0mbhqwd" path="res://UI/data/stylebox/hovered_brush.tres" id="4_f5qfw"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_3xogv"]
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_f5qfw"]
 
 [node name="BrushVisual" type="Control" unique_id=1058319413]
-custom_minimum_size = Vector2(48, 64)
+custom_minimum_size = Vector2(44, 64)
 layout_mode = 3
 anchors_preset = 0
 theme = ExtResource("1_6r84c")
 
 [node name="Button" type="Button" parent="." unique_id=157267812]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(44, 44)
 layout_mode = 0
 theme_override_styles/normal = ExtResource("2_6uoov")
 theme_override_styles/pressed = ExtResource("3_f5qfw")
@@ -38,7 +39,7 @@ theme_override_constants/margin_bottom = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-texture = SubResource("PlaceholderTexture2D_3xogv")
+texture = SubResource("PlaceholderTexture2D_f5qfw")
 
 [node name="Text" type="LineEdit" parent="Button/VBoxContainer" unique_id=869811763]
 unique_name_in_owner = true

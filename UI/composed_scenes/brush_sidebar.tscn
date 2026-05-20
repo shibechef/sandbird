@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b60c8y1bdhusc" path="res://UI/scripts/brush_sidebar_UI.gd" id="1_6q7k1"]
 [ext_resource type="PackedScene" uid="uid://dkpe87xxdua08" path="res://UI/composed_scenes/single_brush.tscn" id="1_dglvy"]
+[ext_resource type="PackedScene" uid="uid://cvxnjd2kcmdkh" path="res://UI/composed_scenes/add_brush.tscn" id="3_waiin"]
 
 [node name="BrushSidebarUI" type="Control" unique_id=201940366]
 custom_minimum_size = Vector2(348, 124)
@@ -10,53 +11,36 @@ anchors_preset = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_6q7k1")
-item_scene = ExtResource("1_dglvy")
+single_brush_scene = ExtResource("1_dglvy")
+add_brush_scene = ExtResource("3_waiin")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2093866990]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=817174368]
 layout_mode = 0
-offset_right = 347.0
-offset_bottom = 132.0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1813756040]
+[node name="GridContainer" type="GridContainer" parent="MarginContainer" unique_id=1517834837]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 7
+columns = 8
 
-[node name="BrushVisual" parent="VBoxContainer/HBoxContainer" unique_id=1404525813 instance=ExtResource("1_dglvy")]
-layout_mode = 2
-
-[node name="BrushVisual2" parent="VBoxContainer/HBoxContainer" unique_id=1913299602 instance=ExtResource("1_dglvy")]
+[node name="AddBrush" parent="MarginContainer/GridContainer" unique_id=879457170 instance=ExtResource("3_waiin")]
 layout_mode = 2
 
-[node name="BrushVisual3" parent="VBoxContainer/HBoxContainer" unique_id=1259082359 instance=ExtResource("1_dglvy")]
+[node name="BrushVisual" parent="MarginContainer/GridContainer" unique_id=1058319413 instance=ExtResource("1_dglvy")]
 layout_mode = 2
 
-[node name="BrushVisual4" parent="VBoxContainer/HBoxContainer" unique_id=1323624098 instance=ExtResource("1_dglvy")]
+[node name="BrushVisual2" parent="MarginContainer/GridContainer" unique_id=715210921 instance=ExtResource("1_dglvy")]
 layout_mode = 2
 
-[node name="BrushVisual5" parent="VBoxContainer/HBoxContainer" unique_id=715854380 instance=ExtResource("1_dglvy")]
+[node name="BrushVisual3" parent="MarginContainer/GridContainer" unique_id=874488528 instance=ExtResource("1_dglvy")]
 layout_mode = 2
 
-[node name="BrushVisual6" parent="VBoxContainer/HBoxContainer" unique_id=402233623 instance=ExtResource("1_dglvy")]
+[node name="BrushVisual4" parent="MarginContainer/GridContainer" unique_id=1744602735 instance=ExtResource("1_dglvy")]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1646338490]
-layout_mode = 2
-theme_override_constants/separation = 7
-
-[node name="BrushVisual" parent="VBoxContainer/HBoxContainer2" unique_id=1058319413 instance=ExtResource("1_dglvy")]
+[node name="BrushVisual5" parent="MarginContainer/GridContainer" unique_id=1061595173 instance=ExtResource("1_dglvy")]
 layout_mode = 2
 
-[node name="BrushVisual2" parent="VBoxContainer/HBoxContainer2" unique_id=715210921 instance=ExtResource("1_dglvy")]
-layout_mode = 2
-
-[node name="BrushVisual3" parent="VBoxContainer/HBoxContainer2" unique_id=874488528 instance=ExtResource("1_dglvy")]
-layout_mode = 2
-
-[node name="BrushVisual4" parent="VBoxContainer/HBoxContainer2" unique_id=1744602735 instance=ExtResource("1_dglvy")]
-layout_mode = 2
-
-[node name="BrushVisual5" parent="VBoxContainer/HBoxContainer2" unique_id=1061595173 instance=ExtResource("1_dglvy")]
-layout_mode = 2
-
-[node name="BrushVisual6" parent="VBoxContainer/HBoxContainer2" unique_id=1822818793 instance=ExtResource("1_dglvy")]
+[node name="BrushVisual6" parent="MarginContainer/GridContainer" unique_id=1822818793 instance=ExtResource("1_dglvy")]
 layout_mode = 2

@@ -54,11 +54,12 @@ func add_new_palette() -> void:
 	var palette_name = "1"
 	while all_palettes.has(palette_name):
 		palette_name = str(int(palette_name) + 1)
-	new_palette.name = palette_name
+	new_palette.palette_name = palette_name
 	new_palette.id = id
 	
 	all_palettes[id] = new_palette
-	add_new_color(new_palette)
+	add_new_color(id)
+	update_palette_UI()
 
 func delete_palette(palette_id: int) -> void:
 	all_palettes.erase(palette_id)
@@ -76,7 +77,7 @@ func ready_palettes() -> void:
 
 func update_palette_UI() -> void:
 	var palette_sidebar = get_node("%UI_manager").palette_sidebar
-	palette_sidebar.fill_list_vertical(all_palettes.values())
+	palette_sidebar.fill_list(all_palettes.values())
 
 func get_color_from_id(color_id: int) -> PaletteColor:
 	var palette = get_palette_from_color(color_id)

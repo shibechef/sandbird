@@ -1,15 +1,29 @@
-extends SidebarUI
+extends Control
 class_name BrushSidebarUI
 
 var paint_system: PaintSystem
+@export var single_brush_scene: PackedScene
+@export var add_brush_scene: PackedScene
 
 func _ready():
 	paint_system = ProjectManager.current_project.get_node("%PaintSystem")
 
-func add_item(item: Resource, parent: Control) -> void:
-	## okay maybe just make this a group of brushes and each group is a grid container
+func fill_list(brushes: Array[BaseBrush]) -> void:
+	var grid = get_node("%GridContainer")
+	var children = grid.get_children()
+	for child in children:
+		child.queue_free()
 	
-	var brush_scene: Control = item_scene.instantiate()
+	var add_brush_node: Control = add_brush_scene.instantiate()
+	var add_butt: Button = add_brush_node.get_node("%Button")
+	add_butt.pressed.connect(paint_system.add_new_brush)
+	grid.add_child(add_brush_node)
+	
+	for brush in brushes:
+		add_brush(brush, grid)
+
+func add_brush(item: Resource, parent: Control) -> void:
+	var brush_scene: Control = single_brush_scene.instantiate()
 	parent.add_child(brush_scene)
 	var text: LineEdit = brush_scene.get_node("%Text")
 	var texture: TextureRect = brush_scene.get_node("%Texture")

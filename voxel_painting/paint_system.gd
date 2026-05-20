@@ -20,7 +20,7 @@ func _ready():
 
 func late_ready():
 	brush_sidebar = get_node("%UI_manager").brush_sidebar
-	brush_sidebar.fill_list_vertical(brush_list.values())
+	update_brush_UI()
 
 func try_click() -> void:
 	if current_brush.is_empty():
@@ -34,6 +34,22 @@ func try_click() -> void:
 
 func select_brush(brush: String) -> void:
 	current_brush = brush
+
+func add_new_brush():
+	var brush_name = "brush 1"
+	var n = 1
+	while brush_list.has(brush_name):
+		n += 1
+		brush_name = "brush " + str(n)
+	
+	var brush: PointBrush = PointBrush.new()
+	brush.named_as = brush_name
+	brush_list[brush_name] = brush
+	
+	update_brush_UI()
+
+func update_brush_UI() -> void:
+	brush_sidebar.fill_list(brush_list.values())
 
 enum PaintingMode{
 	basic,

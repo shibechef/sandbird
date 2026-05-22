@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://davxngcuo6xeo"]
+
+[node name="BrushProperties" type="Control" unique_id=1466556821]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1302837169]
+layout_mode = 0
+offset_right = 542.0
+offset_bottom = 146.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=824429171]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=861956839]
+layout_mode = 2
+text = "Brush Type"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer2" unique_id=1895756489]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=524738386]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=552448004]
+layout_mode = 2
+text = "Name"
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer/HBoxContainer" unique_id=1684919665]
+custom_minimum_size = Vector2(138.89, 40.315)
+layout_mode = 2
+text = "Shit"
+placeholder_text = "Name"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer" unique_id=750429672]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3" unique_id=893571135]
+layout_mode = 2
+text = "Default Colors
+make this faded by default and
+go back to the previously selected colors when switching off"
+
+[node name="ItemList" type="ItemList" parent="VBoxContainer/HBoxContainer3" unique_id=1640674663]
+custom_minimum_size = Vector2(75.415, 0)
+layout_mode = 2

@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://rs2nmydu4gxx"]
+
+[ext_resource type="StyleBox" uid="uid://cdj3tw442wbp2" path="res://UI/data/stylebox/left_sidebar.tres" id="1_3v3su"]
+[ext_resource type="Script" uid="uid://b60c8y1bdhusc" path="res://UI/scripts/brush_sidebar_UI.gd" id="1_6q7k1"]
+[ext_resource type="PackedScene" uid="uid://dkpe87xxdua08" path="res://UI/scenes/brush/single_brush.tscn" id="1_dglvy"]
+[ext_resource type="PackedScene" uid="uid://cvxnjd2kcmdkh" path="res://UI/scenes/brush/add_brush.tscn" id="3_waiin"]
+
+[sub_resource type="Theme" id="Theme_31iu1"]
+RichTextLabel/colors/default_color = Color(0.89, 1, 0.8973333, 1)
+
+[node name="BrushSidebarUI" type="Panel" unique_id=1288893572]
+offset_right = 315.325
+offset_bottom = 95.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("1_3v3su")
+script = ExtResource("1_6q7k1")
+single_brush_scene = ExtResource("1_dglvy")
+add_brush_scene = ExtResource("3_waiin")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=817174368]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 315.325
+offset_bottom = 95.0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=1037486912]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_scroll_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer" unique_id=21685006]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=181039618]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="BrushVisual9" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=593292287 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+theme = SubResource("Theme_31iu1")
+
+[node name="BrushVisual10" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=527960602 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+theme = SubResource("Theme_31iu1")
+
+[node name="BrushVisual11" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1446145438 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+theme = SubResource("Theme_31iu1")
+
+[node name="BrushVisual8" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=496427235 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+theme = SubResource("Theme_31iu1")
+
+[node name="BrushVisual7" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1294656523 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+theme = SubResource("Theme_31iu1")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=725907088]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="AddBrush" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=879457170 instance=ExtResource("3_waiin")]
+layout_mode = 2
+theme = SubResource("Theme_31iu1")
+
+[node name="BrushVisual" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=1058319413 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+theme = SubResource("Theme_31iu1")
+
+[node name="BrushVisual2" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=715210921 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+theme = SubResource("Theme_31iu1")
+
+[node name="BrushVisual3" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=874488528 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+theme = SubResource("Theme_31iu1")
+
+[node name="BrushVisual4" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=1744602735 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+theme = SubResource("Theme_31iu1")
+
+[node name="BrushVisual5" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=1061595173 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+theme = SubResource("Theme_31iu1")
+
+[node name="BrushVisual6" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=1822818793 instance=ExtResource("1_dglvy")]
+layout_mode = 2
+theme = SubResource("Theme_31iu1")

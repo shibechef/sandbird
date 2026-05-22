@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bgqra73vy23m3"
-path="res://.godot/imported/UncutSans-Medium.otf-e4b03e06d676cbfc349f40eaf8c32f78.fontdata"
+uid="uid://dcy5iy52pir2s"
+path="res://.godot/imported/UncutSans-Regular.otf-301322104490d4f145a1207b85624061.fontdata"
 
 [deps]
 
-source_file="res://UI/font/UncutSans-Medium.otf"
-dest_files=["res://.godot/imported/UncutSans-Medium.otf-e4b03e06d676cbfc349f40eaf8c32f78.fontdata"]
+source_file="res://UI/data/font/UncutSans-Regular.otf"
+dest_files=["res://.godot/imported/UncutSans-Regular.otf-301322104490d4f145a1207b85624061.fontdata"]
 
 [params]
 

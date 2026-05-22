@@ -9,12 +9,12 @@ var palette_by_color: Dictionary[int, int]
 
 var currently_selected_colors: Array[int]
 
+var ui_manager: UI_manager
+
 func _ready():
 	ready_palettes()
-	call_deferred("update_palette_UI")
-
-func late_ready():
-	update_palette_UI()
+	ui_manager = get_node("%UI_manager")
+	ui_manager.update_palette_sidebar.call_deferred(all_palettes.values())
 
 func add_new_color(palette_id: int) -> void:
 	var palette: VoxelColorPalette = all_palettes[palette_id]
@@ -38,7 +38,7 @@ func add_new_color(palette_id: int) -> void:
 		
 		palette.colors[id].current_uv_index = num + 1
 		break
-	update_palette_UI()
+	ui_manager.update_palette_sidebar(all_palettes.values())
 			
 func delete_color(palette: VoxelColorPalette, color_id: int) -> void:
 	palette.colors.erase(color_id)
@@ -59,7 +59,7 @@ func add_new_palette() -> void:
 	
 	all_palettes[id] = new_palette
 	add_new_color(id)
-	update_palette_UI()
+	ui_manager.update_palette_sidebar(all_palettes.values())
 
 func delete_palette(palette_id: int) -> void:
 	all_palettes.erase(palette_id)
@@ -74,11 +74,7 @@ func ready_palettes() -> void:
 		var palette = all_palettes[palette_id]
 		for color_id in palette.colors:
 			palette_by_color[color_id] = palette_id
-
-func update_palette_UI() -> void:
-	var palette_sidebar = get_node("%UI_manager").palette_sidebar
-	palette_sidebar.fill_list(all_palettes.values())
-
+	
 func get_color_from_id(color_id: int) -> PaletteColor:
 	var palette = get_palette_from_color(color_id)
 	return palette.colors[color_id]

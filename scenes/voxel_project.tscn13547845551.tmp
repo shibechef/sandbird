@@ -21,7 +21,6 @@
 [ext_resource type="Script" uid="uid://sou14aoubqus" path="res://UI/scripts/UI_manager.gd" id="17_dhmkn"]
 [ext_resource type="PackedScene" uid="uid://rs2nmydu4gxx" path="res://UI/scenes/brush/brush_sidebar.tscn" id="20_2epbo"]
 [ext_resource type="PackedScene" uid="uid://bmcoto6aqkjjg" path="res://UI/scenes/palette/palette_sidebar.tscn" id="21_ayq5r"]
-[ext_resource type="PackedScene" uid="uid://bprvf5xcj52p5" path="res://UI/scenes/brush/extended_brush.tscn" id="22_ayq5r"]
 
 [sub_resource type="Resource" id="Resource_uif21"]
 script = ExtResource("8_2epbo")
@@ -132,20 +131,12 @@ metadata/_custom_type_script = "uid://sou14aoubqus"
 [node name="BrushSidebarUI" parent="UI_manager" unique_id=201940366 instance=ExtResource("20_2epbo")]
 unique_name_in_owner = true
 layout_mode = 1
-offset_top = 9.0
-offset_bottom = 489.0
+offset_top = 240.0
+offset_bottom = 720.0
 
 [node name="PaletteSidebarUI" parent="UI_manager" unique_id=918870501 instance=ExtResource("21_ayq5r")]
 unique_name_in_owner = true
 layout_mode = 1
-offset_top = 500.0
+offset_top = 720.0
 offset_right = 348.0
-offset_bottom = 959.00073
-
-[node name="ExtendedBrushSidebarUI" parent="UI_manager" unique_id=210707944 instance=ExtResource("22_ayq5r")]
-unique_name_in_owner = true
-layout_mode = 1
-offset_left = -171.0
-offset_top = 28.0
-offset_right = -171.0
-offset_bottom = 28.0
+offset_bottom = 1179.0

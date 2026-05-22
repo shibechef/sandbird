@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://b3c800ak8in7u"]
+
+[ext_resource type="Theme" uid="uid://cjsn4j2sjhnlo" path="res://UI/data/themes/medium.tres" id="1_iv7st"]
+
+[node name="SinglePalette" type="Control" unique_id=1804888296]
+custom_minimum_size = Vector2(154, 62)
+layout_mode = 3
+anchors_preset = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=253494368]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=777012560]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+
+[node name="NameButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1670519415]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_iv7st")
+text = "stupid color"
+alignment = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer" unique_id=630366491]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=672308475]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_iv7st")
+text = "x"
+
+[node name="DeleteButton2" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1852594548]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_iv7st")
+text = "*"
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer" unique_id=1651693203]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 6

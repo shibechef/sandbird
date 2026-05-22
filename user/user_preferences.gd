@@ -13,6 +13,9 @@ class_name UserPreference
 @export var hover_color: Color = Color(.6, .8, 9)
 @export var outline_selection_width: float = .11
 
+@export var base_UI_color: Color = Color(.54, .56, 1.0)
+@export var secondary_UI_color: Color = Color(.75, .5, .74)
+
 @export var free_cam_sensitivity: float = 1.0
 
 enum ObjectCreationPoint {

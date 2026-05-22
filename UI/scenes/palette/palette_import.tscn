@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://qhlka6qln6eh"]
 
 [ext_resource type="Script" uid="uid://b0paqvusxsnfq" path="res://UI/scripts/palette_import_UI.gd" id="1_ysmn4"]
-[ext_resource type="PackedScene" uid="uid://b02bj4xvnsmrq" path="res://UI/composed_scenes/palette_preview.tscn" id="2_q7c4r"]
+[ext_resource type="PackedScene" uid="uid://b02bj4xvnsmrq" path="res://UI/scenes/palette/palette_preview.tscn" id="2_q7c4r"]
 
 [node name="PaletteImport" type="Control" unique_id=1804888296]
 layout_mode = 3

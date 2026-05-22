@@ -5,7 +5,7 @@ var object_selection: ObjectSelectionSystem
 var collision_system: CollisionSystem
 var palette_manager: ColorPaletteManager
 var mesh_system: MeshSystem
-var brush_sidebar: BrushSidebarUI
+var ui_manager: UI_manager
 
 var brush_paths: Dictionary[String, String]
 @export var brush_list: Dictionary[String, BaseBrush] 
@@ -19,8 +19,8 @@ func _ready():
 	call_deferred("late_ready")
 
 func late_ready():
-	brush_sidebar = get_node("%UI_manager").brush_sidebar
-	update_brush_UI()
+	ui_manager = get_node("%UI_manager")
+	ui_manager.update_brush_sidebar(brush_list.values())
 
 func try_click() -> void:
 	if current_brush.is_empty():
@@ -46,10 +46,7 @@ func add_new_brush():
 	brush.named_as = brush_name
 	brush_list[brush_name] = brush
 	
-	update_brush_UI()
-
-func update_brush_UI() -> void:
-	brush_sidebar.fill_list(brush_list.values())
+	ui_manager.update_brush_sidebar(brush_list.values())	
 
 enum PaintingMode{
 	basic,

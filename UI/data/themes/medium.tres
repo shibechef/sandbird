@@ -1,0 +1,23 @@
+[gd_resource type="Theme" format=3 uid="uid://cjsn4j2sjhnlo"]
+
+[ext_resource type="FontFile" uid="uid://bgqra73vy23m3" path="res://UI/data/font/UncutSans-Medium.otf" id="1_kn1bh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ibblo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1hk13"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_imnf3"]
+
+[resource]
+default_font = ExtResource("1_kn1bh")
+default_font_size = 16
+Label/colors/font_color = Color(0.9019608, 0.7647059, 0.7647059, 1)
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 2
+Label/font_sizes/font_size = 16
+Label/fonts/font = ExtResource("1_kn1bh")
+LineEdit/colors/font_color = Color(1, 1, 1, 1)
+LineEdit/colors/font_uneditable_color = Color(0.9019608, 0.7647059, 0.7647059, 1)
+LineEdit/styles/focus = SubResource("StyleBoxEmpty_ibblo")
+LineEdit/styles/normal = SubResource("StyleBoxEmpty_1hk13")
+LineEdit/styles/read_only = SubResource("StyleBoxEmpty_imnf3")

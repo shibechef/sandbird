@@ -3,6 +3,7 @@ class_name ColorSelectionInput
 
 var manager: ColorPaletteManager
 var palette_UIs: Dictionary[int, RadialMenu]
+var color_buttons: Dictionary[int, TextureButton]
 
 ## Only for selecting colors with keys
 @export var currently_selected_palette: int
@@ -48,6 +49,9 @@ func select_color(id: int) -> void:
 	
 	if !manager.currently_selected_colors.has(id):
 		manager.currently_selected_colors.append(id)
+	
+	color_buttons[id].set_pressed_no_signal(true)
+	
 	if palette_UIs.has(palette):
 		var ui_element: TextureButton = palette_UIs[palette].get_child(index)
 		ui_element.set_instance_shader_parameter("black_replacement", UserPreferences.selection_color)
@@ -57,11 +61,17 @@ func deselect_color(id: int) -> void:
 	var palette = manager.palette_by_color[id]
 	var index = manager.all_palettes[palette].color_order.find(id)
 	
+	color_buttons[id].set_pressed_no_signal(false)
+	
 	manager.currently_selected_colors.erase(id)
 	if palette_UIs.has(palette):
 		var ui_element: TextureButton = palette_UIs[palette].get_child(index)
 		ui_element.set_instance_shader_parameter("black_replacement", UserPreferences.hover_color)
 		ui_element.set_pressed_no_signal(false)
+
+func update_sidebar_selections() -> void:
+	for color_id in manager.currently_selected_colors:
+		color_buttons[color_id].set_pressed_no_signal(true)
 
 func select_palette(id: int) -> void:
 	return

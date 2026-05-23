@@ -1,9 +1,20 @@
 [gd_scene format=3 uid="uid://dlvu7ftyatecw"]
 
 [ext_resource type="Theme" uid="uid://cjsn4j2sjhnlo" path="res://UI/data/themes/medium.tres" id="1_sl637"]
-[ext_resource type="StyleBox" uid="uid://dbi85feyepdso" path="res://UI/data/stylebox/unselected_brush.tres" id="2_85h57"]
-[ext_resource type="StyleBox" uid="uid://cdrajy0hbo8vq" path="res://UI/data/stylebox/selected_brush.tres" id="3_0prje"]
-[ext_resource type="StyleBox" uid="uid://dl517e0mbhqwd" path="res://UI/data/stylebox/hovered_brush.tres" id="4_edme7"]
+
+[sub_resource type="Gradient" id="Gradient_r4roo"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_y6y02"]
+gradient = SubResource("Gradient_r4roo")
+width = 1
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_r4roo"]
+gradient = SubResource("Gradient_r4roo")
+width = 1
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_3l4sj"]
+gradient = SubResource("Gradient_r4roo")
+width = 1
 
 [sub_resource type="Gradient" id="Gradient_sl637"]
 offsets = PackedFloat32Array(0)
@@ -14,18 +25,22 @@ gradient = SubResource("Gradient_sl637")
 width = 1
 
 [node name="SingleColor" type="Control" unique_id=879457170]
-custom_minimum_size = Vector2(20, 20)
+custom_minimum_size = Vector2(22, 22)
 layout_mode = 3
 anchors_preset = 0
 theme = ExtResource("1_sl637")
 
-[node name="Button" type="Button" parent="." unique_id=1670553264]
+[node name="Button" type="TextureButton" parent="." unique_id=1190866312]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(20, 20)
+custom_minimum_size = Vector2(22, 22)
 layout_mode = 0
-theme_override_styles/normal = ExtResource("2_85h57")
-theme_override_styles/pressed = ExtResource("3_0prje")
-theme_override_styles/hover = ExtResource("4_edme7")
+offset_right = 22.0
+offset_bottom = 22.0
+toggle_mode = true
+texture_normal = SubResource("GradientTexture1D_y6y02")
+texture_pressed = SubResource("GradientTexture1D_r4roo")
+texture_hover = SubResource("GradientTexture1D_3l4sj")
+stretch_mode = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="Button" unique_id=571709661]
 layout_mode = 1
@@ -34,10 +49,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 1
-theme_override_constants/margin_top = 1
-theme_override_constants/margin_right = 1
-theme_override_constants/margin_bottom = 1
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
 
 [node name="Texture" type="TextureRect" parent="Button/MarginContainer" unique_id=923271472]
 unique_name_in_owner = true

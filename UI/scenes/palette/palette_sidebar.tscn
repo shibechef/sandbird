@@ -20,18 +20,25 @@ single_color_scene = ExtResource("2_mqkag")
 add_color_scene = ExtResource("3_mqkag")
 add_palette_scene = ExtResource("5_x1th3")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1058877926]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1004163896]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=1058877926]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=2093866990]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer" unique_id=2093866990]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="SinglePalette" parent="ScrollContainer/VBoxContainer" unique_id=1804888296 instance=ExtResource("2_q7c4r")]
+[node name="SinglePalette" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=1804888296 instance=ExtResource("2_q7c4r")]
 layout_mode = 2
 
-[node name="SinglePalette2" parent="ScrollContainer/VBoxContainer" unique_id=735443469 instance=ExtResource("2_q7c4r")]
+[node name="SinglePalette2" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=735443469 instance=ExtResource("2_q7c4r")]
 layout_mode = 2
 
-[node name="SinglePalette3" parent="ScrollContainer/VBoxContainer" unique_id=2144224685 instance=ExtResource("2_q7c4r")]
+[node name="SinglePalette3" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=2144224685 instance=ExtResource("2_q7c4r")]
 layout_mode = 2

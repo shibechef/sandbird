@@ -23,30 +23,33 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_cn3i0")
 
 [node name="Button" type="Button" parent="." unique_id=847863240]
 layout_mode = 0
-offset_left = 31.0
+offset_left = 27.0
 offset_top = 13.0
-offset_right = 85.0
-offset_bottom = 44.0
+offset_right = 80.99986
+offset_bottom = 40.0
 rotation = 1.5707964
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_ronii")
 text = "Color"
 
 [node name="Button2" type="Button" parent="." unique_id=691875603]
 layout_mode = 0
-offset_left = 31.0
+offset_left = 27.0
 offset_top = 72.0
-offset_right = 94.0
-offset_bottom = 103.0
+offset_right = 89.99982
+offset_bottom = 99.0
 rotation = 1.5707964
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_ronii")
 text = "Palette"
 
 [node name="Button3" type="Button" parent="." unique_id=24727511]
 layout_mode = 0
-offset_left = 31.0
+offset_left = 27.0
 offset_top = 141.0
-offset_right = 93.0
-offset_bottom = 172.0
+offset_right = 88.99985
+offset_bottom = 168.0
 rotation = 1.5707964
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_ronii")
 text = "Import"

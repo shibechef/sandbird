@@ -10,6 +10,7 @@ var ui_manager: UI_manager
 var brush_paths: Dictionary[String, String]
 @export var brush_list: Dictionary[String, BaseBrush] 
 var current_brush: String
+var brush_UI_buttons: Dictionary[String, Button]
 
 func _ready():
 	object_selection = get_node("%ObjectSelectionSystem")
@@ -33,6 +34,10 @@ func try_click() -> void:
 	obj.change_voxels(voxel_diff)
 
 func select_brush(brush: String) -> void:
+	if current_brush != "":
+		brush_UI_buttons[current_brush].set_pressed_no_signal(false)
+	
+	brush_UI_buttons[brush].set_pressed_no_signal(true)
 	current_brush = brush
 
 func add_new_brush():

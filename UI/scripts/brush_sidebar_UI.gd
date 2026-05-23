@@ -59,6 +59,7 @@ func add_brush(item: Resource, parent: Control) -> void:
 	parent.add_child(brush_scene)
 	var texture: TextureRect = brush_scene.get_node("%Texture")
 	var button: Button = brush_scene.get_node("%Button")
+	paint_system.brush_UI_buttons[item.named_as] = button
 	
 	button.pressed.connect(paint_system.select_brush.bind(item.named_as))
 	## uncomment when dynamic textures are a thing

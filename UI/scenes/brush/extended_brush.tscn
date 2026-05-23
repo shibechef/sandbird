@@ -24,21 +24,23 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_mdjra")
 
 [node name="Button" type="Button" parent="." unique_id=847863240]
 layout_mode = 0
-offset_left = 31.0
+offset_left = 27.0
 offset_top = 13.0
-offset_right = 85.0
-offset_bottom = 44.0
+offset_right = 80.99988
+offset_bottom = 40.0
 rotation = 1.5707964
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_bn4wx")
 text = "Brush"
 
 [node name="Button2" type="Button" parent="." unique_id=691875603]
 layout_mode = 0
-offset_left = 31.0
+offset_left = 27.0
 offset_top = 72.0
-offset_right = 93.0
-offset_bottom = 103.0
+offset_right = 88.99989
+offset_bottom = 99.0
 rotation = 1.5707964
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_bn4wx")
 text = "Import"
 

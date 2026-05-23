@@ -36,6 +36,7 @@ custom_minimum_size = Vector2(22, 22)
 layout_mode = 0
 offset_right = 22.0
 offset_bottom = 22.0
+focus_mode = 0
 toggle_mode = true
 texture_normal = SubResource("GradientTexture1D_y6y02")
 texture_pressed = SubResource("GradientTexture1D_r4roo")

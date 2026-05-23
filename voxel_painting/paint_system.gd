@@ -6,6 +6,7 @@ var collision_system: CollisionSystem
 var palette_manager: ColorPaletteManager
 var mesh_system: MeshSystem
 var ui_manager: UI_manager
+var edit_logger: EditLogging
 
 var brush_paths: Dictionary[String, String]
 @export var brush_list: Dictionary[String, BaseBrush] 
@@ -17,6 +18,7 @@ func _ready():
 	collision_system = get_node("%CollisionSystem")
 	palette_manager = get_node("%ColorPaletteManager")
 	mesh_system = get_node("%MeshSystem")
+	edit_logger = get_node("%EditLogger")
 	call_deferred("late_ready")
 
 func late_ready():
@@ -31,6 +33,11 @@ func try_click() -> void:
 	var click_data = get_parent().get_node("%WorldClick").get_mouse_world_pos()
 	var obj: VoxelObject = object_selection.currently_selected_objects[object_selection.currently_selected_objects.keys()[0]]
 	var voxel_diff: Dictionary[Vector3i, VoxelData] = brush_list[current_brush].get_voxels(click_data[0], click_data[1], obj)
+	
+	var log := EditLog.new()
+	log.type = EditLogging.EditType.voxel_change
+	log.arguments = [voxel_diff]
+	edit_logger.previous_changes.append(log)
 	obj.change_voxels(voxel_diff)
 
 func select_brush(brush: String) -> void:

@@ -11,5 +11,5 @@ func get_color_value(color: Color, type: int = 0) -> float:
 	return 0.0
 
 func get_grayscale_color(color: Color, type: int = 0) -> Color:
-	var luminance: float = get_color_value(color, type)
-	return Color(luminance, luminance, luminance)
+	var color_value: float = get_color_value(color, type)
+	return Color(color_value, color_value, color_value)

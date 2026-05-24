@@ -32,12 +32,12 @@ func try_click() -> void:
 	
 	var click_data = get_parent().get_node("%WorldClick").get_mouse_world_pos()
 	var obj: VoxelObject = object_selection.currently_selected_objects[object_selection.currently_selected_objects.keys()[0]]
-	var voxel_diff: Dictionary[Vector3i, VoxelData] = brush_list[current_brush].get_voxels(click_data[0], click_data[1], obj)
 	
-	var log := EditLog.new()
-	log.type = EditLogging.EditType.voxel_change
-	log.arguments = [voxel_diff]
-	edit_logger.previous_changes.append(log)
+	var voxel_diff: Dictionary[Vector3i, VoxelData] = brush_list[current_brush].get_voxels(click_data[0], click_data[1], obj)
+	voxel_diff = obj.get_only_changed(voxel_diff)
+	var previous_voxels: Dictionary[Vector3i, VoxelData] = obj.get_previous(voxel_diff)
+		
+	edit_logger.log_edit(EditLogging.EditType.voxel_change, [voxel_diff, previous_voxels, obj.get_instance_id()])
 	obj.change_voxels(voxel_diff)
 
 func select_brush(brush: String) -> void:

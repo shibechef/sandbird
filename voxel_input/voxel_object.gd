@@ -50,25 +50,46 @@ func update_chunk(chunk: Vector3i) -> void:
 	call_thread_safe("add_child", visual_mesh_chunks[chunk])
 	if removed_chunk != null:
 		removed_chunk.queue_free()
-	
-func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
+
+func get_only_changed(voxels: Dictionary[Vector3i, VoxelData]) -> Dictionary[Vector3i, VoxelData]:
 	var AABB_lower: Vector3 = position
 	var AABB_upper: Vector3 = AABB_lower + Vector3(dimensions)
-
+	
+	var final_voxels: Dictionary[Vector3i, VoxelData]
+	
 	for pos in voxels:
-		pos = Vector3i(pos)
-		
 		if !CollisionSystem.is_within_AABB(pos, AABB_lower, AABB_upper):
 			continue
-			
+		
+		if voxel_grid.has(pos):
+			if voxels[pos].face_colors == voxel_grid[pos].face_colors:
+				continue
+		
+		final_voxels[pos] = voxels[pos]
+	
+	return final_voxels
+
+func get_previous(voxels: Dictionary[Vector3i, VoxelData]) -> Dictionary[Vector3i, VoxelData]:
+	var previous_voxels: Dictionary[Vector3i, VoxelData]
+	for pos in voxels:
+		if !voxel_grid.has(pos):
+			previous_voxels[pos] = null
+		else:
+			previous_voxels[pos] = voxel_grid[pos]
+	return previous_voxels
+
+
+func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
+	for pos in voxels:			
 		if voxels[pos] == null and voxel_grid.has(pos):
 			voxel_grid.erase(pos)
 		
 		var mesh_chunk = mesh_system.get_chunk_pos(pos, visual_offset)
 		if !edited_chunks.has(mesh_chunk):
 			edited_chunks.append(mesh_chunk)
-
-		voxel_grid[pos] = voxels[pos]
+		
+		if voxels[pos] != null:
+			voxel_grid[pos] = voxels[pos]
 
 func create_BB_outline() -> void:
 	var mesh_data = mesh_system.create_box(Vector3.ZERO, dimensions)

@@ -64,6 +64,9 @@ func get_current_offset() -> Vector3:
 	return offset
 
 func cancel_move() -> void:
+	if !actively_moving:
+		return
+	
 	if current_mode == InputManager.InteractionMode.object:
 		var selected_objs: Dictionary[int, VoxelObject] = object_selection.currently_selected_objects
 		for obj_id in selected_objs:

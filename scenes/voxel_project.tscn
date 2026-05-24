@@ -18,6 +18,7 @@
 [ext_resource type="Resource" uid="uid://ce3m077vbf1hg" path="res://user/palettes/rainbow.tres" id="11_tnig6"]
 [ext_resource type="Script" uid="uid://ctyp21ixuvmen" path="res://input/color_selection.gd" id="13_gqylq"]
 [ext_resource type="Script" uid="uid://cvfpnpo0eu04j" path="res://voxel_input/edit_logging.gd" id="15_tnig6"]
+[ext_resource type="Script" uid="uid://ciw1gscypck6r" path="res://voxel_input/move_object_system.gd" id="17_4inyy"]
 [ext_resource type="Script" uid="uid://sou14aoubqus" path="res://UI/scripts/UI_manager.gd" id="17_dhmkn"]
 [ext_resource type="PackedScene" uid="uid://rs2nmydu4gxx" path="res://UI/scenes/brush/brush_sidebar.tscn" id="20_2epbo"]
 [ext_resource type="PackedScene" uid="uid://bmcoto6aqkjjg" path="res://UI/scenes/palette/palette_sidebar.tscn" id="21_ayq5r"]
@@ -94,6 +95,11 @@ metadata/_custom_type_script = "uid://cvfpnpo0eu04j"
 unique_name_in_owner = true
 script = ExtResource("13_gqylq")
 metadata/_custom_type_script = "uid://ctyp21ixuvmen"
+
+[node name="MoveObjectSystem" type="Node" parent="." unique_id=1426845036]
+unique_name_in_owner = true
+script = ExtResource("17_4inyy")
+metadata/_custom_type_script = "uid://ciw1gscypck6r"
 
 [node name="Hierarchy" type="Node" parent="." unique_id=1297333066]
 unique_name_in_owner = true

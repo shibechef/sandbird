@@ -16,6 +16,7 @@ class_name UserPreference
 @export var base_UI_color: Color = Color(.54, .56, 1.0)
 @export var secondary_UI_color: Color = Color(.75, .5, .74)
 
+@export var object_grabbing_sensitivity: float = 1.0
 @export var free_cam_sensitivity: float = 1.0
 
 enum ObjectCreationPoint {

@@ -3,11 +3,14 @@ class_name InputManager
 
 @export var interaction_mode: InteractionMode = InteractionMode.object
 @export var focus_mode: ActionFocusMode = ActionFocusMode.none
+var last_mouse_pos: Vector2 = Vector2.ZERO
 
 var selection_system: ObjectSelectionSystem
 var paint_system: PaintSystem
 var creation_system: ObjectCreationSystem
 var color_palette_manager: ColorPaletteManager
+var edit_logging: EditLogging
+var move_obj_system: MoveObjectSystem
 
 var number_selection_sequence: String
 
@@ -16,25 +19,61 @@ func _ready():
 	paint_system = get_node("%PaintSystem")
 	creation_system = get_node("%ObjectCreationSystem")
 	color_palette_manager = get_node("%ColorPaletteManager")
+	edit_logging = get_node("%EditLogger")
+	move_obj_system = get_node("%MoveObjectSystem")
 
 func _process(delta):
+	handle_mode_switching()
 	handle_key_interaction()
+	handle_grab_inputs()
 	## Need to make this unique with other things that use 0-9
 	handle_color_selection_inputs()
 	save_number_input_chain()
-	
-	if Input.is_action_just_pressed("switch_edit_mode"):
-		if interaction_mode == InteractionMode.voxel:
-			enter_object_mode()
-		elif interaction_mode == InteractionMode.object:
-			if selection_system.currently_selected_objects.size() != 0:
-				enter_edit_mode()
-			## TODO: Add a pop-up if nothing is selected
-		
+	last_mouse_pos = get_viewport().get_mouse_position()
+
 func _unhandled_input(event: InputEvent):
 	handle_mouse_interaction(event)
 
 func handle_key_interaction():
+	if Input.is_action_just_pressed("create_new_object"):
+		creation_system.create_new_object()
+	
+	## undo and redo overlap with ctrl z but need to be exclusive
+	if Input.is_action_just_pressed("undo_action"):
+		if !Input.is_action_pressed("redo_action"):
+			edit_logging.undo_last_edit()
+	if Input.is_action_just_pressed("redo_action"):
+		edit_logging.redo_last_edit()
+	
+func handle_grab_inputs() -> void:
+	if Input.is_action_pressed("move_object"):
+		var diff = get_viewport().get_mouse_position() - last_mouse_pos
+		## y is flipped on the viewport
+		diff.y = -diff.y
+		move_obj_system.current_mouse_move += diff
+	if Input.is_action_just_pressed("move_object"):
+		move_obj_system.start_move(interaction_mode)
+	if Input.is_action_just_released("move_object"):
+		move_obj_system.finalize_move()
+	
+	var cur_vector = Vector3(
+			Input.is_action_pressed("lock_x"),
+			Input.is_action_pressed("lock_y"), 
+			Input.is_action_pressed("lock_z"))
+	
+	if move_obj_system.actively_moving and Input.is_action_just_pressed("escape"):
+		move_obj_system.cancel_move()
+	
+	if move_obj_system.actively_moving:
+		if Input.is_action_just_pressed("lock_x") or \
+		Input.is_action_just_pressed("lock_y") or \
+		Input.is_action_just_pressed("lock_z"):
+			if cur_vector == move_obj_system.pressed_dirs:
+				move_obj_system.pressed_dirs = Vector3.ONE
+			else:
+				move_obj_system.pressed_dirs = cur_vector
+
+func handle_object_creation() -> void:
 	if Input.is_action_just_pressed("create_new_object"):
 		creation_system.create_new_object()
 
@@ -103,10 +142,22 @@ func save_number_input_chain() -> void:
 	else:
 		number_selection_sequence = ""
 
+func handle_mode_switching() -> void:
+	if !Input.is_action_just_pressed("switch_edit_mode"):
+		return
+		
+	if interaction_mode == InteractionMode.voxel:
+		enter_object_mode()
+	elif interaction_mode == InteractionMode.object:
+		if selection_system.currently_selected_objects.size() != 0:
+			enter_edit_mode()
+		## TODO: Add a pop-up if nothing is selected
+
 func enter_edit_mode() -> void:
 	interaction_mode = InteractionMode.voxel
 	selection_system.deselect_all_but_recent()
 	selection_system.hide_unselected_borders()
+	move_obj_system.cancel_move()
 
 func enter_object_mode() -> void:
 	interaction_mode = InteractionMode.object

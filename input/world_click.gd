@@ -1,4 +1,5 @@
 extends Node
+class_name WorldClick
 
 @export var camera_system: CameraSystem
 

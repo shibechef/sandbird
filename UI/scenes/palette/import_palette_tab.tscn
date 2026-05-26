@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://qhlka6qln6eh"]
+
+[ext_resource type="Script" uid="uid://u2vvuxg6lu2u" path="res://UI/scripts/palette/palette_import_tab.gd" id="1_3uxet"]
+[ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/ui_masking.tres" id="1_y2pvi"]
+[ext_resource type="PackedScene" uid="uid://b02bj4xvnsmrq" path="res://UI/scenes/palette/palette_preview.tscn" id="2_y2pvi"]
+
+[node name="ImportPaletteTab" type="Control" unique_id=1804888296]
+material = ExtResource("1_y2pvi")
+custom_minimum_size = Vector2(206.93, 200)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_3uxet")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=997958691]
+use_parent_material = true
+layout_mode = 0
+offset_right = 204.0
+offset_bottom = 128.0
+theme_override_constants/separation = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1568070219]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PaletteVisual" parent="VBoxContainer/HBoxContainer" unique_id=879457170 instance=ExtResource("2_y2pvi")]
+use_parent_material = true
+layout_mode = 2
+
+[node name="PaletteVisual2" parent="VBoxContainer/HBoxContainer" unique_id=64188291 instance=ExtResource("2_y2pvi")]
+use_parent_material = true
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1519691286]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PaletteVisual" parent="VBoxContainer/HBoxContainer2" unique_id=1330392797 instance=ExtResource("2_y2pvi")]
+use_parent_material = true
+layout_mode = 2
+
+[node name="PaletteVisual2" parent="VBoxContainer/HBoxContainer2" unique_id=1176136243 instance=ExtResource("2_y2pvi")]
+use_parent_material = true
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer" unique_id=970018730]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PaletteVisual" parent="VBoxContainer/HBoxContainer3" unique_id=411400149 instance=ExtResource("2_y2pvi")]
+use_parent_material = true
+layout_mode = 2
+
+[node name="PaletteVisual2" parent="VBoxContainer/HBoxContainer3" unique_id=1020422072 instance=ExtResource("2_y2pvi")]
+use_parent_material = true
+layout_mode = 2

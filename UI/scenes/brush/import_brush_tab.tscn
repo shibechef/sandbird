@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b3sx2qaaqd5u7"]
+
+[ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/ui_masking.tres" id="1_77tvu"]
+[ext_resource type="Script" uid="uid://d2c4vj8mp1y3w" path="res://UI/scripts/brush/brush_import_tab.gd" id="1_y10qe"]
+
+[node name="ImportBrushTab" type="Control" unique_id=1787022151]
+material = ExtResource("1_77tvu")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y10qe")

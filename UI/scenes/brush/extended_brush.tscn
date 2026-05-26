@@ -1,18 +1,23 @@
 [gd_scene format=3 uid="uid://bprvf5xcj52p5"]
 
 [ext_resource type="StyleBox" uid="uid://cks6tcdf1gwmj" path="res://UI/data/stylebox/unselected_tab.tres" id="1_bn4wx"]
-[ext_resource type="PackedScene" uid="uid://davxngcuo6xeo" path="res://UI/scenes/brush/brush_properties.tscn" id="2_1n63v"]
+[ext_resource type="PackedScene" uid="uid://davxngcuo6xeo" path="res://UI/scenes/brush/brush_properties_tab.tscn" id="2_1n63v"]
+[ext_resource type="PackedScene" uid="uid://b3sx2qaaqd5u7" path="res://UI/scenes/brush/import_brush_tab.tscn" id="3_1n63v"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mdjra"]
 bg_color = Color(0.7411765, 0.5019608, 0.7372549, 1)
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 
-[node name="ExtendedBrush" type="Control" unique_id=210707944]
+[node name="ExtendedBrush" type="Control" unique_id=1505440297]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 1074.0
+offset_top = 383.0
+offset_right = 1074.0
+offset_bottom = 383.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -22,7 +27,7 @@ offset_right = 5.0
 offset_bottom = 140.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_mdjra")
 
-[node name="Button" type="Button" parent="." unique_id=847863240]
+[node name="BrushMenuButton" type="Button" parent="." unique_id=847863240]
 layout_mode = 0
 offset_left = 27.0
 offset_top = 13.0
@@ -31,9 +36,11 @@ offset_bottom = 40.0
 rotation = 1.5707964
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_bn4wx")
+toggle_mode = true
+action_mode = 0
 text = "Brush"
 
-[node name="Button2" type="Button" parent="." unique_id=691875603]
+[node name="ImportMenuButton" type="Button" parent="." unique_id=691875603]
 layout_mode = 0
 offset_left = 27.0
 offset_top = 72.0
@@ -42,10 +49,24 @@ offset_bottom = 99.0
 rotation = 1.5707964
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_bn4wx")
+toggle_mode = true
+action_mode = 0
 text = "Import"
 
-[node name="BrushProperties" parent="." unique_id=1466556821 instance=ExtResource("2_1n63v")]
-visible = false
+[node name="BrushProperties" parent="." unique_id=1466556821 node_paths=PackedStringArray("tab_button") instance=ExtResource("2_1n63v")]
+unique_name_in_owner = true
 layout_mode = 1
-offset_left = -553.0
-offset_right = -553.0
+offset_left = -549.0
+offset_top = -4.0
+offset_right = -549.0
+offset_bottom = -4.0
+tab_button = NodePath("../BrushMenuButton")
+
+[node name="BrushImport" parent="." unique_id=1787022151 node_paths=PackedStringArray("tab_button") instance=ExtResource("3_1n63v")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = -673.0
+offset_top = -55.0
+offset_right = -673.0
+offset_bottom = -55.0
+tab_button = NodePath("../ImportMenuButton")

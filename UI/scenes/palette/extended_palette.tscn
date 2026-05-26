@@ -1,17 +1,24 @@
 [gd_scene format=3 uid="uid://bpmfu3fasvinn"]
 
 [ext_resource type="StyleBox" uid="uid://cks6tcdf1gwmj" path="res://UI/data/stylebox/unselected_tab.tres" id="1_ronii"]
+[ext_resource type="PackedScene" uid="uid://cy8we4kvd1p1n" path="res://UI/scenes/palette/color_picking_tab.tscn" id="2_slx8c"]
+[ext_resource type="PackedScene" uid="uid://pyapvsu2k622" path="res://UI/scenes/palette/palette_properties_tab.tscn" id="3_vnnuf"]
+[ext_resource type="PackedScene" uid="uid://qhlka6qln6eh" path="res://UI/scenes/palette/import_palette_tab.tscn" id="4_sh5dr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cn3i0"]
 bg_color = Color(0.7425501, 0.50336033, 0.7382107, 1)
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 
-[node name="ExtendedPalette" type="Control" unique_id=210707944]
+[node name="ExtendedPalette" type="Control" unique_id=1898670170]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 992.0
+offset_top = 496.0
+offset_right = 992.0
+offset_bottom = 496.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -21,7 +28,7 @@ offset_right = 5.0
 offset_bottom = 209.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_cn3i0")
 
-[node name="Button" type="Button" parent="." unique_id=847863240]
+[node name="ColorPickingButton" type="Button" parent="." unique_id=847863240]
 layout_mode = 0
 offset_left = 27.0
 offset_top = 13.0
@@ -30,9 +37,11 @@ offset_bottom = 40.0
 rotation = 1.5707964
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_ronii")
+toggle_mode = true
+action_mode = 0
 text = "Color"
 
-[node name="Button2" type="Button" parent="." unique_id=691875603]
+[node name="PalettePropertiesButton" type="Button" parent="." unique_id=691875603]
 layout_mode = 0
 offset_left = 27.0
 offset_top = 72.0
@@ -41,9 +50,11 @@ offset_bottom = 99.0
 rotation = 1.5707964
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_ronii")
+toggle_mode = true
+action_mode = 0
 text = "Palette"
 
-[node name="Button3" type="Button" parent="." unique_id=24727511]
+[node name="ImportPaletteButton" type="Button" parent="." unique_id=24727511]
 layout_mode = 0
 offset_left = 27.0
 offset_top = 141.0
@@ -52,4 +63,32 @@ offset_bottom = 168.0
 rotation = 1.5707964
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_ronii")
+toggle_mode = true
+action_mode = 0
 text = "Import"
+
+[node name="ColorPickingTab" parent="." unique_id=2129949841 node_paths=PackedStringArray("tab_button") instance=ExtResource("2_slx8c")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = -233.0
+offset_top = -15.0
+offset_right = -233.0
+offset_bottom = -15.0
+tab_button = NodePath("../ColorPickingButton")
+
+[node name="PalettePropertiesTab" parent="." unique_id=1759130693 node_paths=PackedStringArray("tab_button") instance=ExtResource("3_vnnuf")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = -259.0
+offset_top = -22.0
+offset_right = -259.0
+offset_bottom = -22.0
+tab_button = NodePath("../PalettePropertiesButton")
+
+[node name="ImportPaletteTab" parent="." unique_id=1804888296 node_paths=PackedStringArray("tab_button") instance=ExtResource("4_sh5dr")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -209.0
+offset_right = -209.0
+offset_bottom = 200.0
+tab_button = NodePath("../ImportPaletteButton")

@@ -67,7 +67,6 @@ func change_voxels(args: Array, undo: bool) -> void:
 	else:
 		obj.change_voxels(new_voxels)
 	
-	print(args)
 	return
 
 enum EditType {

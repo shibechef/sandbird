@@ -1,50 +1,67 @@
 [gd_scene format=3 uid="uid://davxngcuo6xeo"]
 
-[node name="BrushProperties" type="Control" unique_id=1466556821]
+[ext_resource type="Shader" uid="uid://dvvo6o5f0tit2" path="res://shaders/UI_masking.gdshader" id="1_fgeed"]
+[ext_resource type="Script" uid="uid://cai0ajhk7cmdj" path="res://UI/scripts/brush/brush_properties_tab.gd" id="2_bg6cb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u10a6"]
+shader = ExtResource("1_fgeed")
+shader_parameter/minimum_pos = Vector2(0, 0)
+
+[node name="BrushPropertiesTab" type="Control" unique_id=1466556821]
+material = SubResource("ShaderMaterial_u10a6")
+custom_minimum_size = Vector2(600, 240)
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+offset_right = 270.315
+script = ExtResource("2_bg6cb")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1302837169]
+use_parent_material = true
 layout_mode = 0
 offset_right = 542.0
 offset_bottom = 146.0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=824429171]
+use_parent_material = true
 layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=861956839]
+use_parent_material = true
 layout_mode = 2
 text = "Brush Type"
 
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer2" unique_id=1895756489]
+use_parent_material = true
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=524738386]
+use_parent_material = true
 layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=552448004]
+use_parent_material = true
 layout_mode = 2
 text = "Name"
 
 [node name="TextEdit" type="TextEdit" parent="VBoxContainer/HBoxContainer" unique_id=1684919665]
+use_parent_material = true
 custom_minimum_size = Vector2(138.89, 40.315)
 layout_mode = 2
 text = "Shit"
 placeholder_text = "Name"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer" unique_id=750429672]
+use_parent_material = true
 layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3" unique_id=893571135]
+use_parent_material = true
 layout_mode = 2
 text = "Default Colors
 make this faded by default and
 go back to the previously selected colors when switching off"
 
 [node name="ItemList" type="ItemList" parent="VBoxContainer/HBoxContainer3" unique_id=1640674663]
+use_parent_material = true
 custom_minimum_size = Vector2(75.415, 0)
 layout_mode = 2

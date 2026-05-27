@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://bprvf5xcj52p5"]
 
-[ext_resource type="StyleBox" uid="uid://cks6tcdf1gwmj" path="res://UI/data/stylebox/unselected_tab.tres" id="1_bn4wx"]
+[ext_resource type="StyleBox" uid="uid://cks6tcdf1gwmj" path="res://UI/data/stylebox/tab/unselected_tab.tres" id="1_bn4wx"]
 [ext_resource type="PackedScene" uid="uid://davxngcuo6xeo" path="res://UI/scenes/brush/brush_properties_tab.tscn" id="2_1n63v"]
+[ext_resource type="StyleBox" uid="uid://b8kyjkhrtl8ib" path="res://UI/data/stylebox/tab/selected_tab.tres" id="2_55kgs"]
 [ext_resource type="PackedScene" uid="uid://b3sx2qaaqd5u7" path="res://UI/scenes/brush/import_brush_tab.tscn" id="3_1n63v"]
+[ext_resource type="StyleBox" uid="uid://b4fxxvxg3ccff" path="res://UI/data/stylebox/tab/hovered_tab.tres" id="3_ir86c"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mdjra"]
 bg_color = Color(0.7411765, 0.5019608, 0.7372549, 1)
@@ -36,6 +38,8 @@ offset_bottom = 40.0
 rotation = 1.5707964
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_bn4wx")
+theme_override_styles/pressed = ExtResource("2_55kgs")
+theme_override_styles/hover = ExtResource("3_ir86c")
 toggle_mode = true
 action_mode = 0
 text = "Brush"
@@ -49,24 +53,30 @@ offset_bottom = 99.0
 rotation = 1.5707964
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_bn4wx")
+theme_override_styles/pressed = ExtResource("2_55kgs")
+theme_override_styles/hover = ExtResource("3_ir86c")
 toggle_mode = true
 action_mode = 0
 text = "Import"
 
-[node name="BrushProperties" parent="." unique_id=1466556821 node_paths=PackedStringArray("tab_button") instance=ExtResource("2_1n63v")]
+[node name="BrushProperties" parent="." unique_id=1466556821 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("2_1n63v")]
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = -549.0
 offset_top = -4.0
 offset_right = -549.0
 offset_bottom = -4.0
+hide_on_enable = [NodePath("../BrushImport")]
+disable_on_enable = [NodePath("../ImportMenuButton")]
 tab_button = NodePath("../BrushMenuButton")
 
-[node name="BrushImport" parent="." unique_id=1787022151 node_paths=PackedStringArray("tab_button") instance=ExtResource("3_1n63v")]
+[node name="BrushImport" parent="." unique_id=1787022151 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("3_1n63v")]
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = -673.0
 offset_top = -55.0
 offset_right = -673.0
 offset_bottom = -55.0
+hide_on_enable = [NodePath("../BrushProperties")]
+disable_on_enable = [NodePath("../BrushMenuButton")]
 tab_button = NodePath("../ImportMenuButton")

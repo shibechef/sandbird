@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://bpmfu3fasvinn"]
 
-[ext_resource type="StyleBox" uid="uid://cks6tcdf1gwmj" path="res://UI/data/stylebox/unselected_tab.tres" id="1_ronii"]
+[ext_resource type="StyleBox" uid="uid://cks6tcdf1gwmj" path="res://UI/data/stylebox/tab/unselected_tab.tres" id="1_ronii"]
+[ext_resource type="StyleBox" uid="uid://b8kyjkhrtl8ib" path="res://UI/data/stylebox/tab/selected_tab.tres" id="2_sh5dr"]
 [ext_resource type="PackedScene" uid="uid://cy8we4kvd1p1n" path="res://UI/scenes/palette/color_picking_tab.tscn" id="2_slx8c"]
+[ext_resource type="StyleBox" uid="uid://b4fxxvxg3ccff" path="res://UI/data/stylebox/tab/hovered_tab.tres" id="3_11krp"]
 [ext_resource type="PackedScene" uid="uid://pyapvsu2k622" path="res://UI/scenes/palette/palette_properties_tab.tscn" id="3_vnnuf"]
 [ext_resource type="PackedScene" uid="uid://qhlka6qln6eh" path="res://UI/scenes/palette/import_palette_tab.tscn" id="4_sh5dr"]
 
@@ -37,6 +39,8 @@ offset_bottom = 40.0
 rotation = 1.5707964
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_ronii")
+theme_override_styles/pressed = ExtResource("2_sh5dr")
+theme_override_styles/hover = ExtResource("3_11krp")
 toggle_mode = true
 action_mode = 0
 text = "Color"
@@ -50,6 +54,8 @@ offset_bottom = 99.0
 rotation = 1.5707964
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_ronii")
+theme_override_styles/pressed = ExtResource("2_sh5dr")
+theme_override_styles/hover = ExtResource("3_11krp")
 toggle_mode = true
 action_mode = 0
 text = "Palette"
@@ -63,32 +69,40 @@ offset_bottom = 168.0
 rotation = 1.5707964
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = ExtResource("1_ronii")
+theme_override_styles/pressed = ExtResource("2_sh5dr")
+theme_override_styles/hover = ExtResource("3_11krp")
 toggle_mode = true
 action_mode = 0
 text = "Import"
 
-[node name="ColorPickingTab" parent="." unique_id=2129949841 node_paths=PackedStringArray("tab_button") instance=ExtResource("2_slx8c")]
+[node name="ColorPickingTab" parent="." unique_id=2129949841 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("2_slx8c")]
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = -233.0
 offset_top = -15.0
 offset_right = -233.0
 offset_bottom = -15.0
+hide_on_enable = [NodePath("../PalettePropertiesTab"), NodePath("../ImportPaletteTab")]
+disable_on_enable = [NodePath("../PalettePropertiesButton"), NodePath("../ImportPaletteButton")]
 tab_button = NodePath("../ColorPickingButton")
 
-[node name="PalettePropertiesTab" parent="." unique_id=1759130693 node_paths=PackedStringArray("tab_button") instance=ExtResource("3_vnnuf")]
+[node name="PalettePropertiesTab" parent="." unique_id=1759130693 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("3_vnnuf")]
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = -259.0
 offset_top = -22.0
 offset_right = -259.0
 offset_bottom = -22.0
+hide_on_enable = [NodePath("../ColorPickingTab"), NodePath("../ImportPaletteTab")]
+disable_on_enable = [NodePath("../ColorPickingButton"), NodePath("../ImportPaletteButton")]
 tab_button = NodePath("../PalettePropertiesButton")
 
-[node name="ImportPaletteTab" parent="." unique_id=1804888296 node_paths=PackedStringArray("tab_button") instance=ExtResource("4_sh5dr")]
+[node name="ImportPaletteTab" parent="." unique_id=1804888296 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("4_sh5dr")]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = -209.0
 offset_right = -209.0
 offset_bottom = 200.0
+hide_on_enable = [NodePath("../ColorPickingTab"), NodePath("../PalettePropertiesTab")]
+disable_on_enable = [NodePath("../ColorPickingButton"), NodePath("../PalettePropertiesButton")]
 tab_button = NodePath("../ImportPaletteButton")

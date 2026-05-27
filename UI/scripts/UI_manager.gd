@@ -25,7 +25,7 @@ var paint_system: PaintSystem
 @export var colors_per_line: int = 11
 @export var color_width: int = 24
 
-@export var animation_pixels_per_sec: float = 800.0
+@export var animation_pixels_per_sec: float = 1400.0
 var animation_tasks: Dictionary[Control, Array]
 
 func _ready():
@@ -43,11 +43,10 @@ func _ready():
 	palette_properties_tab = extended_palette_sidebar.get_node("%PalettePropertiesTab")
 	palette_import_tab = extended_palette_sidebar.get_node("%ImportPaletteTab")
 
-
 	## Remove this later
 	#add_palette_menu(1)
 	
-	extended_brush_sidebar.position = Vector2(8 + brush_width * brushes_per_line, sidebar_mid_point - 145)
+	extended_brush_sidebar.position = Vector2(4 + brush_width * brushes_per_line, sidebar_mid_point - 145)
 	extended_palette_sidebar.position = Vector2(8 + colors_per_line * color_width, sidebar_mid_point + 2)
 
 func _process(delta):

@@ -1,13 +1,4 @@
 {
-	"BaseBrush":
-		{
-			"inspector_name": "Base Brush",
-			"texture_file_path": "",
-			"exposed_properties":
-				{
-					"named_as": "Name",
-				}
-		},
 	"PointBrush":
 		{
 			"inspector_name": "Regular Brush",

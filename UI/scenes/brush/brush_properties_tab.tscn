@@ -2,66 +2,31 @@
 
 [ext_resource type="Shader" uid="uid://dvvo6o5f0tit2" path="res://shaders/UI_masking.gdshader" id="1_fgeed"]
 [ext_resource type="Script" uid="uid://cai0ajhk7cmdj" path="res://UI/scripts/brush/brush_properties_tab.gd" id="2_bg6cb"]
+[ext_resource type="StyleBox" uid="uid://cdj3tw442wbp2" path="res://UI/data/stylebox/left_sidebar.tres" id="3_bg6cb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u10a6"]
 shader = ExtResource("1_fgeed")
 shader_parameter/minimum_pos = Vector2(0, 0)
 
-[node name="BrushPropertiesTab" type="Control" unique_id=1466556821]
+[node name="BrushPropertiesTab" type="PanelContainer" unique_id=1298561908]
 material = SubResource("ShaderMaterial_u10a6")
-custom_minimum_size = Vector2(546.74, 240)
-layout_mode = 3
-anchors_preset = 0
-offset_right = 270.315
+custom_minimum_size = Vector2(255, 144)
+offset_right = 255.0
+offset_bottom = 150.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("3_bg6cb")
 script = ExtResource("2_bg6cb")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1302837169]
-use_parent_material = true
-layout_mode = 0
-offset_right = 542.0
-offset_bottom = 146.0
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=824429171]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=764145414]
 use_parent_material = true
 layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=861956839]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1302837169]
+unique_name_in_owner = true
 use_parent_material = true
-layout_mode = 2
-text = "Brush Type"
-
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer2" unique_id=1895756489]
-use_parent_material = true
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=524738386]
-use_parent_material = true
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=552448004]
-use_parent_material = true
-layout_mode = 2
-text = "Name"
-
-[node name="TextEdit" type="TextEdit" parent="VBoxContainer/HBoxContainer" unique_id=1684919665]
-use_parent_material = true
-custom_minimum_size = Vector2(138.89, 40.315)
-layout_mode = 2
-text = "Shit"
-placeholder_text = "Name"
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer" unique_id=750429672]
-use_parent_material = true
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3" unique_id=893571135]
-use_parent_material = true
-layout_mode = 2
-text = "Default Colors
-make this faded by default and
-go back to the previously selected colors when switching off"
-
-[node name="ItemList" type="ItemList" parent="VBoxContainer/HBoxContainer3" unique_id=1640674663]
-use_parent_material = true
-custom_minimum_size = Vector2(75.415, 0)
 layout_mode = 2

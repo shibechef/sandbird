@@ -31,6 +31,7 @@ func extend(auto_close: bool) -> void:
 	hovered = false
 	var parent = get_parent()
 	var sidebar = get_sidebar()
+	
 	var new_pos = Vector2(sidebar.position.x + sidebar.size.x + size.x, parent.position.y)
 	ui_manager.add_animation(parent, new_pos)
 	
@@ -46,8 +47,7 @@ func detract() -> void:
 	var parent = get_parent()
 	var sidebar = get_sidebar()
 	var new_pos = Vector2(sidebar.position.x + sidebar.size.x, parent.position.y)
-	ui_manager.add_animation(parent, new_pos)
-	hide()
+	ui_manager.add_animation(parent, new_pos, hide)
 
 func press_button() -> void:
 	if is_visible_in_tree():

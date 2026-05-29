@@ -5,7 +5,7 @@ varying float alpha;
 uniform vec2 minimum_pos = vec2(0.0);
 
 void vertex() {
-	alpha = min(-minimum_pos.x + VERTEX.x, -minimum_pos.x + VERTEX.y);
+	alpha = min(-minimum_pos.x + VERTEX.x, -minimum_pos.y + VERTEX.y);
 }
 
 void fragment() {

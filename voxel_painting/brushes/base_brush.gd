@@ -3,6 +3,7 @@ class_name BaseBrush
 
 @export var named_as: String
 @export var depth: float = 300.0
+@export var default_colors: Array[int]
 
 func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject) -> Dictionary[Vector3i, VoxelData]:
 	var voxels: Dictionary[Vector3i, VoxelData]

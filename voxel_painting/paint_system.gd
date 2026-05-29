@@ -7,11 +7,15 @@ var palette_manager: ColorPaletteManager
 var mesh_system: MeshSystem
 var ui_manager: UI_manager
 var edit_logger: EditLogging
+var brush_properties_UI: BrushPropertiesTab
 
 var brush_paths: Dictionary[String, String]
 @export var brush_list: Dictionary[String, BaseBrush] 
 var current_brush: String
 var brush_UI_buttons: Dictionary[String, Button]
+
+var last_selected: String
+var last_selected_time: float = 0.0
 
 func _ready():
 	object_selection = get_node("%ObjectSelectionSystem")
@@ -19,7 +23,11 @@ func _ready():
 	palette_manager = get_node("%ColorPaletteManager")
 	mesh_system = get_node("%MeshSystem")
 	edit_logger = get_node("%EditLogger")
+	brush_properties_UI = get_node("%ExtendedBrushSidebarUI").get_node("%BrushProperties")
 	call_deferred("late_ready")
+
+func _process(delta):
+	last_selected_time += delta
 
 func late_ready():
 	ui_manager = get_node("%UI_manager")
@@ -41,6 +49,15 @@ func try_click() -> void:
 	obj.change_voxels(voxel_diff)
 
 func select_brush(brush: String) -> void:
+	brush_properties_UI.fill_properties(brush_list[brush])
+	
+	## double clicking to close too feels nice to me but maybe auto close is better
+	if last_selected_time < .4 and last_selected == brush:
+		brush_properties_UI.extend(true)
+
+	last_selected = brush
+	last_selected_time = 0.0
+	
 	if current_brush != "":
 		brush_UI_buttons[current_brush].set_pressed_no_signal(false)
 	

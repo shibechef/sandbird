@@ -64,7 +64,7 @@ func update_brush_sidebar(values: Array[BaseBrush]) -> void:
 	if paint_system.current_brush != "":
 		paint_system.brush_UI_buttons[paint_system.current_brush].set_pressed_no_signal(true)
 
-	var cutoff_point = extended_brush_sidebar.position
+	var cutoff_point = Vector2(extended_brush_sidebar.position.x, 0.0)
 	brush_properties_tab.set_clipping_point(cutoff_point)
 	brush_import_tab.set_clipping_point(cutoff_point)
 	
@@ -73,22 +73,22 @@ func update_palette_sidebar(values: Array[VoxelColorPalette]) -> void:
 	palette_sidebar.fill_list(values, 11)
 	color_selection.update_sidebar_selections()
 	
-	var cutoff_point = extended_palette_sidebar.position
+	var cutoff_point = Vector2(extended_palette_sidebar.position.x, 0.0)
 	color_picking_tab.set_clipping_point(cutoff_point)
 	palette_properties_tab.set_clipping_point(cutoff_point)
 	palette_import_tab.set_clipping_point(cutoff_point)
 
-func add_animation(UI_node: Control, new_pos: Vector2) -> void:
+func add_animation(UI_node: Control, new_pos: Vector2, callable = null) -> void:
 	if animation_tasks.has(UI_node):
 		if animation_tasks[UI_node][1] == new_pos:
 			return
 	
 	var anim_speed: float = animation_pixels_per_sec / UI_node.position.distance_to(new_pos)
 	anim_speed = clamp(anim_speed, .1, 10.0)
-	animation_tasks[UI_node] = [UI_node.position, new_pos, 0.0, anim_speed]
+	animation_tasks[UI_node] = [UI_node.position, new_pos, 0.0, anim_speed, callable]
 
 func animate_UI(delta: float) -> void:
-	var finished_anims: Array[Node]
+	var finished_anims: Array[Control]
 	
 	for UI_node in animation_tasks:
 		var args = animation_tasks[UI_node]
@@ -102,4 +102,55 @@ func animate_UI(delta: float) -> void:
 			finished_anims.append(UI_node)
 			
 	for UI_node in finished_anims:
+		if animation_tasks[UI_node][4] != null:
+			animation_tasks[UI_node][4].call()
 		animation_tasks.erase(UI_node)
+
+static func get_data_entry_UI_scene(sync_location: Object, property_name: String, property_value, property_data) -> HBoxContainer:
+	var display_name: String
+	var input_scenes: Array[Control]
+	var final_scene := HBoxContainer.new()
+	assert(property_data is String or property_data is Dictionary, "property data has incorrect input")
+	if property_data is String:
+		display_name = property_data
+	else:
+		display_name = property_data["name"]
+		if property_data.has("min_value"):
+			var slider := HSlider.new()
+			slider.min_value = property_data["min_value"]
+			slider.max_value = property_data["max_value"]
+			slider.value = property_value
+			slider.value_changed.connect(sync_value.bind(sync_location, property_name))
+			input_scenes.append(slider)
+		elif property_data.has("options"):
+			return
+	
+	input_scenes.append(get_input_scene_from_property(sync_location, property_name, property_value))
+	
+	var name_scene = Label.new()
+	name_scene.text = display_name
+	name_scene.use_parent_material = true
+	final_scene.add_child(name_scene)
+	for input_scene in input_scenes:
+		input_scene.use_parent_material = true
+		final_scene.add_child(input_scene)
+	
+	final_scene.use_parent_material = true
+	return final_scene
+	
+static func get_input_scene_from_property(sync_location: Object, property_name: String, property_value) -> Control:
+	if property_value is String or property_value is int or property_value is float:
+		var text_edit := LineEdit.new()
+		text_edit.text = str(property_value)
+		text_edit.text_changed.connect(sync_value.bind(sync_location, property_name))
+		return text_edit
+	if property_value is bool:
+		var check_box := CheckBox.new()
+		check_box.set_pressed_no_signal(property_value)
+		check_box.toggled.connect(sync_value.bind(sync_location, property_name))
+		return check_box
+	
+	return Control.new()
+
+static func sync_value(value, sync_location: Object, property_name: String) -> void:
+	sync_location.set(property_name, value)

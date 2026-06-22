@@ -3,12 +3,112 @@
 [ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/ui_masking.tres" id="1_05jwr"]
 [ext_resource type="Script" uid="uid://6yeayq1602kf" path="res://UI/scripts/palette/color_picking_tab.gd" id="1_e1aa3"]
 
-[node name="ColorPickingTab" type="Control" unique_id=2129949841]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_05jwr"]
+bg_color = Color(0.15312716, 0.6097826, 0.7495609, 1)
+
+[node name="ColorPickingTab" type="Panel" unique_id=1725259682]
 material = ExtResource("1_05jwr")
-layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -2261.0
+offset_bottom = -753.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_05jwr")
 script = ExtResource("1_e1aa3")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1253791165]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = -7
+
+[node name="ColorPicker" type="ColorPicker" parent="VBoxContainer" unique_id=45457144]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(0.20121926, 0.5292372, 0.4443998, 1)
+edit_alpha = false
+edit_intensity = false
+color_mode = 3
+can_add_swatches = false
+sampler_visible = false
+color_modes_visible = false
+sliders_visible = false
+hex_visible = false
+presets_visible = false
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=1798720802]
+layout_mode = 2
+
+[node name="ColorSampler" type="ColorPicker" parent="VBoxContainer/MarginContainer2" unique_id=1840648561]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.4147895, 0.21611321, 0.31299102, 1)
+edit_alpha = false
+edit_intensity = false
+color_mode = 2
+picker_shape = 4
+color_modes_visible = false
+sliders_visible = false
+hex_visible = false
+presets_visible = false
+
+[node name="ColorSlider1" type="ColorPicker" parent="VBoxContainer" unique_id=2045861701]
+unique_name_in_owner = true
+layout_mode = 2
+edit_alpha = false
+edit_intensity = false
+color_mode = 3
+picker_shape = 4
+sampler_visible = false
+color_modes_visible = false
+hex_visible = false
+presets_visible = false
+
+[node name="ColorSlider2" type="ColorPicker" parent="VBoxContainer" unique_id=2054643062]
+unique_name_in_owner = true
+layout_mode = 2
+edit_alpha = false
+edit_intensity = false
+color_mode = 2
+picker_shape = 4
+sampler_visible = false
+color_modes_visible = false
+hex_visible = false
+presets_visible = false
+
+[node name="ColorSlider3" type="ColorPicker" parent="VBoxContainer" unique_id=1007495073]
+unique_name_in_owner = true
+layout_mode = 2
+edit_alpha = false
+edit_intensity = false
+color_mode = 1
+picker_shape = 4
+sampler_visible = false
+color_modes_visible = false
+hex_visible = false
+presets_visible = false
+
+[node name="HexInput" type="ColorPicker" parent="VBoxContainer" unique_id=789982297]
+unique_name_in_owner = true
+layout_mode = 2
+edit_alpha = false
+edit_intensity = false
+color_mode = 2
+picker_shape = 4
+sampler_visible = false
+color_modes_visible = false
+sliders_visible = false
+presets_visible = false
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=2095011233]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 11
+theme_override_constants/margin_right = 4
+
+[node name="Button" type="Button" parent="VBoxContainer/MarginContainer" unique_id=788086494]
+layout_mode = 2
+text = "generate similar colors button!"

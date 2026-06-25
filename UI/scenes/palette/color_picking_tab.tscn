@@ -6,27 +6,23 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_05jwr"]
 bg_color = Color(0.15312716, 0.6097826, 0.7495609, 1)
 
-[node name="ColorPickingTab" type="Panel" unique_id=1725259682]
+[node name="ColorPickingTab" type="PanelContainer" unique_id=95370749]
 material = ExtResource("1_05jwr")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -2261.0
-offset_bottom = -753.0
-grow_horizontal = 2
-grow_vertical = 2
+custom_minimum_size = Vector2(255, 0)
+offset_right = 255.0
+offset_bottom = 431.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_05jwr")
 script = ExtResource("1_e1aa3")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1253791165]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 2
 theme_override_constants/separation = -7
 
 [node name="ColorPicker" type="ColorPicker" parent="VBoxContainer" unique_id=45457144]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/sv_width = 200
+theme_override_constants/sv_height = 213
 color = Color(0.20121926, 0.5292372, 0.4443998, 1)
 edit_alpha = false
 edit_intensity = false
@@ -57,6 +53,19 @@ presets_visible = false
 
 [node name="ColorSlider1" type="ColorPicker" parent="VBoxContainer" unique_id=2045861701]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 113)
+layout_mode = 2
+edit_alpha = false
+edit_intensity = false
+picker_shape = 4
+sampler_visible = false
+color_modes_visible = false
+hex_visible = false
+presets_visible = false
+
+[node name="ColorSlider2" type="ColorPicker" parent="VBoxContainer" unique_id=2054643062]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 113)
 layout_mode = 2
 edit_alpha = false
 edit_intensity = false
@@ -67,20 +76,9 @@ color_modes_visible = false
 hex_visible = false
 presets_visible = false
 
-[node name="ColorSlider2" type="ColorPicker" parent="VBoxContainer" unique_id=2054643062]
-unique_name_in_owner = true
-layout_mode = 2
-edit_alpha = false
-edit_intensity = false
-color_mode = 2
-picker_shape = 4
-sampler_visible = false
-color_modes_visible = false
-hex_visible = false
-presets_visible = false
-
 [node name="ColorSlider3" type="ColorPicker" parent="VBoxContainer" unique_id=1007495073]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 113)
 layout_mode = 2
 edit_alpha = false
 edit_intensity = false
@@ -108,6 +106,7 @@ layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 11
 theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 5
 
 [node name="Button" type="Button" parent="VBoxContainer/MarginContainer" unique_id=788086494]
 layout_mode = 2

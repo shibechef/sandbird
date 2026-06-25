@@ -2,6 +2,7 @@ extends Node
 class_name ColorSelectionInput
 
 var manager: ColorPaletteManager
+var color_picking_tab: ColorPickingTab
 var palette_UIs: Dictionary[int, RadialMenu]
 var color_buttons: Dictionary[int, TextureButton]
 
@@ -10,6 +11,7 @@ var color_buttons: Dictionary[int, TextureButton]
 
 func _ready():
 	manager = get_node("%ColorPaletteManager")
+	color_picking_tab = get_node("%ExtendedPaletteSidebarUI").get_node("%ColorPickingTab")
 
 func add_palette_UI(palette_id: int, menu: RadialMenu):
 	palette_UIs[palette_id] = menu
@@ -35,7 +37,8 @@ func press_UI_button(id: int) -> void:
 	elif Input.is_action_pressed("select_several"):
 		select_color(id)
 	else:
-		deselect_all()
+		if manager.currently_selected_colors.size() > 1 or !manager.currently_selected_colors.has(id):
+			deselect_all()
 		select_color(id)
 	
 func deselect_all() -> void:
@@ -49,6 +52,9 @@ func select_color(id: int) -> void:
 	
 	if !manager.currently_selected_colors.has(id):
 		manager.currently_selected_colors.append(id)
+	else:
+		color_picking_tab.extend(true)
+		
 	
 	color_buttons[id].set_pressed_no_signal(true)
 	
@@ -56,6 +62,9 @@ func select_color(id: int) -> void:
 		var ui_element: TextureButton = palette_UIs[palette].get_child(index)
 		ui_element.set_instance_shader_parameter("black_replacement", UserPreferences.selection_color)
 		ui_element.set_pressed_no_signal(true)
+	
+	if manager.currently_selected_colors.size() < 2:
+		color_picking_tab.set_new_color(manager.get_color_from_id(id).color)
 	
 func deselect_color(id: int) -> void:
 	var palette = manager.palette_by_color[id]

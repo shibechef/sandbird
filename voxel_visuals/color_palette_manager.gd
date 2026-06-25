@@ -14,7 +14,7 @@ var ui_manager: UI_manager
 func _ready():
 	ready_palettes()
 	ui_manager = get_node("%UI_manager")
-	ui_manager.update_palette_sidebar.call_deferred(all_palettes.values())
+	call_deferred("update_color_UI")
 
 func add_new_color(palette_id: int) -> void:
 	var palette: VoxelColorPalette = all_palettes[palette_id]
@@ -38,8 +38,11 @@ func add_new_color(palette_id: int) -> void:
 		
 		palette.colors[id].current_uv_index = num + 1
 		break
+	update_color_UI()
+
+func update_color_UI() -> void:
 	ui_manager.update_palette_sidebar(all_palettes.values())
-			
+
 func delete_color(palette: VoxelColorPalette, color_id: int) -> void:
 	palette.colors.erase(color_id)
 	palette_by_color.erase(color_id)
@@ -59,7 +62,7 @@ func add_new_palette() -> void:
 	
 	all_palettes[id] = new_palette
 	add_new_color(id)
-	ui_manager.update_palette_sidebar(all_palettes.values())
+	update_color_UI()
 
 func delete_palette(palette_id: int) -> void:
 	all_palettes.erase(palette_id)

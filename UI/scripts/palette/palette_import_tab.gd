@@ -11,7 +11,6 @@ func add_item(item: Resource, parent: Control) -> void:
 	
 	## make it import from double click/dragging and dropping
 
-
 func get_sidebar() -> Control:
 	return ui_manager.palette_sidebar
 	

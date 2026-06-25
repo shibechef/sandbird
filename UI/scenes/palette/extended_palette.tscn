@@ -81,10 +81,8 @@ text = "Import"
 [node name="ColorPickingTab" parent="." unique_id=2129949841 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("2_slx8c")]
 unique_name_in_owner = true
 layout_mode = 1
-offset_left = -233.0
-offset_top = -15.0
-offset_right = -233.0
-offset_bottom = -15.0
+offset_left = -255.0
+offset_right = 0.0
 hide_on_enable = [NodePath("../PalettePropertiesTab"), NodePath("../ImportPaletteTab")]
 disable_on_enable = [NodePath("../PalettePropertiesButton"), NodePath("../ImportPaletteButton")]
 tab_button = NodePath("../ColorPickingButton")

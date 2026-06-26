@@ -24,8 +24,8 @@ func _ready():
 	slider_3 = get_node("%ColorSlider3")
 	hex_input = get_node("%HexInput")
 	
-	picker.color_changed.connect(update_color)
-	sampler.color_changed.connect(update_color)
+	picker.color_changed.connect(update_wheel)
+	sampler.color_changed.connect(update_color_linear)
 	slider_1.color_changed.connect(update_slider.bind(slider_1))
 	slider_2.color_changed.connect(update_slider.bind(slider_2))
 	slider_3.color_changed.connect(update_slider.bind(slider_3))
@@ -33,6 +33,15 @@ func _ready():
 	
 	update_UI_settings()
 	show()
+	get_parent().hide()
+	
+	call_deferred("pin_mask")
+	
+func pin_mask() -> void:
+	var grand_parent = get_parent().get_parent()
+	var sidebar = get_sidebar()
+	var parent: Control = get_parent()
+	ui_manager.pinned_UI[parent] = Vector2(sidebar.position.x + sidebar.size.x, grand_parent.position.y)
 
 func set_new_color(color: Color) -> void:
 	previous_color = color
@@ -45,6 +54,21 @@ func update_color(color: Color) -> void:
 	slider_2.color = color
 	slider_3.color = color
 	hex_input.color = color
+
+func update_wheel(color: Color) -> void:
+	match picker.picker_shape:
+		ColorPicker.PickerShapeType.SHAPE_HSV_RECTANGLE:
+			update_color_HSV(color)
+		ColorPicker.PickerShapeType.SHAPE_HSV_WHEEL:
+			update_color_HSV(color)
+		ColorPicker.PickerShapeType.SHAPE_OKHSL_CIRCLE:
+			update_color_HSL(color)
+		ColorPicker.PickerShapeType.SHAPE_OK_HL_RECTANGLE:
+			update_color_HSL(color)
+		ColorPicker.PickerShapeType.SHAPE_OK_HS_RECTANGLE:
+			update_color_HSL(color)
+		ColorPicker.PickerShapeType.SHAPE_VHS_CIRCLE:
+			update_color_HSV(color)
 
 func update_slider(color: Color, slider: ColorPicker) -> void:
 	match slider.color_mode:
@@ -166,15 +190,19 @@ func get_sidebar() -> Control:
 
 ## needs to animate the mask as none of ColorPicker works with shaders!!!!
 func extend(auto_close: bool) -> void:
-	show()
-	get_parent().show()
 	tab_button.set_pressed_no_signal(true)
 	hovered = false
-	var parent = get_parent().get_parent()
+	var grand_parent = get_parent().get_parent()
+	var parent = get_parent()
 	var sidebar = get_sidebar()
 	
-	var new_pos = Vector2(sidebar.position.x + sidebar.size.x + size.x, parent.position.y)
-	ui_manager.add_animation(parent, new_pos)
+	parent.show()
+	
+	var new_pos := Vector2(sidebar.position.x + sidebar.size.x + size.x, grand_parent.position.y)
+	var self_pos: Vector2 = Vector2(0.0, 0.0)
+
+	ui_manager.add_animation(grand_parent, new_pos)
+	ui_manager.add_animation(self, self_pos)
 	
 	for UI_object in hide_on_enable:
 		UI_object.hide()
@@ -183,10 +211,14 @@ func extend(auto_close: bool) -> void:
 		button.set_pressed_no_signal(false)
 
 func detract() -> void:
-	show()
 	hovered = false
 	tab_button.set_pressed_no_signal(false)
-	var parent = get_parent().get_parent()
+	var grand_parent = get_parent().get_parent()
+	var parent = get_parent()
 	var sidebar = get_sidebar()
-	var new_pos = Vector2(sidebar.position.x + sidebar.size.x, parent.position.y)
-	ui_manager.add_animation(parent, new_pos, hide)
+	
+	var new_pos := Vector2(sidebar.position.x + sidebar.size.x, grand_parent.position.y)
+	var self_pos: Vector2 = Vector2(-size.x, 0.0)
+
+	ui_manager.add_animation(grand_parent, new_pos)
+	ui_manager.add_animation(self, self_pos, parent.hide)

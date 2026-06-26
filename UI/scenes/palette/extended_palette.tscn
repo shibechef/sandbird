@@ -82,6 +82,7 @@ action_mode = 0
 text = "Import"
 
 [node name="Clipping" type="Panel" parent="." unique_id=1383696658]
+clip_children = 1
 layout_mode = 0
 offset_left = -10.0
 offset_top = 111.0

@@ -27,6 +27,7 @@ var paint_system: PaintSystem
 
 @export var animation_pixels_per_sec: float = 1400.0
 var animation_tasks: Dictionary[Control, Array]
+var pinned_UI: Dictionary[Control, Vector2]
 
 func _ready():
 	color_selection = get_node("%ColorSelectionInput")
@@ -51,6 +52,7 @@ func _ready():
 
 func _process(delta):
 	animate_UI(delta)
+	keep_UI_pinned()
 
 func add_palette_menu(palette_ID: int) -> void:
 	var menu = RadialMenu.new()
@@ -105,6 +107,10 @@ func animate_UI(delta: float) -> void:
 		if animation_tasks[UI_node][4] != null:
 			animation_tasks[UI_node][4].call()
 		animation_tasks.erase(UI_node)
+
+func keep_UI_pinned() -> void:
+	for pinned_obj in pinned_UI:
+		pinned_obj.global_position = pinned_UI[pinned_obj]
 
 static func get_data_entry_UI_scene(sync_location: Object, property_name: String, property_value, property_data) -> HBoxContainer:
 	var display_name: String

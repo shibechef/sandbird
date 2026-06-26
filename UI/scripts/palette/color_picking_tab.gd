@@ -1,9 +1,6 @@
 extends UITabExtension
 class_name ColorPickingTab
 
-## EXTREME SHITCODE!! COLOR AND COLORPICKER ARE BOTH QUESTIONABLE TO USE AT BEST!!
-## I WISH I HADN'T USED EITHER!!
-
 var color_palette_manager: ColorPaletteManager 
 
 var previous_color: Color
@@ -16,6 +13,7 @@ var slider_3: ColorPicker
 var hex_input: ColorPicker
 
 func _ready():
+	position.x = -size.x
 	super()
 	color_palette_manager = ProjectManager.current_project.get_node("%ColorPaletteManager")
 	
@@ -34,6 +32,7 @@ func _ready():
 	hex_input.color_changed.connect(update_color_linear)
 	
 	update_UI_settings()
+	show()
 
 func set_new_color(color: Color) -> void:
 	previous_color = color
@@ -164,3 +163,30 @@ func update_UI_settings() -> void:
 
 func get_sidebar() -> Control:
 	return ui_manager.palette_sidebar
+
+## needs to animate the mask as none of ColorPicker works with shaders!!!!
+func extend(auto_close: bool) -> void:
+	show()
+	get_parent().show()
+	tab_button.set_pressed_no_signal(true)
+	hovered = false
+	var parent = get_parent().get_parent()
+	var sidebar = get_sidebar()
+	
+	var new_pos = Vector2(sidebar.position.x + sidebar.size.x + size.x, parent.position.y)
+	ui_manager.add_animation(parent, new_pos)
+	
+	for UI_object in hide_on_enable:
+		UI_object.hide()
+	
+	for button in disable_on_enable:
+		button.set_pressed_no_signal(false)
+
+func detract() -> void:
+	show()
+	hovered = false
+	tab_button.set_pressed_no_signal(false)
+	var parent = get_parent().get_parent()
+	var sidebar = get_sidebar()
+	var new_pos = Vector2(sidebar.position.x + sidebar.size.x, parent.position.y)
+	ui_manager.add_animation(parent, new_pos, hide)

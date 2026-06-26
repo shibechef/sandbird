@@ -10,16 +10,18 @@ bg_color = Color(0.15312716, 0.6097826, 0.7495609, 1)
 material = ExtResource("1_05jwr")
 custom_minimum_size = Vector2(255, 0)
 offset_right = 255.0
-offset_bottom = 431.0
+offset_bottom = 644.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_05jwr")
 script = ExtResource("1_e1aa3")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1253791165]
+use_parent_material = true
 layout_mode = 2
 theme_override_constants/separation = -7
 
 [node name="ColorPicker" type="ColorPicker" parent="VBoxContainer" unique_id=45457144]
 unique_name_in_owner = true
+use_parent_material = true
 layout_mode = 2
 theme_override_constants/sv_width = 200
 theme_override_constants/sv_height = 213
@@ -35,10 +37,12 @@ hex_visible = false
 presets_visible = false
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=1798720802]
+use_parent_material = true
 layout_mode = 2
 
 [node name="ColorSampler" type="ColorPicker" parent="VBoxContainer/MarginContainer2" unique_id=1840648561]
 unique_name_in_owner = true
+use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0.4147895, 0.21611321, 0.31299102, 1)
@@ -53,6 +57,7 @@ presets_visible = false
 
 [node name="ColorSlider1" type="ColorPicker" parent="VBoxContainer" unique_id=2045861701]
 unique_name_in_owner = true
+material = ExtResource("1_05jwr")
 custom_minimum_size = Vector2(0, 113)
 layout_mode = 2
 edit_alpha = false
@@ -65,6 +70,7 @@ presets_visible = false
 
 [node name="ColorSlider2" type="ColorPicker" parent="VBoxContainer" unique_id=2054643062]
 unique_name_in_owner = true
+use_parent_material = true
 custom_minimum_size = Vector2(0, 113)
 layout_mode = 2
 edit_alpha = false
@@ -78,6 +84,7 @@ presets_visible = false
 
 [node name="ColorSlider3" type="ColorPicker" parent="VBoxContainer" unique_id=1007495073]
 unique_name_in_owner = true
+use_parent_material = true
 custom_minimum_size = Vector2(0, 113)
 layout_mode = 2
 edit_alpha = false
@@ -91,6 +98,7 @@ presets_visible = false
 
 [node name="HexInput" type="ColorPicker" parent="VBoxContainer" unique_id=789982297]
 unique_name_in_owner = true
+use_parent_material = true
 layout_mode = 2
 edit_alpha = false
 edit_intensity = false
@@ -102,6 +110,7 @@ sliders_visible = false
 presets_visible = false
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=2095011233]
+use_parent_material = true
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 11
@@ -109,5 +118,7 @@ theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 5
 
 [node name="Button" type="Button" parent="VBoxContainer/MarginContainer" unique_id=788086494]
+material = ExtResource("1_05jwr")
+use_parent_material = true
 layout_mode = 2
 text = "generate similar colors button!"

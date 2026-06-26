@@ -12,6 +12,9 @@ bg_color = Color(0.7425501, 0.50336033, 0.7382107, 1)
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_11krp"]
+corner_detail = 1
+
 [node name="ExtendedPalette" type="Control" unique_id=1898670170]
 layout_mode = 3
 anchors_preset = 15
@@ -78,14 +81,20 @@ toggle_mode = true
 action_mode = 0
 text = "Import"
 
-[node name="ColorPickingTab" parent="." unique_id=2129949841 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("2_slx8c")]
+[node name="Clipping" type="Panel" parent="." unique_id=1383696658]
+layout_mode = 0
+offset_left = -10.0
+offset_top = 111.0
+offset_right = 245.0
+offset_bottom = 755.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_11krp")
+
+[node name="ColorPickingTab" parent="Clipping" unique_id=2129949841 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("2_slx8c")]
 unique_name_in_owner = true
-layout_mode = 1
-offset_left = -255.0
-offset_right = 0.0
-hide_on_enable = [NodePath("../PalettePropertiesTab"), NodePath("../ImportPaletteTab")]
-disable_on_enable = [NodePath("../PalettePropertiesButton"), NodePath("../ImportPaletteButton")]
-tab_button = NodePath("../ColorPickingButton")
+layout_mode = 0
+hide_on_enable = [NodePath("../../PalettePropertiesTab"), NodePath("../../ImportPaletteTab")]
+disable_on_enable = [NodePath("../../PalettePropertiesButton"), NodePath("../../ImportPaletteButton")]
+tab_button = NodePath("../../ColorPickingButton")
 
 [node name="PalettePropertiesTab" parent="." unique_id=1759130693 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("3_vnnuf")]
 unique_name_in_owner = true
@@ -94,7 +103,7 @@ offset_left = -259.0
 offset_top = -22.0
 offset_right = -259.0
 offset_bottom = -22.0
-hide_on_enable = [NodePath("../ColorPickingTab"), NodePath("../ImportPaletteTab")]
+hide_on_enable = [NodePath("../Clipping"), NodePath("../ImportPaletteTab")]
 disable_on_enable = [NodePath("../ColorPickingButton"), NodePath("../ImportPaletteButton")]
 tab_button = NodePath("../PalettePropertiesButton")
 
@@ -104,6 +113,6 @@ layout_mode = 0
 offset_left = -209.0
 offset_right = -209.0
 offset_bottom = 200.0
-hide_on_enable = [NodePath("../ColorPickingTab"), NodePath("../PalettePropertiesTab")]
+hide_on_enable = [NodePath("../Clipping"), NodePath("../PalettePropertiesTab")]
 disable_on_enable = [NodePath("../ColorPickingButton"), NodePath("../PalettePropertiesButton")]
 tab_button = NodePath("../ImportPaletteButton")

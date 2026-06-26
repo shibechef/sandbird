@@ -17,9 +17,9 @@ func _init():
 	call_deferred("update_hsl")
 
 func update_hsv():
-	hsv_saturation = color.s
-	hsv_hue = color.h
+	hsv_saturation = clamp(color.s, .01, .99)
+	hsv_hue = clamp(color.h, .01, .99)
 
 func update_hsl():
-	hsl_saturation = color.ok_hsl_s
-	hsl_hue = color.ok_hsl_h
+	hsl_saturation = clamp(color.ok_hsl_s, .01, .99)
+	hsl_hue = clamp(color.ok_hsl_h, .01, .99)

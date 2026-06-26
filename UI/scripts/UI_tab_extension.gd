@@ -16,7 +16,7 @@ func _ready():
 	tab_button.pressed.connect(press_button)
 	tab_button.mouse_entered.connect(on_hover)
 	tab_button.mouse_exited.connect(on_stop_hover)
-	ui_manager = get_parent().get_parent()
+	ui_manager = ProjectManager.current_project.get_node("%UI_manager")
 
 func _process(delta):
 	if hovered:

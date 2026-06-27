@@ -159,4 +159,7 @@ static func get_input_scene_from_property(sync_location: Object, property_name: 
 	return Control.new()
 
 static func sync_value(value, sync_location: Object, property_name: String) -> void:
-	sync_location.set(property_name, value)
+	if sync_location is ShaderMaterial:
+		sync_location.set_shader_parameter(property_name, value)
+	else:
+		sync_location.set(property_name, value)

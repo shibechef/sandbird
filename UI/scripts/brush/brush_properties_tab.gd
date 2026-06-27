@@ -8,9 +8,6 @@ func _ready():
 	available_types = BrushManager.brush_metadata.keys()
 	fill_properties(PointBrush.new())
 
-func get_sidebar() -> Control:
-	return ui_manager.brush_sidebar
-
 func fill_properties(brush: BaseBrush) -> void:
 	var v_box: VBoxContainer = get_node("%VBoxContainer")
 	var children = v_box.get_children()
@@ -37,3 +34,6 @@ func fill_properties(brush: BaseBrush) -> void:
 	var over_flow_scenes: int = max(v_box.get_child_count() - 5, 0)
 	size.y += over_flow_scenes * 36
 	position.y -= over_flow_scenes * 36
+
+func get_sidebar() -> Control:
+	return ui_manager.brush_sidebar

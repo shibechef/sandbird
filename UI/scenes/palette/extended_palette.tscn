@@ -92,6 +92,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_11krp")
 
 [node name="ColorPickingTab" parent="Clipping" unique_id=2129949841 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("2_slx8c")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 hide_on_enable = [NodePath("../../PalettePropertiesTab"), NodePath("../../ImportPaletteTab")]
 disable_on_enable = [NodePath("../../PalettePropertiesButton"), NodePath("../../ImportPaletteButton")]
@@ -100,20 +101,19 @@ tab_button = NodePath("../../ColorPickingButton")
 [node name="PalettePropertiesTab" parent="." unique_id=1759130693 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("3_vnnuf")]
 unique_name_in_owner = true
 layout_mode = 1
-offset_left = -259.0
-offset_top = -22.0
-offset_right = -259.0
-offset_bottom = -22.0
+offset_left = -255.0
+offset_right = 0.0
+offset_bottom = 255.0
 hide_on_enable = [NodePath("../Clipping"), NodePath("../ImportPaletteTab")]
 disable_on_enable = [NodePath("../ColorPickingButton"), NodePath("../ImportPaletteButton")]
 tab_button = NodePath("../PalettePropertiesButton")
 
 [node name="ImportPaletteTab" parent="." unique_id=1804888296 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("4_sh5dr")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
-offset_left = -209.0
-offset_right = -209.0
-offset_bottom = 200.0
+offset_left = -208.0
+offset_right = -1.0700073
 hide_on_enable = [NodePath("../Clipping"), NodePath("../PalettePropertiesTab")]
 disable_on_enable = [NodePath("../ColorPickingButton"), NodePath("../PalettePropertiesButton")]
 tab_button = NodePath("../ImportPaletteButton")

@@ -9,10 +9,12 @@ class_name PaletteSidebarUI
 
 var color_selection: ColorSelectionInput
 var palette_manager: ColorPaletteManager
+var palette_properties: PalettePropertiesTab
 
 func _ready():
-	color_selection = ProjectManager.current_project.get_node("%ColorSelectionInput")
-	palette_manager = ProjectManager.current_project.get_node("%ColorPaletteManager")
+	color_selection = get_node("%ColorSelectionInput")
+	palette_manager = get_node("%ColorPaletteManager")
+	palette_properties = get_node("%ExtendedPaletteSidebarUI").get_node("%PalettePropertiesTab")
 
 func fill_list(palettes: Array[VoxelColorPalette], per_line: int) -> void:
 	var v_box = get_node("%VBoxContainer")
@@ -37,7 +39,11 @@ func add_palette(palette: VoxelColorPalette, parent: Control, per_line: int) -> 
 	parent.add_child(palette_scene)
 	var grid: GridContainer = palette_scene.get_node("%GridContainer")
 	grid.columns = per_line
-		
+	
+	var name_button: Button = palette_scene.get_node("%NameButton")
+	name_button.name = palette.palette_name
+	name_button.pressed.connect(palette_properties.open_and_fill.bind(palette))	
+	
 	## I like the + button being first so it doesn't move around
 	var add_color_node = add_color_scene.instantiate()
 	var add_butt: Button = add_color_node.get_node("%Button")

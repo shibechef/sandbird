@@ -1,5 +1,31 @@
 extends UITabExtension
 class_name PalettePropertiesTab
 
+func _ready():
+	super()
+	fill_properties(VoxelColorPalette.new())
+
+func open_and_fill(palette: VoxelColorPalette) -> void:
+	extend(true)
+	fill_properties(palette)
+
+func fill_properties(palette: VoxelColorPalette) -> void:
+	var v_box: VBoxContainer = get_node("%VBoxContainer")
+	var children = v_box.get_children()
+	for child in children:
+		child.queue_free()
+	
+	var name_scene := UI_manager.get_data_entry_UI_scene(palette, "palette_name", palette.palette_name, "Name")
+	v_box.add_child(name_scene)
+	
+	var material: ShaderMaterial = palette.material
+	var material_params = material.shader.get_shader_uniform_list()
+	
+	for param in material_params:
+		var param_name = param["name"]
+		var param_value = material.get_shader_parameter(param_name)
+		var param_scene := UI_manager.get_data_entry_UI_scene(material, param_name, param_value, param_name)
+		print(param_value)
+
 func get_sidebar() -> Control:
 	return ui_manager.palette_sidebar

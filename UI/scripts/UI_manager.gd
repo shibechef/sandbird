@@ -4,6 +4,8 @@ class_name UI_manager
 static var regular_theme: Theme = preload("res://UI/data/themes/regular.tres")
 static var medium_theme: Theme = preload("res://UI/data/themes/medium.tres")
 
+static var hover_focus_script: Script = preload("res://UI/scripts/hover_focus.gd")
+
 var brush_sidebar: BrushSidebarUI
 var palette_sidebar: PaletteSidebarUI
 
@@ -116,6 +118,7 @@ static func get_data_entry_UI_scene(sync_location: Object, property_name: String
 	var display_name: String
 	var input_scenes: Array[Control]
 	var final_scene := HBoxContainer.new()
+	final_scene.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	assert(property_data is String or property_data is Dictionary, "property data has incorrect input")
 	if property_data is String:
 		display_name = property_data
@@ -149,11 +152,14 @@ static func get_input_scene_from_property(sync_location: Object, property_name: 
 		var text_edit := LineEdit.new()
 		text_edit.text = str(property_value)
 		text_edit.text_changed.connect(sync_value.bind(sync_location, property_name))
+		text_edit.set_script(hover_focus_script)
+		text_edit.caret_blink = true
 		return text_edit
 	if property_value is bool:
 		var check_box := CheckBox.new()
 		check_box.set_pressed_no_signal(property_value)
 		check_box.toggled.connect(sync_value.bind(sync_location, property_name))
+		check_box.set_script(hover_focus_script)
 		return check_box
 	
 	return Control.new()

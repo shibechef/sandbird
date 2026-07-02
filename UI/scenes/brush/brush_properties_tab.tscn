@@ -15,6 +15,7 @@ offset_right = 255.0
 offset_bottom = 150.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 1
 theme_override_styles/panel = ExtResource("3_bg6cb")
 script = ExtResource("2_bg6cb")
 

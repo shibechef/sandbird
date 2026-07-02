@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://qhxmvfbtp060"]
+
+[ext_resource type="Shader" uid="uid://d237005umptob" path="res://shaders/pbr_basic.gdshader" id="1_8kp7k"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_8kp7k")
+shader_parameter/transparency = 1.0
+shader_parameter/metalicness = 1.0
+shader_parameter/roughness = 1.0

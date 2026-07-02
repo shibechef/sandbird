@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://b02bj4xvnsmrq"]
 
 [ext_resource type="Theme" uid="uid://cjsn4j2sjhnlo" path="res://UI/data/themes/medium.tres" id="1_rv7sa"]
-[ext_resource type="StyleBox" uid="uid://dbi85feyepdso" path="res://UI/data/stylebox/unselected_brush.tres" id="2_sqthx"]
 [ext_resource type="StyleBox" uid="uid://cdrajy0hbo8vq" path="res://UI/data/stylebox/selected_brush.tres" id="3_4a4nk"]
 [ext_resource type="StyleBox" uid="uid://dl517e0mbhqwd" path="res://UI/data/stylebox/hovered_brush.tres" id="4_7jb8e"]
+[ext_resource type="FontFile" uid="uid://dcy5iy52pir2s" path="res://UI/data/font/UncutSans-Regular.otf" id="5_kej05"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0jmmj"]
 
 [sub_resource type="Gradient" id="Gradient_rv7sa"]
 interpolation_mode = 1
@@ -15,11 +17,11 @@ gradient = SubResource("Gradient_rv7sa")
 
 [node name="PaletteVisual" type="Control" unique_id=879457170]
 use_parent_material = true
-custom_minimum_size = Vector2(100, 40)
+custom_minimum_size = Vector2(100, 44)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 100.0
-offset_bottom = 40.0
+offset_bottom = 44.0
 theme = ExtResource("1_rv7sa")
 
 [node name="Button" type="Button" parent="." unique_id=1670553264]
@@ -28,24 +30,24 @@ use_parent_material = true
 layout_mode = 1
 anchors_preset = -1
 offset_right = 100.0
-offset_bottom = 40.0
-theme_override_styles/normal = ExtResource("2_sqthx")
+offset_bottom = 32.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0jmmj")
 theme_override_styles/pressed = ExtResource("3_4a4nk")
 theme_override_styles/hover = ExtResource("4_7jb8e")
 
 [node name="MarginContainer" type="MarginContainer" parent="Button" unique_id=571709661]
 use_parent_material = true
-custom_minimum_size = Vector2(100, 40)
+custom_minimum_size = Vector2(100, 32)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
 
 [node name="Texture" type="TextureRect" parent="Button/MarginContainer" unique_id=923271472]
 unique_name_in_owner = true
@@ -53,3 +55,13 @@ use_parent_material = true
 layout_mode = 2
 texture = SubResource("GradientTexture1D_y6k63")
 expand_mode = 2
+
+[node name="Label" type="Label" parent="." unique_id=97122921]
+clip_contents = true
+layout_mode = 0
+offset_top = 30.0
+offset_right = 100.0
+offset_bottom = 45.0
+theme_override_fonts/font = ExtResource("5_kej05")
+theme_override_font_sizes/font_size = 12
+text = "Hello bro"

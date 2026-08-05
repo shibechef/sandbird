@@ -12,7 +12,6 @@ var ui_manager: UI_manager
 
 func _ready():
 	hide()
-	material = material.duplicate()
 	tab_button.pressed.connect(press_button)
 	tab_button.mouse_entered.connect(on_hover)
 	tab_button.mouse_exited.connect(on_stop_hover)
@@ -67,4 +66,6 @@ func on_stop_hover() -> void:
 	hovered = false
 
 func set_clipping_point(start_pos: Vector2i) -> void:
+	if material == null:
+		return
 	material.set_shader_parameter("minimum_pos", start_pos)

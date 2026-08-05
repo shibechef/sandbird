@@ -15,9 +15,22 @@ class_name UserPreference
 
 @export var base_UI_color: Color = Color(.54, .56, 1.0)
 @export var secondary_UI_color: Color = Color(.75, .5, .74)
+@export var current_ui_theme: String
+
+signal theme_set
+var ui_themes: Dictionary[String, Material]
 
 @export var object_grabbing_sensitivity: float = 1.0
 @export var free_cam_sensitivity: float = 1.0
+
+func _init():
+	ui_themes["default"] = load("res://materials/UI/ui_masking.tres")
+	ui_themes["dots"] = load("res://materials/UI/masking_dots.tres")
+	set_theme("dots")
+
+func set_theme(theme: String) -> void:
+	theme_set.emit(theme)
+	current_ui_theme = theme
 
 enum ObjectCreationPoint {
 	origin,

@@ -1,15 +1,13 @@
 [gd_scene format=3 uid="uid://davxngcuo6xeo"]
 
-[ext_resource type="Shader" uid="uid://dvvo6o5f0tit2" path="res://shaders/UI_masking.gdshader" id="1_fgeed"]
+[ext_resource type="Material" uid="uid://x1odhx0ctq8q" path="res://materials/UI/masking_dots.tres" id="1_bg6cb"]
+[ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/UI/ui_masking.tres" id="1_oun7i"]
 [ext_resource type="Script" uid="uid://cai0ajhk7cmdj" path="res://UI/scripts/brush/brush_properties_tab.gd" id="2_bg6cb"]
 [ext_resource type="StyleBox" uid="uid://cdj3tw442wbp2" path="res://UI/data/stylebox/left_sidebar.tres" id="3_bg6cb"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u10a6"]
-shader = ExtResource("1_fgeed")
-shader_parameter/minimum_pos = Vector2(0, 0)
+[ext_resource type="Script" uid="uid://dret3dgnnoh5c" path="res://UI/scripts/themed_UI.gd" id="3_oun7i"]
 
 [node name="BrushPropertiesTab" type="PanelContainer" unique_id=1298561908]
-material = SubResource("ShaderMaterial_u10a6")
+material = ExtResource("1_bg6cb")
 custom_minimum_size = Vector2(255, 144)
 offset_right = 255.0
 offset_bottom = 150.0
@@ -20,7 +18,7 @@ theme_override_styles/panel = ExtResource("3_bg6cb")
 script = ExtResource("2_bg6cb")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=764145414]
-use_parent_material = true
+material = ExtResource("1_oun7i")
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
@@ -31,3 +29,7 @@ theme_override_constants/margin_bottom = 2
 unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
+
+[node name="ThemedUI" type="Node" parent="." unique_id=352642917]
+script = ExtResource("3_oun7i")
+metadata/_custom_type_script = "uid://dret3dgnnoh5c"

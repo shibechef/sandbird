@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cy8we4kvd1p1n"]
 
-[ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/ui_masking.tres" id="1_05jwr"]
+[ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/UI/ui_masking.tres" id="1_05jwr"]
 [ext_resource type="Script" uid="uid://6yeayq1602kf" path="res://UI/scripts/palette/color_picking_tab.gd" id="1_e1aa3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_05jwr"]

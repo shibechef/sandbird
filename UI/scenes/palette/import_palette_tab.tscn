@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://qhlka6qln6eh"]
 
 [ext_resource type="Script" uid="uid://u2vvuxg6lu2u" path="res://UI/scripts/palette/palette_import_tab.gd" id="1_3uxet"]
-[ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/ui_masking.tres" id="1_y2pvi"]
+[ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/UI/ui_masking.tres" id="1_y2pvi"]
 [ext_resource type="StyleBox" uid="uid://cdj3tw442wbp2" path="res://UI/data/stylebox/left_sidebar.tres" id="2_dd41a"]
 [ext_resource type="PackedScene" uid="uid://b02bj4xvnsmrq" path="res://UI/scenes/palette/palette_preview.tscn" id="2_y2pvi"]
 

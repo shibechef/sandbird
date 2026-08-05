@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://pyapvsu2k622"]
 
-[ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/ui_masking.tres" id="1_qrbrq"]
+[ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/UI/ui_masking.tres" id="1_qrbrq"]
 [ext_resource type="Script" uid="uid://dm044v3vp7a2g" path="res://UI/scripts/palette/palette_properties_tab.gd" id="1_wbh1m"]
 [ext_resource type="StyleBox" uid="uid://cdj3tw442wbp2" path="res://UI/data/stylebox/left_sidebar.tres" id="2_7mecm"]
 

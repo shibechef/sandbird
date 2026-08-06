@@ -4,9 +4,9 @@
 [ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/UI/ui_masking.tres" id="1_y2pvi"]
 [ext_resource type="StyleBox" uid="uid://cdj3tw442wbp2" path="res://UI/data/stylebox/left_sidebar.tres" id="2_dd41a"]
 [ext_resource type="PackedScene" uid="uid://b02bj4xvnsmrq" path="res://UI/scenes/palette/palette_preview.tscn" id="2_y2pvi"]
+[ext_resource type="Script" uid="uid://dret3dgnnoh5c" path="res://UI/scripts/themed_UI.gd" id="5_wlftr"]
 
 [node name="ImportPaletteTab" type="PanelContainer" unique_id=469076588]
-material = ExtResource("1_y2pvi")
 custom_minimum_size = Vector2(206.93, 200)
 offset_right = 301.0
 offset_bottom = 200.0
@@ -14,6 +14,7 @@ theme_override_styles/panel = ExtResource("2_dd41a")
 script = ExtResource("1_3uxet")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=129064759]
+material = ExtResource("1_y2pvi")
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
@@ -26,10 +27,12 @@ layout_mode = 2
 theme_override_constants/separation = 5
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=875578019]
+use_parent_material = true
 layout_mode = 2
 text = "aaaaaaaa"
 
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer" unique_id=152788036]
+use_parent_material = true
 layout_mode = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
@@ -61,3 +64,8 @@ layout_mode = 2
 
 [node name="PaletteVisual9" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=810464740 instance=ExtResource("2_y2pvi")]
 layout_mode = 2
+
+[node name="ThemedUI" type="Node" parent="." unique_id=578542524]
+script = ExtResource("5_wlftr")
+ui_type = 2
+metadata/_custom_type_script = "uid://dret3dgnnoh5c"

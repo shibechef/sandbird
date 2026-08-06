@@ -2,12 +2,12 @@
 
 [ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/UI/ui_masking.tres" id="1_05jwr"]
 [ext_resource type="Script" uid="uid://6yeayq1602kf" path="res://UI/scripts/palette/color_picking_tab.gd" id="1_e1aa3"]
+[ext_resource type="Script" uid="uid://dret3dgnnoh5c" path="res://UI/scripts/themed_UI.gd" id="3_1l743"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_05jwr"]
 bg_color = Color(0.15312716, 0.6097826, 0.7495609, 1)
 
 [node name="ColorPickingTab" type="PanelContainer" unique_id=95370749]
-material = ExtResource("1_05jwr")
 custom_minimum_size = Vector2(255, 0)
 offset_right = 255.0
 offset_bottom = 644.0
@@ -15,7 +15,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_05jwr")
 script = ExtResource("1_e1aa3")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1253791165]
-use_parent_material = true
+material = ExtResource("1_05jwr")
 layout_mode = 2
 theme_override_constants/separation = -7
 
@@ -122,3 +122,8 @@ material = ExtResource("1_05jwr")
 use_parent_material = true
 layout_mode = 2
 text = "generate similar colors button!"
+
+[node name="ThemedUI" type="Node" parent="." unique_id=592267954]
+script = ExtResource("3_1l743")
+ui_type = 2
+metadata/_custom_type_script = "uid://dret3dgnnoh5c"

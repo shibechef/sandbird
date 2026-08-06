@@ -57,6 +57,7 @@ texture = SubResource("GradientTexture1D_y6k63")
 expand_mode = 2
 
 [node name="Label" type="Label" parent="." unique_id=97122921]
+use_parent_material = true
 clip_contents = true
 layout_mode = 0
 offset_top = 30.0

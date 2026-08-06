@@ -7,6 +7,7 @@ class_name UITabExtension
 var hover_timer: float = 0.0
 var hovered: bool = false
 var hover_threshold: float = .35
+var clipping_point: Vector2i 
 
 var ui_manager: UI_manager
 
@@ -16,6 +17,7 @@ func _ready():
 	tab_button.mouse_entered.connect(on_hover)
 	tab_button.mouse_exited.connect(on_stop_hover)
 	ui_manager = ProjectManager.current_project.get_node("%UI_manager")
+	UserPreferences.secondary_theme_set.connect(set_clipping_point.bind(Vector2i.ZERO))
 
 func _process(delta):
 	if hovered:
@@ -68,4 +70,11 @@ func on_stop_hover() -> void:
 func set_clipping_point(start_pos: Vector2i) -> void:
 	if material == null:
 		return
+	if start_pos == Vector2i.ZERO:
+		start_pos = clipping_point
 	material.set_shader_parameter("minimum_pos", start_pos)
+	for child in get_children():
+		if child.get("material") != null:
+			child.material = child.material.duplicate()
+			child.material.set_shader_parameter("minimum_pos", start_pos)
+	clipping_point = start_pos

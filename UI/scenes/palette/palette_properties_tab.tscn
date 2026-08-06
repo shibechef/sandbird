@@ -3,9 +3,9 @@
 [ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/UI/ui_masking.tres" id="1_qrbrq"]
 [ext_resource type="Script" uid="uid://dm044v3vp7a2g" path="res://UI/scripts/palette/palette_properties_tab.gd" id="1_wbh1m"]
 [ext_resource type="StyleBox" uid="uid://cdj3tw442wbp2" path="res://UI/data/stylebox/left_sidebar.tres" id="2_7mecm"]
+[ext_resource type="Script" uid="uid://dret3dgnnoh5c" path="res://UI/scripts/themed_UI.gd" id="4_2m1w3"]
 
 [node name="PalettePropertiesTab" type="PanelContainer" unique_id=320960035]
-material = ExtResource("1_qrbrq")
 custom_minimum_size = Vector2(255, 255)
 offset_right = 225.0
 offset_bottom = 225.0
@@ -15,7 +15,7 @@ theme_override_styles/panel = ExtResource("2_7mecm")
 script = ExtResource("1_wbh1m")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=520006716]
-use_parent_material = true
+material = ExtResource("1_qrbrq")
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
@@ -26,3 +26,8 @@ theme_override_constants/margin_bottom = 2
 unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
+
+[node name="ThemedUI" type="Node" parent="." unique_id=1064430748]
+script = ExtResource("4_2m1w3")
+ui_type = 2
+metadata/_custom_type_script = "uid://dret3dgnnoh5c"

@@ -1,11 +1,17 @@
 extends Node
 class_name ThemedUI
 
+@export var ui_type: int = 1
+
 func _ready():
-	UserPreferences.theme_set.connect(change_theme)
-	change_theme(UserPreferences.current_ui_theme)
+	match ui_type:
+		1:	
+			UserPreferences.primary_theme_set.connect(change_theme)
+			change_theme(UserPreferences.primary_UI_theme)
+		2:	
+			UserPreferences.secondary_theme_set.connect(change_theme)
+			change_theme(UserPreferences.secondary_UI_theme)
 
 func change_theme(shader_name: String) -> void:
-	var ui_node: Control = get_parent()
-	ui_node.material = UserPreferences.ui_themes[shader_name].duplicate()
-	print(ui_node.material.get_shader_parameter("tiling_size"))
+	var UI_node: Control = get_parent()
+	UI_node.material = UserPreferences.UI_themes[shader_name].duplicate()

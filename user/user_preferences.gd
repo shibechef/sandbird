@@ -14,23 +14,37 @@ class_name UserPreference
 @export var outline_selection_width: float = .11
 
 @export var base_UI_color: Color = Color(.54, .56, 1.0)
-@export var secondary_UI_color: Color = Color(.75, .5, .74)
-@export var current_ui_theme: String
+@export var complimentary_UI_color: Color = Color(.75, .5, .74)
 
-signal theme_set
-var ui_themes: Dictionary[String, Material]
+@export var primary_UI_theme: String
+@export var secondary_UI_theme: String
+
+signal UI_color_changed
+signal primary_theme_set
+signal secondary_theme_set
+var UI_themes: Dictionary[String, Material]
 
 @export var object_grabbing_sensitivity: float = 1.0
 @export var free_cam_sensitivity: float = 1.0
 
 func _init():
-	ui_themes["default"] = load("res://materials/UI/ui_masking.tres")
-	ui_themes["dots"] = load("res://materials/UI/masking_dots.tres")
-	set_theme("dots")
+	UI_themes["default"] = load("res://materials/UI/ui_masking.tres")
+	UI_themes["dots"] = load("res://materials/UI/masking_dots.tres")
+	set_primary_theme("default")
+	set_secondary_theme("dots")
 
-func set_theme(theme: String) -> void:
-	theme_set.emit(theme)
-	current_ui_theme = theme
+func set_primary_theme(theme: String) -> void:
+	primary_theme_set.emit(theme)
+	primary_UI_theme = theme
+
+func set_secondary_theme(theme: String) -> void:
+	secondary_theme_set.emit(theme)
+	secondary_UI_theme = theme
+
+func change_UI_color(base: Color, complimentary: Color) -> void:
+	base_UI_color = base
+	complimentary_UI_color = complimentary
+	UI_color_changed.emit(base, complimentary)
 
 enum ObjectCreationPoint {
 	origin,

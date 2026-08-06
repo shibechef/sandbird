@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://b60c8y1bdhusc" path="res://UI/scripts/brush/brush_sidebar_UI.gd" id="1_6q7k1"]
 [ext_resource type="PackedScene" uid="uid://dkpe87xxdua08" path="res://UI/scenes/brush/single_brush.tscn" id="1_dglvy"]
 [ext_resource type="PackedScene" uid="uid://cvxnjd2kcmdkh" path="res://UI/scenes/brush/add_brush.tscn" id="3_waiin"]
+[ext_resource type="Script" uid="uid://dret3dgnnoh5c" path="res://UI/scripts/themed_UI.gd" id="5_pii6s"]
 
 [sub_resource type="Theme" id="Theme_31iu1"]
 RichTextLabel/colors/default_color = Color(0.89, 1, 0.8973333, 1)
@@ -94,3 +95,7 @@ theme = SubResource("Theme_31iu1")
 [node name="BrushVisual6" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=1822818793 instance=ExtResource("1_dglvy")]
 layout_mode = 2
 theme = SubResource("Theme_31iu1")
+
+[node name="ThemedUI" type="Node" parent="." unique_id=233259374]
+script = ExtResource("5_pii6s")
+metadata/_custom_type_script = "uid://dret3dgnnoh5c"

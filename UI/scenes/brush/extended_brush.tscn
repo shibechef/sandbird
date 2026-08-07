@@ -76,10 +76,10 @@ tab_button = NodePath("../BrushMenuButton")
 [node name="BrushImport" parent="." unique_id=1787022151 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("3_1n63v")]
 unique_name_in_owner = true
 layout_mode = 1
-offset_left = -673.0
-offset_top = -55.0
-offset_right = -673.0
-offset_bottom = -55.0
+offset_left = -307.0
+offset_top = -26.0
+offset_right = 1.0
+offset_bottom = 142.0
 hide_on_enable = [NodePath("../BrushProperties")]
 disable_on_enable = [NodePath("../BrushMenuButton")]
 tab_button = NodePath("../ImportMenuButton")

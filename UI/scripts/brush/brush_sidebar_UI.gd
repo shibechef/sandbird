@@ -2,11 +2,13 @@ extends Control
 class_name BrushSidebarUI
 
 var paint_system: PaintSystem
+var ui_manager: UI_manager
 @export var single_brush_scene: PackedScene
 @export var add_brush_scene: PackedScene
 
 func _ready():
-	paint_system = ProjectManager.current_project.get_node("%PaintSystem")
+	paint_system = get_node("%PaintSystem")
+	ui_manager = get_node("%UI_manager")
 
 func fill_list(brushes: Array[BaseBrush], per_line: int, max_lines: int, starting_y: int, item_width: int) -> void:
 	var v_box = get_node("%VBoxContainer")
@@ -62,5 +64,6 @@ func add_brush(item: Resource, parent: Control) -> void:
 	paint_system.brush_UI_buttons[item.named_as] = button
 	
 	button.pressed.connect(paint_system.select_brush.bind(item.named_as))
+	button.pressed.connect(ui_manager.brush_import_tab.export_item_clicked.bind(item.named_as))
 	## uncomment when dynamic textures are a thing
 	#texture.texture = BrushManager.get_brush_text(brush)

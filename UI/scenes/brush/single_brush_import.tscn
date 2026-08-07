@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cc6cwhse2g2os"]
+
+[ext_resource type="Theme" uid="uid://cjsn4j2sjhnlo" path="res://UI/data/themes/medium.tres" id="1_qhvtg"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_m6r4f"]
+size = Vector2(40, 40)
+
+[node name="BrushVisual" type="Control" unique_id=1058319413]
+use_parent_material = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 3
+anchors_preset = 0
+theme = ExtResource("1_qhvtg")
+
+[node name="TextureButton" type="TextureButton" parent="." unique_id=865397552]
+unique_name_in_owner = true
+use_parent_material = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture_normal = SubResource("PlaceholderTexture2D_m6r4f")

@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://dret3dgnnoh5c" path="res://UI/scripts/themed_UI.gd" id="5_wlftr"]
 
 [node name="ImportPaletteTab" type="PanelContainer" unique_id=469076588]
-custom_minimum_size = Vector2(206.93, 200)
+custom_minimum_size = Vector2(207, 200)
 offset_right = 301.0
 offset_bottom = 200.0
 theme_override_styles/panel = ExtResource("2_dd41a")

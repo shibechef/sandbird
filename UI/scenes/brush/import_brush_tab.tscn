@@ -2,13 +2,84 @@
 
 [ext_resource type="Material" uid="uid://by3sfwtdl3470" path="res://materials/UI/ui_masking.tres" id="1_77tvu"]
 [ext_resource type="Script" uid="uid://d2c4vj8mp1y3w" path="res://UI/scripts/brush/brush_import_tab.gd" id="1_y10qe"]
+[ext_resource type="PackedScene" uid="uid://cc6cwhse2g2os" path="res://UI/scenes/brush/single_brush_import.tscn" id="3_2o31s"]
+[ext_resource type="Script" uid="uid://dret3dgnnoh5c" path="res://UI/scripts/themed_UI.gd" id="4_qscg8"]
 
-[node name="ImportBrushTab" type="Control" unique_id=1787022151]
+[node name="ImportBrushTab" type="PanelContainer" unique_id=804672410]
 material = ExtResource("1_77tvu")
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+custom_minimum_size = Vector2(308, 150)
+offset_right = 308.0
+offset_bottom = 197.0
 script = ExtResource("1_y10qe")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1794301264]
+material = ExtResource("1_77tvu")
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1883228093]
+use_parent_material = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1885363525]
+use_parent_material = true
+layout_mode = 2
+text = "faq"
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer" unique_id=642568303]
+use_parent_material = true
+layout_mode = 2
+columns = 7
+
+[node name="BrushVisual" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1058319413 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual2" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=294090179 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual3" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=635714915 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual4" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1220484718 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual5" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=2007739915 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual6" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1740654915 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual7" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=24024863 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual8" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=305685333 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual9" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=239581272 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual10" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=704820531 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual11" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=94920285 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual12" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1453832859 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual13" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=717079984 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual14" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=515337832 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="BrushVisual15" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=648980179 instance=ExtResource("3_2o31s")]
+layout_mode = 2
+
+[node name="ThemedUI" type="Node" parent="." unique_id=1147580365]
+script = ExtResource("4_qscg8")
+ui_type = 2
+metadata/_custom_type_script = "uid://dret3dgnnoh5c"

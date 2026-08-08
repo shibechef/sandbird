@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BeamBrush" format=3]
+
+[ext_resource type="Script" path="res://voxel_painting/brushes/beam_paint.gd" id="1_gfdtv"]
+
+[resource]
+script = ExtResource("1_gfdtv")
+named_as = "poo"
+metadata/_custom_type_script = "uid://rrg3dhpf3gdf"

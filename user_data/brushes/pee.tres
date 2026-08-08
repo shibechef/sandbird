@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PointBrush" format=3]
+
+[ext_resource type="Script" path="res://voxel_painting/brushes/point_brush.gd" id="1_y671l"]
+
+[resource]
+script = ExtResource("1_y671l")
+named_as = "pee"
+metadata/_custom_type_script = "uid://cabu1sttj61yr"

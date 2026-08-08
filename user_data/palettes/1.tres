@@ -1,0 +1,86 @@
+[gd_resource type="Resource" script_class="VoxelColorPalette" format=3]
+
+[ext_resource type="Script" path="res://voxel_visuals/palette_color.gd" id="1_qau6d"]
+[ext_resource type="Shader" path="res://shaders/color_palette.gdshader" id="2_7f45j"]
+[ext_resource type="Script" path="res://voxel_visuals/color_palette.gd" id="3_wdvt7"]
+
+[sub_resource type="Image" id="Image_qau6d"]
+data = {
+"data": PackedByteArray(224, 39, 61, 255, 128, 12, 177, 255, 76, 129, 221, 255, 249, 216, 40, 255, 246, 137, 27, 255, 53, 214, 53, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 6
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_7f45j"]
+image = SubResource("Image_qau6d")
+
+[sub_resource type="Resource" id="Resource_q7h0j"]
+script = ExtResource("1_qau6d")
+color = Color(0.87857217, 0.15302941, 0.24035037, 1)
+palette_id = 1
+color_id = -1140
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_paus5"]
+script = ExtResource("1_qau6d")
+color = Color(0.502008, 0.048163645, 0.6950024, 1)
+palette_id = 1
+color_id = -935
+current_uv_index = 1
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_f23kq"]
+script = ExtResource("1_qau6d")
+color = Color(0.29922208, 0.5077467, 0.86921954, 1)
+palette_id = 1
+color_id = -125
+current_uv_index = 2
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_afnbf"]
+script = ExtResource("1_qau6d")
+color = Color(0.97889835, 0.8471011, 0.16050273, 1)
+palette_id = 1
+color_id = 170
+current_uv_index = 3
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_ahkma"]
+script = ExtResource("1_qau6d")
+color = Color(0.9662083, 0.5409966, 0.10832695, 1)
+palette_id = 1
+color_id = 275
+current_uv_index = 4
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="Resource" id="Resource_xwo0n"]
+script = ExtResource("1_qau6d")
+color = Color(0.21080884, 0.8419087, 0.211243, 1)
+palette_id = 1
+color_id = 2690
+current_uv_index = 5
+metadata/_custom_type_script = "uid://c4cxqovgpocot"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wdvt7"]
+render_priority = 0
+shader = ExtResource("2_7f45j")
+shader_parameter/color_palette_tex = SubResource("ImageTexture_7f45j")
+
+[resource]
+script = ExtResource("3_wdvt7")
+palette_name = "rainbow"
+material = SubResource("ShaderMaterial_wdvt7")
+id = 1
+colors = Dictionary[int, ExtResource("1_qau6d")]({
+-1140: SubResource("Resource_q7h0j"),
+-935: SubResource("Resource_paus5"),
+-125: SubResource("Resource_f23kq"),
+170: SubResource("Resource_afnbf"),
+275: SubResource("Resource_ahkma"),
+2690: SubResource("Resource_xwo0n")
+})
+color_order = Array[int]([-1140, 275, 170, 2690, -125, -935])
+color_texture = SubResource("ImageTexture_7f45j")
+metadata/_custom_type_script = "uid://ciubgxcnuov46"

@@ -9,11 +9,11 @@ var palette_by_color: Dictionary[int, int]
 
 var currently_selected_colors: Array[int]
 
-var ui_manager: UI_manager
+var ui_manager: UIManager
 
 func _ready():
 	ready_palettes()
-	ui_manager = get_node("%UI_manager")
+	ui_manager = get_node("%UIManager")
 	call_deferred("update_color_UI")
 
 func add_new_color(palette_id: int) -> void:
@@ -47,8 +47,12 @@ func delete_color(palette: VoxelColorPalette, color_id: int) -> void:
 	palette.colors.erase(color_id)
 	palette_by_color.erase(color_id)
 
-func add_existing_palette() -> void:
-	return
+func add_existing_palette(palette: VoxelColorPalette) -> void:
+	all_palettes[palette.id] = palette
+	palettes_by_order.append(palette.id)
+	for color_id in palette.colors:
+		palette_by_color[color_id] = palette.id
+	update_color_UI()
 
 func add_new_palette() -> void:
 	var id = randi()

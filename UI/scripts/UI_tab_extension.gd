@@ -9,14 +9,14 @@ var hovered: bool = false
 var hover_threshold: float = .35
 var clipping_point: Vector2i 
 
-var ui_manager: UI_manager
+var ui_manager: UIManager
 
 func _ready():
 	hide()
 	tab_button.pressed.connect(press_button)
 	tab_button.mouse_entered.connect(on_hover)
 	tab_button.mouse_exited.connect(on_stop_hover)
-	ui_manager = ProjectManager.current_project.get_node("%UI_manager")
+	ui_manager = ProjectManager.current_project.get_node("%UIManager")
 	UserPreferences.secondary_theme_set.connect(set_clipping_point.bind(Vector2i.ZERO))
 
 func _process(delta):

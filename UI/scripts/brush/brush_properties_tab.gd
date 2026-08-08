@@ -28,7 +28,7 @@ func fill_properties(brush: BaseBrush) -> void:
 		var property_display_name = properties[property_name]
 		var property_value = brush.get(property_name)
 		
-		var scene = UI_manager.get_data_entry_UI_scene(brush, property_name, property_value, property)
+		var scene = UIManager.get_data_entry_UI_scene(brush, property_name, property_value, property)
 		v_box.add_child(scene)
 		
 	var over_flow_scenes: int = max(v_box.get_child_count() - 5, 0)

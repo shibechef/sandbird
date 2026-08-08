@@ -1,7 +1,7 @@
 extends Node
 
-var brush_path: String = "res://user/brushes/"
-var palette_path: String = "res://user/palettes/"
+var brush_path: String = "res://user_data/brushes/"
+var palette_path: String = "res://user_data/palettes/"
 
 func get_folder_contents(file_path: String, type: String, recursive: bool = false) -> Array[String]:
 	var dir = DirAccess.open(file_path)
@@ -21,17 +21,26 @@ func get_folder_contents(file_path: String, type: String, recursive: bool = fals
 	return contents
 
 func get_brushes() -> Dictionary[String, String]:
+	var dir := DirAccess.open("res://user_data/")
+	if !dir.dir_exists("brushes"):
+		dir.make_dir("brushes")
+		
 	var folder_contents: Array[String] = get_folder_contents(brush_path, "tres", true)
 	var valid_brushes: Dictionary[String, String]
 	
 	for file_path in folder_contents:
 		var resource = load(file_path)
-		if resource.get_script().get_global_name() == "BaseBrush":
-			valid_brushes[resource.inspector_name] = file_path
+		print(resource.get_script().get_global_name())
+		if resource is BaseBrush:
+			valid_brushes[resource.named_as] = file_path
 	
 	return valid_brushes
 
 func get_palettes() -> Dictionary[String, String]:
+	var dir := DirAccess.open("res://user_data/")
+	if !dir.dir_exists("palettes"):
+		dir.make_dir("palettes")
+		
 	var folder_contents: Array[String] = get_folder_contents(palette_path, "tres", true)
 	var valid_palettes: Dictionary[String, String]
 	

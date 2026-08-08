@@ -1,5 +1,5 @@
 extends Control
-class_name UI_manager
+class_name UIManager
 
 static var regular_theme: Theme = preload("res://UI/data/themes/regular.tres")
 static var medium_theme: Theme = preload("res://UI/data/themes/medium.tres")
@@ -51,6 +51,7 @@ func _ready():
 	
 	extended_brush_sidebar.position = Vector2(4 + brush_width * brushes_per_line, sidebar_mid_point - 145)
 	extended_palette_sidebar.position = Vector2(8 + colors_per_line * color_width, sidebar_mid_point + 2)
+	set_cutoffs()
 
 func _process(delta):
 	animate_UI(delta)
@@ -62,25 +63,26 @@ func add_palette_menu(palette_ID: int) -> void:
 	color_selection.add_palette_UI(palette_ID, menu)	
 	menu.position += Vector2(500., 500.)
 
+func set_cutoffs() -> void:
+	var brush_cutoff_point = Vector2(extended_brush_sidebar.position.x, 0.0)
+	brush_properties_tab.set_clipping_point(brush_cutoff_point)
+	brush_import_tab.set_clipping_point(brush_cutoff_point)
+	
+	var palette_cutoff_point = Vector2(extended_palette_sidebar.position.x, 0.0)
+	color_picking_tab.set_clipping_point(palette_cutoff_point)
+	palette_properties_tab.set_clipping_point(palette_cutoff_point)
+	palette_import_tab.set_clipping_point(palette_cutoff_point)
+
 func update_brush_sidebar(values: Array[BaseBrush]) -> void:
 	paint_system.brush_UI_buttons.clear()
 	brush_sidebar.fill_list(values, brushes_per_line, 8, sidebar_mid_point, brush_width)
 	if paint_system.current_brush != "":
 		paint_system.brush_UI_buttons[paint_system.current_brush].set_pressed_no_signal(true)
-
-	var cutoff_point = Vector2(extended_brush_sidebar.position.x, 0.0)
-	brush_properties_tab.set_clipping_point(cutoff_point)
-	brush_import_tab.set_clipping_point(cutoff_point)
 	
 func update_palette_sidebar(values: Array[VoxelColorPalette]) -> void:
 	color_selection.color_buttons.clear()
 	palette_sidebar.fill_list(values, 11)
 	color_selection.update_sidebar_selections()
-	
-	var cutoff_point = Vector2(extended_palette_sidebar.position.x, 0.0)
-	color_picking_tab.set_clipping_point(cutoff_point)
-	palette_properties_tab.set_clipping_point(cutoff_point)
-	palette_import_tab.set_clipping_point(cutoff_point)
 
 func add_animation(UI_node: Control, new_pos: Vector2, callable = null) -> void:
 	if animation_tasks.has(UI_node):

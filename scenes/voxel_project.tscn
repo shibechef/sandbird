@@ -15,7 +15,7 @@
 [ext_resource type="Script" uid="uid://b4aeqlytrf1fx" path="res://voxel_visuals/color_palette_manager.gd" id="9_6fg1y"]
 [ext_resource type="Script" uid="uid://rrg3dhpf3gdf" path="res://voxel_painting/brushes/beam_paint.gd" id="9_ayq5r"]
 [ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="10_2l07e"]
-[ext_resource type="Resource" uid="uid://ce3m077vbf1hg" path="res://user/palettes/rainbow.tres" id="11_tnig6"]
+[ext_resource type="Resource" uid="uid://ce3m077vbf1hg" path="res://user_data/palettes/rainbow.tres" id="11_tnig6"]
 [ext_resource type="Script" uid="uid://ctyp21ixuvmen" path="res://input/color_selection.gd" id="13_gqylq"]
 [ext_resource type="Script" uid="uid://cvfpnpo0eu04j" path="res://voxel_input/edit_logging.gd" id="15_tnig6"]
 [ext_resource type="Script" uid="uid://ciw1gscypck6r" path="res://voxel_input/move_object_system.gd" id="17_4inyy"]
@@ -123,7 +123,7 @@ script = ExtResource("4_dvsgh")
 script = ExtResource("4_dvsgh")
 dimensions = Vector3i(200, 200, 200)
 
-[node name="UI_manager" type="Control" parent="." unique_id=956425776]
+[node name="UIManager" type="Control" parent="." unique_id=956425776]
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 15
@@ -137,20 +137,20 @@ size_flags_horizontal = 4
 script = ExtResource("17_dhmkn")
 metadata/_custom_type_script = "uid://sou14aoubqus"
 
-[node name="BrushSidebarUI" parent="UI_manager" unique_id=201940366 instance=ExtResource("20_2epbo")]
+[node name="BrushSidebarUI" parent="UIManager" unique_id=201940366 instance=ExtResource("20_2epbo")]
 unique_name_in_owner = true
 layout_mode = 1
 offset_top = 9.0
 offset_bottom = 489.0
 
-[node name="PaletteSidebarUI" parent="UI_manager" unique_id=918870501 instance=ExtResource("21_ayq5r")]
+[node name="PaletteSidebarUI" parent="UIManager" unique_id=918870501 instance=ExtResource("21_ayq5r")]
 unique_name_in_owner = true
 layout_mode = 1
 offset_top = 500.0
 offset_right = 348.0
 offset_bottom = 959.00073
 
-[node name="ExtendedBrushSidebarUI" parent="UI_manager" unique_id=210707944 instance=ExtResource("22_ayq5r")]
+[node name="ExtendedBrushSidebarUI" parent="UIManager" unique_id=210707944 instance=ExtResource("22_ayq5r")]
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = 1942.0
@@ -158,7 +158,7 @@ offset_top = 315.0
 offset_right = 1942.0
 offset_bottom = 315.0
 
-[node name="ExtendedPaletteSidebarUI" parent="UI_manager" unique_id=877684218 instance=ExtResource("23_uif21")]
+[node name="ExtendedPaletteSidebarUI" parent="UIManager" unique_id=877684218 instance=ExtResource("23_uif21")]
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = 1852.0

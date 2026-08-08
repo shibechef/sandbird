@@ -63,11 +63,12 @@ text = "Import"
 
 [node name="BrushProperties" parent="." unique_id=1466556821 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("2_1n63v")]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(255, 146)
 layout_mode = 1
-offset_left = -254.0
+offset_left = -255.0
 offset_top = -26.0
-offset_right = 1.0
+offset_right = 0.0
 offset_bottom = 142.0
 hide_on_enable = [NodePath("../BrushImport")]
 disable_on_enable = [NodePath("../ImportMenuButton")]
@@ -76,9 +77,9 @@ tab_button = NodePath("../BrushMenuButton")
 [node name="BrushImport" parent="." unique_id=1787022151 node_paths=PackedStringArray("hide_on_enable", "disable_on_enable", "tab_button") instance=ExtResource("3_1n63v")]
 unique_name_in_owner = true
 layout_mode = 1
-offset_left = -307.0
+offset_left = -308.0
 offset_top = -26.0
-offset_right = 1.0
+offset_right = 0.0
 offset_bottom = 142.0
 hide_on_enable = [NodePath("../BrushProperties")]
 disable_on_enable = [NodePath("../BrushMenuButton")]

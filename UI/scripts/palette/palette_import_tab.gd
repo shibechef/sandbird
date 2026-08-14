@@ -41,7 +41,7 @@ func update_folder_visuals() -> void:
 		import_button.pressed.connect(import_item_clicked.bind(palette))
 		var name_label: Label = palette_scene.get_node("%NameLabel")
 		name_label.text = palette_name
-		var texture: Texture = palette.get_node("%Texture")
+		var texture: TextureRect = palette_scene.get_node("%Texture")
 		texture.texture
 		v_box.get_node(folder_name).add_child(palette_scene)
 

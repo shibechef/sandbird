@@ -1,0 +1,2 @@
+extends PopupUI
+class_name SettingsMenu

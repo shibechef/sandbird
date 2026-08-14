@@ -1,0 +1,265 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://voxel_input/voxel_project.gd" id="1_rgeuu"]
+[ext_resource type="Script" path="res://user/project_preference.gd" id="2_guiol"]
+[ext_resource type="Script" path="res://voxel_visuals/mesh_system.gd" id="3_rtopl"]
+[ext_resource type="Script" path="res://voxel_input/collision_system.gd" id="4_aroi7"]
+[ext_resource type="Script" path="res://input/input_manager.gd" id="5_ax87t"]
+[ext_resource type="Script" path="res://voxel_painting/paint_system.gd" id="6_gdktb"]
+[ext_resource type="Script" path="res://voxel_painting/brushes/base_brush.gd" id="7_f0mqh"]
+[ext_resource type="Script" path="res://voxel_painting/brushes/point_brush.gd" id="8_3b4iu"]
+[ext_resource type="Script" path="res://voxel_painting/brushes/beam_paint.gd" id="9_1i030"]
+[ext_resource type="Script" path="res://voxel_input/object_selection.gd" id="10_2ieas"]
+[ext_resource type="Script" path="res://voxel_input/object_creation.gd" id="11_6yftw"]
+[ext_resource type="Script" path="res://voxel_visuals/color_palette_manager.gd" id="12_pt14n"]
+[ext_resource type="Script" path="res://voxel_visuals/color_palette.gd" id="13_b30ou"]
+[ext_resource type="Resource" path="res://user_data/palettes/rainbow.tres" id="14_iwqq7"]
+[ext_resource type="Script" path="res://voxel_input/edit_logging.gd" id="15_kcf61"]
+[ext_resource type="Script" path="res://input/color_selection.gd" id="16_xb3po"]
+[ext_resource type="Script" path="res://voxel_input/move_object_system.gd" id="17_n1po5"]
+[ext_resource type="Script" path="res://voxel_input/hierarchy.gd" id="18_hdxjw"]
+[ext_resource type="Script" path="res://voxel_input/voxel_object.gd" id="19_m0ykl"]
+[ext_resource type="Script" path="res://UI/scripts/UI_manager.gd" id="20_bq0vh"]
+[ext_resource type="PackedScene" path="res://UI/scenes/brush/brush_sidebar.tscn" id="21_jqpjf"]
+[ext_resource type="StyleBox" path="res://UI/data/stylebox/left_sidebar.tres" id="22_082gq"]
+[ext_resource type="Script" path="res://UI/scripts/brush/brush_sidebar_UI.gd" id="23_nqj7g"]
+[ext_resource type="PackedScene" path="res://UI/scenes/brush/single_brush.tscn" id="24_xfmaw"]
+[ext_resource type="PackedScene" path="res://UI/scenes/brush/add_brush.tscn" id="25_q5h54"]
+[ext_resource type="PackedScene" path="res://UI/scenes/palette/palette_sidebar.tscn" id="26_dxxjx"]
+[ext_resource type="Script" path="res://UI/scripts/palette/palette_sidebar_UI.gd" id="27_8qtr4"]
+[ext_resource type="PackedScene" path="res://UI/scenes/palette/single_palette.tscn" id="28_wiv0i"]
+[ext_resource type="PackedScene" path="res://UI/scenes/palette/single_color.tscn" id="29_8mhcl"]
+[ext_resource type="PackedScene" path="res://UI/scenes/palette/add_color.tscn" id="30_bimhl"]
+[ext_resource type="PackedScene" path="res://UI/scenes/palette/add_palette.tscn" id="31_j03cr"]
+[ext_resource type="PackedScene" path="res://UI/scenes/brush/extended_brush.tscn" id="32_bqxxe"]
+[ext_resource type="PackedScene" path="res://UI/scenes/palette/extended_palette.tscn" id="33_tiodh"]
+[ext_resource type="PackedScene" path="res://UI/scenes/project/project_buttons.tscn" id="34_bir72"]
+[ext_resource type="Theme" path="res://UI/data/themes/medium.tres" id="35_a786m"]
+[ext_resource type="Script" path="res://UI/scripts/project/project_buttons.gd" id="36_bwlmc"]
+[ext_resource type="PackedScene" path="res://UI/scenes/project/project_menu.tscn" id="37_ei2xa"]
+[ext_resource type="Script" path="res://UI/scripts/project/project_menu.gd" id="38_mmdgx"]
+[ext_resource type="PackedScene" path="res://UI/scenes/project/settings_menu.tscn" id="39_u0mxw"]
+[ext_resource type="Script" path="res://UI/scripts/project/settings_menu.gd" id="40_2qf2a"]
+[ext_resource type="PackedScene" path="res://UI/scenes/project/export_menu.tscn" id="41_6l0m1"]
+[ext_resource type="Script" path="res://UI/scripts/project/export_menu.gd" id="42_jshof"]
+
+[sub_resource type="Resource" id="Resource_uif21"]
+script = ExtResource("8_3b4iu")
+named_as = "pee"
+metadata/_custom_type_script = "uid://cabu1sttj61yr"
+
+[sub_resource type="Resource" id="Resource_4inyy"]
+script = ExtResource("9_1i030")
+named_as = "poo"
+metadata/_custom_type_script = "uid://rrg3dhpf3gdf"
+
+[node name="VoxelProject" type="Node" unique_id=690339630]
+script = ExtResource("1_rgeuu")
+last_opened_time = {
+"day": 14,
+"dst": true,
+"hour": 2,
+"minute": 30,
+"month": 8,
+"second": 51,
+"weekday": 5,
+"year": 2026
+}
+metadata/_custom_type_script = "uid://cj0jdwoskk87h"
+
+[node name="ProjectPreferences" type="Node" parent="." unique_id=779933586]
+unique_name_in_owner = true
+script = ExtResource("2_guiol")
+metadata/_custom_type_script = "uid://81a2nxrx8cf5"
+
+[node name="MeshSystem" type="Node" parent="." unique_id=979287164]
+unique_name_in_owner = true
+script = ExtResource("3_rtopl")
+metadata/_custom_type_script = "uid://pe00bjvkjlbp"
+
+[node name="CollisionSystem" type="Node" parent="." unique_id=1888868262]
+unique_name_in_owner = true
+script = ExtResource("4_aroi7")
+metadata/_custom_type_script = "uid://cq72t00uw47bq"
+
+[node name="InputManager" type="Node" parent="." unique_id=123845880]
+unique_name_in_owner = true
+script = ExtResource("5_ax87t")
+metadata/_custom_type_script = "uid://cm1ndittglsvb"
+
+[node name="PaintSystem" type="Node" parent="." unique_id=1285157098]
+unique_name_in_owner = true
+script = ExtResource("6_gdktb")
+brush_list = Dictionary[String, ExtResource("7_f0mqh")]({
+"pee": SubResource("Resource_uif21"),
+"poo": SubResource("Resource_4inyy")
+})
+metadata/_custom_type_script = "uid://cw07yos5ueqli"
+
+[node name="ObjectSelectionSystem" type="Node" parent="." unique_id=953585129]
+unique_name_in_owner = true
+script = ExtResource("10_2ieas")
+metadata/_custom_type_script = "uid://db6h5eik3hk6p"
+
+[node name="ObjectCreationSystem" type="Node" parent="." unique_id=1702071089]
+unique_name_in_owner = true
+script = ExtResource("11_6yftw")
+metadata/_custom_type_script = "uid://cdbapr8i4wu3k"
+
+[node name="ColorPaletteManager" type="Node" parent="." unique_id=47309321]
+unique_name_in_owner = true
+script = ExtResource("12_pt14n")
+all_palettes = Dictionary[int, ExtResource("13_b30ou")]({
+1: ExtResource("14_iwqq7")
+})
+metadata/_custom_type_script = "uid://b4aeqlytrf1fx"
+
+[node name="EditLogger" type="Node" parent="." unique_id=2007931179]
+unique_name_in_owner = true
+script = ExtResource("15_kcf61")
+metadata/_custom_type_script = "uid://cvfpnpo0eu04j"
+
+[node name="ColorSelectionInput" type="Node" parent="." unique_id=594427728]
+unique_name_in_owner = true
+script = ExtResource("16_xb3po")
+metadata/_custom_type_script = "uid://ctyp21ixuvmen"
+
+[node name="MoveObjectSystem" type="Node" parent="." unique_id=1426845036]
+unique_name_in_owner = true
+script = ExtResource("17_n1po5")
+metadata/_custom_type_script = "uid://ciw1gscypck6r"
+
+[node name="Hierarchy" type="Node" parent="." unique_id=1297333066]
+unique_name_in_owner = true
+script = ExtResource("18_hdxjw")
+metadata/_custom_type_script = "uid://b1jlrdrtghd7"
+
+[node name="Node3D2" type="Node3D" parent="Hierarchy" unique_id=1189882118]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -97.41853)
+script = ExtResource("19_m0ykl")
+dimensions = Vector3i(16, 8, 16)
+
+[node name="Node3D3" type="Node3D" parent="Hierarchy" unique_id=1594163214]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
+script = ExtResource("19_m0ykl")
+dimensions = Vector3i(35, 4, 1)
+
+[node name="Node3D" type="Node3D" parent="Hierarchy" unique_id=1238180466]
+script = ExtResource("19_m0ykl")
+
+[node name="Node3D4" type="Node3D" parent="Hierarchy" unique_id=240919997]
+script = ExtResource("19_m0ykl")
+dimensions = Vector3i(200, 200, 200)
+
+[node name="UIManager" type="Control" parent="." unique_id=956425776]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -2560.0
+offset_bottom = -1440.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("20_bq0vh")
+metadata/_custom_type_script = "uid://sou14aoubqus"
+
+[node name="BrushSidebarUI" type="Panel" parent="UIManager" unique_id=201940366 instance=ExtResource("21_jqpjf")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_top = 9.0
+offset_right = 315.325
+offset_bottom = 489.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("22_082gq")
+script = ExtResource("23_nqj7g")
+single_brush_scene = ExtResource("24_xfmaw")
+add_brush_scene = ExtResource("25_q5h54")
+
+[node name="PaletteSidebarUI" type="PanelContainer" parent="UIManager" unique_id=918870501 instance=ExtResource("26_dxxjx")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(155, 194)
+layout_mode = 1
+offset_top = 500.0
+offset_right = 348.0
+offset_bottom = 959.00073
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("22_082gq")
+script = ExtResource("27_8qtr4")
+single_palette_scene = ExtResource("28_wiv0i")
+single_color_scene = ExtResource("29_8mhcl")
+add_color_scene = ExtResource("30_bimhl")
+add_palette_scene = ExtResource("31_j03cr")
+
+[node name="ExtendedBrushSidebarUI" type="Control" parent="UIManager" unique_id=210707944 instance=ExtResource("32_bqxxe")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1942.0
+offset_top = 315.0
+offset_right = 1942.0
+offset_bottom = 315.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ExtendedPaletteSidebarUI" type="Control" parent="UIManager" unique_id=877684218 instance=ExtResource("33_tiodh")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1852.0
+offset_top = 816.0
+offset_right = 1852.0
+offset_bottom = 816.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProjectButtons" type="PanelContainer" parent="UIManager" unique_id=749843550 instance=ExtResource("34_bir72")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2364.0
+offset_top = 1404.0
+offset_right = 2559.0
+offset_bottom = 1436.0
+theme = ExtResource("35_a786m")
+script = ExtResource("36_bwlmc")
+
+[node name="ProjectMenu" type="Control" parent="UIManager" unique_id=1169223423 instance=ExtResource("37_ei2xa")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 859.0
+offset_top = 523.0
+offset_right = 859.0
+offset_bottom = 523.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("38_mmdgx")
+
+[node name="SettingsMenu" type="Control" parent="UIManager" unique_id=407220828 instance=ExtResource("39_u0mxw")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("40_2qf2a")
+
+[node name="ExportMenu" type="Control" parent="UIManager" unique_id=228793466 instance=ExtResource("41_6l0m1")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("42_jshof")

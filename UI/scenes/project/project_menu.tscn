@@ -1,0 +1,182 @@
+[gd_scene format=3 uid="uid://7clbq0hmu7d4"]
+
+[ext_resource type="Script" uid="uid://dcwm1elv3yrca" path="res://UI/scripts/project/project_menu.gd" id="1_hp40p"]
+[ext_resource type="Script" uid="uid://dret3dgnnoh5c" path="res://UI/scripts/themed_UI.gd" id="2_6il03"]
+[ext_resource type="Script" uid="uid://uk5474a1gemp" path="res://UI/scripts/draggable_UI.gd" id="3_gbe7r"]
+[ext_resource type="Script" uid="uid://bbyyh5b8ngk67" path="res://UI/scripts/text_edit_extension.gd" id="3_ld0b3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gbe7r"]
+content_margin_left = 2.0
+content_margin_top = 4.0
+bg_color = Color(0.13174233, 0.13174233, 0.13174233, 1)
+
+[node name="ProjectMenu" type="Control" unique_id=228793466]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hp40p")
+
+[node name="Bound1" type="Button" parent="." unique_id=53582260]
+modulate = Color(1, 1, 1, 0)
+z_index = 1
+layout_mode = 0
+offset_top = -1.0
+offset_right = 680.0
+offset_bottom = 467.0
+mouse_filter = 1
+mouse_default_cursor_shape = 13
+action_mode = 0
+
+[node name="Panel" type="Panel" parent="." unique_id=945718464]
+layout_mode = 0
+offset_right = 680.0
+offset_bottom = 467.0
+mouse_filter = 2
+
+[node name="ThemedUI" type="Node" parent="Panel" unique_id=298473432]
+script = ExtResource("2_6il03")
+ui_type = 2
+metadata/_custom_type_script = "uid://dret3dgnnoh5c"
+
+[node name="Row1" type="VBoxContainer" parent="." unique_id=963812894]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 5.0
+offset_right = 224.0
+offset_bottom = 287.0
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Row1" unique_id=595919964]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="Row1/HBoxContainer" unique_id=1960419981]
+layout_mode = 2
+text = "Load Project"
+
+[node name="ProjectFolderButton" type="Button" parent="Row1/HBoxContainer" unique_id=751420674]
+unique_name_in_owner = true
+layout_mode = 2
+text = "folder icon!!"
+
+[node name="MarginContainer" type="MarginContainer" parent="Row1" unique_id=351997016]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+
+[node name="RecentProjects" type="VBoxContainer" parent="Row1/MarginContainer" unique_id=107241555]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Row1/MarginContainer/RecentProjects" unique_id=206546867]
+layout_mode = 2
+text = "Project 1 - 01:33 May2/25"
+
+[node name="Label2" type="Label" parent="Row1/MarginContainer/RecentProjects" unique_id=875092724]
+layout_mode = 2
+text = "Project 2 - 01:32 May2/25"
+
+[node name="Label3" type="Label" parent="Row1/MarginContainer/RecentProjects" unique_id=579017339]
+layout_mode = 2
+text = "Project 3 - 01:31 May2/25"
+
+[node name="Seperater1" type="MarginContainer" parent="Row1" unique_id=1427143943]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="SaveProjectButton" type="Button" parent="Row1" unique_id=2122906445]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save Project"
+
+[node name="Seperater2" type="MarginContainer" parent="Row1" unique_id=372926769]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Row1" unique_id=1802162248]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Row1/HBoxContainer3" unique_id=588067234]
+layout_mode = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 3
+
+[node name="SaveProjectAsButton" type="Label" parent="Row1/HBoxContainer3/MarginContainer" unique_id=621213414]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save Project As"
+
+[node name="NameEditor" type="TextEdit" parent="Row1/HBoxContainer3" unique_id=206571530]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_gbe7r")
+text = "Default"
+tab_input_mode = false
+script = ExtResource("3_ld0b3")
+metadata/_custom_type_script = "uid://bbyyh5b8ngk67"
+
+[node name="Seperater3" type="MarginContainer" parent="Row1" unique_id=936226972]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Row1" unique_id=1406879832]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="Row1/HBoxContainer2" unique_id=1182264188]
+layout_mode = 2
+text = "Load Backup"
+
+[node name="ProjectFolderButton" type="Button" parent="Row1/HBoxContainer2" unique_id=886194889]
+layout_mode = 2
+text = "folder icon!!"
+
+[node name="MarginContainer2" type="MarginContainer" parent="Row1" unique_id=970689919]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Row1/MarginContainer2" unique_id=1094099716]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Row1/MarginContainer2/VBoxContainer" unique_id=1886527570]
+layout_mode = 2
+text = "Project 1 - 10:23 May2/25"
+
+[node name="Label2" type="Label" parent="Row1/MarginContainer2/VBoxContainer" unique_id=890349943]
+layout_mode = 2
+text = "Project 2 - 22:24 Oct5/23"
+
+[node name="Label3" type="Label" parent="Row1/MarginContainer2/VBoxContainer" unique_id=431637450]
+layout_mode = 2
+text = "Project 3 - 22:24 Oct5/22"
+
+[node name="Row2" type="VBoxContainer" parent="." unique_id=2136564980]
+layout_mode = 0
+offset_left = 231.0
+offset_right = 271.0
+offset_bottom = 40.0
+
+[node name="Row3" type="VBoxContainer" parent="." unique_id=233174360]
+layout_mode = 0
+offset_left = 258.0
+offset_right = 298.0
+offset_bottom = 40.0
+
+[node name="CloseButton" type="Button" parent="." unique_id=134788172]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 640.0
+offset_top = 8.0
+offset_right = 674.0
+offset_bottom = 42.0
+text = "x"
+
+[node name="DraggableUI" type="Node" parent="." unique_id=588625201 node_paths=PackedStringArray("bounds_buttons")]
+script = ExtResource("3_gbe7r")
+bounds_buttons = [NodePath("../Bound1")]
+metadata/_custom_type_script = "uid://uk5474a1gemp"

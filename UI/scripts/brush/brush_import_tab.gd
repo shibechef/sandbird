@@ -23,7 +23,6 @@ func update_folder_visuals() -> void:
 		child.free()
 	
 	var brushes = FileReader.get_brushes()
-	print(brushes)
 	for brush_name in brushes:
 		var folder_name: String = brushes[brush_name].get_base_dir().get_file()
 		if v_box.get_node(folder_name) == null:

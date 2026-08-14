@@ -24,6 +24,10 @@
 [ext_resource type="PackedScene" uid="uid://bmcoto6aqkjjg" path="res://UI/scenes/palette/palette_sidebar.tscn" id="21_ayq5r"]
 [ext_resource type="PackedScene" uid="uid://bprvf5xcj52p5" path="res://UI/scenes/brush/extended_brush.tscn" id="22_ayq5r"]
 [ext_resource type="PackedScene" uid="uid://bpmfu3fasvinn" path="res://UI/scenes/palette/extended_palette.tscn" id="23_uif21"]
+[ext_resource type="PackedScene" uid="uid://dtdh1t6kpnna4" path="res://UI/scenes/project/project_buttons.tscn" id="25_std3u"]
+[ext_resource type="PackedScene" uid="uid://ctmtdw3ncrs4" path="res://UI/scenes/project/export_menu.tscn" id="26_ebms0"]
+[ext_resource type="PackedScene" uid="uid://7clbq0hmu7d4" path="res://UI/scenes/project/project_menu.tscn" id="27_egyng"]
+[ext_resource type="PackedScene" uid="uid://cei2k5v1p4wn4" path="res://UI/scenes/project/settings_menu.tscn" id="28_oj7yu"]
 
 [sub_resource type="Resource" id="Resource_uif21"]
 script = ExtResource("8_2epbo")
@@ -165,3 +169,32 @@ offset_left = 1852.0
 offset_top = 816.0
 offset_right = 1852.0
 offset_bottom = 816.0
+
+[node name="ProjectButtons" parent="UIManager" unique_id=749843550 instance=ExtResource("25_std3u")]
+unique_name_in_owner = true
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 2364.0
+offset_top = 1404.0
+offset_right = 2559.0
+offset_bottom = 1436.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="ProjectMenu" parent="UIManager" unique_id=1169223423 instance=ExtResource("27_egyng")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 859.0
+offset_top = 523.0
+offset_right = 859.0
+offset_bottom = 523.0
+
+[node name="SettingsMenu" parent="UIManager" unique_id=407220828 instance=ExtResource("28_oj7yu")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="ExportMenu" parent="UIManager" unique_id=228793466 instance=ExtResource("26_ebms0")]
+unique_name_in_owner = true
+layout_mode = 1

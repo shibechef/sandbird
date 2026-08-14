@@ -91,6 +91,7 @@ func handle_color_selection_inputs() -> void:
 		
 	if color_palette_manager.currently_selected_palette == 0:
 		return
+	
 	var palette: VoxelColorPalette = color_palette_manager.all_palettes[color_palette_manager.currently_selected_palette]
 	
 	var color_num = int(number_selection_sequence) - 1

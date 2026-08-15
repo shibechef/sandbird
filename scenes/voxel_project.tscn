@@ -185,6 +185,7 @@ grow_vertical = 1
 
 [node name="ProjectMenu" parent="UIManager" unique_id=1169223423 instance=ExtResource("27_egyng")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 offset_left = 859.0
 offset_top = 523.0
@@ -193,8 +194,10 @@ offset_bottom = 523.0
 
 [node name="SettingsMenu" parent="UIManager" unique_id=407220828 instance=ExtResource("28_oj7yu")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 
 [node name="ExportMenu" parent="UIManager" unique_id=228793466 instance=ExtResource("26_ebms0")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1

@@ -50,11 +50,11 @@ func select_color(id: int) -> void:
 	var palette = manager.palette_by_color[id]
 	var index = manager.all_palettes[palette].color_order.find(id)
 	
+	
 	if !manager.currently_selected_colors.has(id):
 		manager.currently_selected_colors.append(id)
 	else:
 		color_picking_tab.extend(true)
-		
 	
 	color_buttons[id].set_pressed_no_signal(true)
 	

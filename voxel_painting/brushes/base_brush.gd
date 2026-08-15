@@ -5,7 +5,7 @@ class_name BaseBrush
 @export var depth: float = 300.0
 @export var default_colors: Array[int]
 
-func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject) -> Dictionary[Vector3i, VoxelData]:
+func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject, cols: Array[PaletteColor]) -> Dictionary[Vector3i, VoxelData]:
 	var voxels: Dictionary[Vector3i, VoxelData]
 	assert(false, "brush " + resource_name + " using default logic!!")
 	
@@ -34,10 +34,3 @@ func get_monochrome_voxel(voxel: VoxelData, color_id: int, palette_id: int) -> V
 	voxel.face_palettes = [palette_id]
 	
 	return voxel
-
-func get_selected_colors() -> Array[PaletteColor]:
-	var colors: Array[PaletteColor]
-	var manager: ColorPaletteManager = ProjectManager.current_project.get_node("%ColorPaletteManager")
-	for color in manager.currently_selected_colors:
-		colors.append(manager.get_color_from_id(color))
-	return colors

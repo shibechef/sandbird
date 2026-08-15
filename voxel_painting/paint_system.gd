@@ -41,7 +41,11 @@ func try_click() -> void:
 	var click_data = get_parent().get_node("%WorldClick").get_mouse_world_pos()
 	var obj: VoxelObject = object_selection.currently_selected_objects[object_selection.currently_selected_objects.keys()[0]]
 	
-	var voxel_diff: Dictionary[Vector3i, VoxelData] = brush_list[current_brush].get_voxels(click_data[0], click_data[1], obj)
+	var selected_colors: Array[PaletteColor] = []
+	for color_id in palette_manager.currently_selected_colors:
+		selected_colors.append(palette_manager.get_color_from_id(color_id))
+	
+	var voxel_diff: Dictionary[Vector3i, VoxelData] = brush_list[current_brush].get_voxels(click_data[0], click_data[1], obj, selected_colors)
 	voxel_diff = obj.get_only_changed(voxel_diff)
 	var previous_voxels: Dictionary[Vector3i, VoxelData] = obj.get_previous(voxel_diff)
 		

@@ -4,7 +4,7 @@ class_name PointBrush
 @export var size: float = 5.2
 @export var requires_end: bool = true
 
-func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject) -> Dictionary[Vector3i, VoxelData]:
+func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject, cols: Array[PaletteColor]) -> Dictionary[Vector3i, VoxelData]:
 	var voxels: Dictionary[Vector3i, VoxelData] = {}
 	var positions: Array[Vector3i] = []
 	var col_pos = get_collision_point(origin, direction, object)
@@ -17,9 +17,8 @@ func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject) -> Dic
 	var AABB_upper = AABB_lower + object.dimensions
 	positions = CollisionSystem.get_within_AABB(positions, AABB_lower, AABB_upper)
 	
-	var col: PaletteColor = get_selected_colors()[0]
 	for pos in positions:
-		voxels[pos] = get_monochrome_voxel(VoxelData.new(), col.color_id, col.palette_id)
+		voxels[pos] = get_monochrome_voxel(VoxelData.new(), cols[0].color_id, cols[0].palette_id)
 	return voxels
 
 func get_collision_point(origin: Vector3, direction: Vector3, object: VoxelObject) -> Array[Vector3i]:

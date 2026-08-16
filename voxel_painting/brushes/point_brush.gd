@@ -4,10 +4,10 @@ class_name PointBrush
 @export var size: float = 5.2
 @export var requires_end: bool = true
 
-func get_voxels(origin: Vector3, direction: Vector3, object: VoxelObject, cols: Array[PaletteColor]) -> Dictionary[Vector3i, VoxelData]:
+func get_voxels(input_data: Dictionary, object: VoxelObject, cols: Array[PaletteColor]) -> Dictionary[Vector3i, VoxelData]:
 	var voxels: Dictionary[Vector3i, VoxelData] = {}
 	var positions: Array[Vector3i] = []
-	var col_pos = get_collision_point(origin, direction, object)
+	var col_pos = get_collision_point(input_data["origin_0"], input_data["dir_0"], object)
 	
 	if col_pos.is_empty():
 		return voxels

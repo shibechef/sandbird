@@ -4,6 +4,7 @@ class_name InputManager
 @export var interaction_mode: InteractionMode = InteractionMode.object
 @export var focus_mode: ActionFocusMode = ActionFocusMode.none
 var last_mouse_pos: Vector2 = Vector2.ZERO
+var mouse_held_time: float = 0.0
 
 var selection_system: ObjectSelectionSystem
 var paint_system: PaintSystem
@@ -21,6 +22,7 @@ func _ready():
 	color_palette_manager = get_node("%ColorPaletteManager")
 	edit_logging = get_node("%EditLogger")
 	move_obj_system = get_node("%MoveObjectSystem")
+	reset_mouse_cursor()
 
 func _process(delta):
 	handle_mode_switching()
@@ -29,6 +31,7 @@ func _process(delta):
 	## Need to make this unique with other things that use 0-9
 	handle_color_selection_inputs()
 	save_number_input_chain()
+	handle_mouse_held(delta)
 	last_mouse_pos = get_viewport().get_mouse_position()
 
 func _unhandled_input(event: InputEvent):
@@ -52,8 +55,10 @@ func handle_grab_inputs() -> void:
 		diff.y = -diff.y
 		move_obj_system.current_mouse_move += diff
 	if Input.is_action_just_pressed("move_object"):
+		Input.set_default_cursor_shape(Input.CURSOR_DRAG)
 		move_obj_system.start_move(interaction_mode)
 	if Input.is_action_just_released("move_object"):
+		reset_mouse_cursor()
 		move_obj_system.finalize_move()
 	
 	var cur_vector = Vector3(
@@ -83,7 +88,15 @@ func handle_mouse_interaction(event: InputEvent) -> void:
 			selection_system.try_click()
 	elif interaction_mode == InteractionMode.voxel:
 		if event.is_action_pressed("select"):
-			paint_system.try_click()
+			paint_system.try_click(0.0)
+
+func handle_mouse_held(delta: float) -> void:
+	if interaction_mode == InteractionMode.voxel:
+		if Input.is_action_pressed("select"):
+			mouse_held_time += delta
+			paint_system.try_click(mouse_held_time)
+		else:
+			mouse_held_time = 0.0
 
 func handle_color_selection_inputs() -> void:
 	if !Input.is_action_just_released("color_selection"):
@@ -159,10 +172,19 @@ func enter_edit_mode() -> void:
 	selection_system.deselect_all_but_recent()
 	selection_system.hide_unselected_borders()
 	move_obj_system.cancel_move()
+	reset_mouse_cursor()
 
 func enter_object_mode() -> void:
 	interaction_mode = InteractionMode.object
 	selection_system.unhide_all_borders()
+	reset_mouse_cursor()
+	
+func reset_mouse_cursor() -> void:
+	match interaction_mode:
+		InteractionMode.object:
+			Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+		InteractionMode.voxel:
+			Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 
 enum ActionFocusMode {
 	none,

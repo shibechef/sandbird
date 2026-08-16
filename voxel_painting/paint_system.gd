@@ -16,6 +16,7 @@ var brush_UI_buttons: Dictionary[String, Button]
 
 var last_selected: String
 var last_selected_time: float = 0.0
+var last_click_data: Array[Vector3]
 
 func _ready():
 	object_selection = get_node("%ObjectSelectionSystem")
@@ -33,24 +34,37 @@ func late_ready():
 	ui_manager = get_node("%UIManager")
 	ui_manager.update_brush_sidebar(brush_list.values())
 
-func try_click() -> void:
+func try_click(hold_time: float) -> void:
 	if current_brush.is_empty():
 		## No brush selected!
 		return
 	
-	var click_data = get_parent().get_node("%WorldClick").get_mouse_world_pos()
+	var click_data: Array[Vector3] = get_parent().get_node("%WorldClick").get_mouse_world_pos()
 	var obj: VoxelObject = object_selection.currently_selected_objects[object_selection.currently_selected_objects.keys()[0]]
+	
+	if hold_time == 0.0:
+		last_click_data = click_data.duplicate()
 	
 	var selected_colors: Array[PaletteColor] = []
 	for color_id in palette_manager.currently_selected_colors:
 		selected_colors.append(palette_manager.get_color_from_id(color_id))
 	
-	var voxel_diff: Dictionary[Vector3i, VoxelData] = brush_list[current_brush].get_voxels(click_data[0], click_data[1], obj, selected_colors)
+	var input_data: Dictionary = {
+		"hold_time" = hold_time,
+		"origin_0" = last_click_data[0],
+		"dir_0" = last_click_data[1],
+		"origin_1" = click_data[0],
+		"dir_1" = click_data[1],
+	}
+	
+	var voxel_diff: Dictionary[Vector3i, VoxelData] = brush_list[current_brush].get_voxels(input_data, obj, selected_colors)
 	voxel_diff = obj.get_only_changed(voxel_diff)
 	var previous_voxels: Dictionary[Vector3i, VoxelData] = obj.get_previous(voxel_diff)
 		
 	edit_logger.log_edit(EditLogging.EditType.voxel_change, [voxel_diff, previous_voxels, obj.get_instance_id()])
 	obj.change_voxels(voxel_diff)
+	
+	last_click_data = click_data
 
 func select_brush(brush: String) -> void:
 	brush_properties_UI.fill_properties(brush_list[brush])

@@ -50,7 +50,7 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 			for z in range(AABB_lower.z, AABB_upper.z):
 				var pos = Vector3i(x, y, z)
 				
-				if !voxel_grid.has(pos):
+				if !voxel_grid.has(pos) or voxel_grid[pos] == null:
 					continue
 					
 				var voxel: VoxelData = voxel_grid[pos]

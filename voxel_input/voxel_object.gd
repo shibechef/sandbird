@@ -13,6 +13,8 @@ var visual_mesh_chunks: Dictionary[Vector3i, MeshInstance3D]
 var visual_offset: Vector3i
 var edited_chunks: Array[Vector3i]
 
+var mutex: Mutex
+
 var project_prefs: ProjectPreferences
 var mesh_system: MeshSystem
 var collision_system: CollisionSystem
@@ -24,6 +26,7 @@ func _process(delta):
 	update_mesh_chunks()
 
 func _ready():		
+	mutex = Mutex.new()
 	mesh_system = get_parent().get_node("%MeshSystem")
 	project_prefs = get_parent().get_node("%ProjectPreferences")
 	collision_system = get_parent().get_node("%CollisionSystem")
@@ -36,20 +39,25 @@ func _ready():
 	create_BB_outline()
 	
 func update_mesh_chunks() -> void:
-	for chunk in edited_chunks:
-		WorkerThreadPool.add_task(update_chunk.bind(chunk), true)
-
+	var id = WorkerThreadPool.add_group_task(update_chunk_visual, edited_chunks.size())
+	WorkerThreadPool.wait_for_group_task_completion(id)
 	edited_chunks.clear()
 
-func update_chunk(chunk: Vector3i) -> void:	
+func update_chunk_visual(chunk_index) -> void:	
+	var chunk: Vector3i = edited_chunks[chunk_index]
 	var is_new_chunk: bool = !visual_mesh_chunks.has(chunk)
 	
 	var AABB_lower: Vector3i = visual_offset + chunk * project_prefs.mesh_chunk_size
 	var AABB_upper: Vector3i = AABB_lower + Vector3i.ONE * project_prefs.mesh_chunk_size
 	
-	if is_new_chunk:
+	var mesh_instance: MeshInstance3D
+	mutex.lock()
+	if !visual_mesh_chunks.has(chunk):
 		visual_mesh_chunks[chunk] = MeshInstance3D.new()
-	visual_mesh_chunks[chunk].mesh = mesh_system.get_chunk_mesh(AABB_lower, AABB_upper, voxel_grid, visual_offset).mesh
+	mesh_instance = visual_mesh_chunks[chunk]
+	mutex.unlock()
+	
+	mesh_instance.call_thread_safe("set", "mesh", mesh_system.get_chunk_mesh(AABB_lower, AABB_upper, voxel_grid, visual_offset).mesh)
 	
 	if is_new_chunk:
 		call_thread_safe("add_child", visual_mesh_chunks[chunk])

@@ -10,7 +10,7 @@ func get_voxels(input_data: Dictionary, object: VoxelObject, cols: Array[Palette
 	return voxels
 	
 func get_self_voxel_collision(origin: Vector3, direction: Vector3, object: VoxelObject) -> Array[Vector3i]:
-	var cols = CollisionSystem.get_grid_traversal_collisions(origin, direction, object.voxel_grid, depth)
+	var cols = CollisionSystem.get_grid_traversal_collisions(origin, direction, object.previous_grid, depth)
 	return cols
 
 func get_first_border_collision(origin: Vector3, direction: Vector3, object: VoxelObject) -> Array[Vector3i]:

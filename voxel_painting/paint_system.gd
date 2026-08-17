@@ -69,8 +69,8 @@ func click_ended() -> void:
 	var obj: VoxelObject = object_selection.currently_selected_objects[object_selection.currently_selected_objects.keys()[0]]
 	
 	var inverted_changes: Dictionary[Vector3i, VoxelData] = get_inverted_diff(obj.previous_grid, obj.consecutive_changes)
-	print(obj.consecutive_changes.size(), " ", inverted_changes.size())
 	edit_logger.log_edit(EditLogging.EditType.voxel_change, [obj.consecutive_changes, inverted_changes, obj.get_instance_id()])
+	obj.previous_grid = obj.voxel_grid.duplicate()
 	obj.consecutive_changes.clear()
 
 func get_inverted_diff(previous_voxels: Dictionary[Vector3i, VoxelData], changes: Dictionary[Vector3i, VoxelData]) -> Dictionary[Vector3i, VoxelData]:

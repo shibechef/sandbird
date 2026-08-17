@@ -4,7 +4,6 @@ class_name BaseBrush
 @export var named_as: String
 @export var depth: float = 300.0
 @export var default_colors: Array[int]
-@export var hold_mode: bool
 
 func get_voxels(input_data: Dictionary, object: VoxelObject, cols: Array[PaletteColor]) -> Dictionary[Vector3i, VoxelData]:
 	var voxels: Dictionary[Vector3i, VoxelData]
@@ -18,7 +17,7 @@ func get_first_border_collision(origin: Vector3, direction: Vector3, object: Vox
 	var AABB_lower: Vector3 = object.position
 	var AABB_upper: Vector3 = AABB_lower + Vector3(object.dimensions)
 	var result = CollisionSystem.get_AABB_line_collisions(origin, direction, {object.get_instance_id(): [AABB_lower, AABB_upper]})
-
+	
 	if result.is_empty():
 		return []
 		
@@ -34,7 +33,7 @@ func get_monochrome_voxel(voxel: VoxelData, color_id: int, palette_id: int) -> V
 	return voxel
 
 func get_interpolated_rays(origin_0: Vector3, dir_0: Vector3, origin_1: Vector3, dir_1: Vector3, distance_rate: float = 0.75, angle_rate: float = 0.3) -> Array[Array]:
-	var ray_count: int = floori(origin_0.distance_to(origin_1) / distance_rate + rad_to_deg(dir_0.angle_to(dir_1)) / angle_rate)
+	var ray_count: int = max(1, floori(origin_0.distance_to(origin_1) / distance_rate + rad_to_deg(dir_0.angle_to(dir_1)) / angle_rate))
 	var rays: Array[Array]
 	for n in ray_count:
 		var progress := float(n) / float(ray_count)

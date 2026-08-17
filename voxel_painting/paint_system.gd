@@ -59,13 +59,29 @@ func try_click(hold_time: float) -> void:
 	
 	var voxel_diff: Dictionary[Vector3i, VoxelData] = brush_list[current_brush].get_voxels(input_data, obj, selected_colors)
 	voxel_diff = obj.get_only_changed(voxel_diff)
-	var previous_voxels: Dictionary[Vector3i, VoxelData] = obj.get_previous(voxel_diff)
-		
-	edit_logger.log_edit(EditLogging.EditType.voxel_change, [voxel_diff, previous_voxels, obj.get_instance_id()])
+	
 	obj.change_voxels(voxel_diff)
+	obj.consecutive_changes.merge(voxel_diff, true)
 	
 	last_click_data = click_data
 
+func click_ended() -> void:
+	var obj: VoxelObject = object_selection.currently_selected_objects[object_selection.currently_selected_objects.keys()[0]]
+	
+	var inverted_changes: Dictionary[Vector3i, VoxelData] = get_inverted_diff(obj.previous_grid, obj.consecutive_changes)
+	print(obj.consecutive_changes.size(), " ", inverted_changes.size())
+	edit_logger.log_edit(EditLogging.EditType.voxel_change, [obj.consecutive_changes, inverted_changes, obj.get_instance_id()])
+	obj.consecutive_changes.clear()
+
+func get_inverted_diff(previous_voxels: Dictionary[Vector3i, VoxelData], changes: Dictionary[Vector3i, VoxelData]) -> Dictionary[Vector3i, VoxelData]:
+	var inverted_changes: Dictionary[Vector3i, VoxelData]
+	for pos in changes:
+		if !previous_voxels.has(pos):
+			inverted_changes[pos] = null
+		else:
+			inverted_changes[pos] = previous_voxels[pos]
+	return inverted_changes
+	
 func select_brush(brush: String) -> void:
 	brush_properties_UI.fill_properties(brush_list[brush])
 	

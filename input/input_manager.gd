@@ -89,6 +89,8 @@ func handle_mouse_interaction(event: InputEvent) -> void:
 	elif interaction_mode == InteractionMode.voxel:
 		if event.is_action_pressed("select"):
 			paint_system.try_click(0.0)
+		if event.is_action_released("select"):
+			paint_system.click_ended()
 
 func handle_mouse_held(delta: float) -> void:
 	if interaction_mode == InteractionMode.voxel:

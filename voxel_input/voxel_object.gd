@@ -2,6 +2,8 @@ extends Node3D
 class_name VoxelObject
 
 @export var voxel_grid: Dictionary[Vector3i, VoxelData]
+var previous_grid: Dictionary[Vector3i, VoxelData]
+var consecutive_changes: Dictionary[Vector3i, VoxelData]
 @export var dimensions: Vector3i
 @export var outline_material = preload("res://materials/grid.tres")
 
@@ -39,17 +41,18 @@ func update_mesh_chunks() -> void:
 
 	edited_chunks.clear()
 
-func update_chunk(chunk: Vector3i) -> void:
-	var removed_chunk: Node
-	if visual_mesh_chunks.has(chunk):
-		removed_chunk = visual_mesh_chunks[chunk]
+func update_chunk(chunk: Vector3i) -> void:	
+	var is_new_chunk: bool = !visual_mesh_chunks.has(chunk)
 	
 	var AABB_lower: Vector3i = visual_offset + chunk * project_prefs.mesh_chunk_size
 	var AABB_upper: Vector3i = AABB_lower + Vector3i.ONE * project_prefs.mesh_chunk_size
-	visual_mesh_chunks[chunk] = mesh_system.get_chunk_mesh(AABB_lower, AABB_upper, voxel_grid, visual_offset)
-	call_thread_safe("add_child", visual_mesh_chunks[chunk])
-	if removed_chunk != null:
-		removed_chunk.queue_free()
+	
+	if is_new_chunk:
+		visual_mesh_chunks[chunk] = MeshInstance3D.new()
+	visual_mesh_chunks[chunk].mesh = mesh_system.get_chunk_mesh(AABB_lower, AABB_upper, voxel_grid, visual_offset).mesh
+	
+	if is_new_chunk:
+		call_thread_safe("add_child", visual_mesh_chunks[chunk])
 
 func get_only_changed(voxels: Dictionary[Vector3i, VoxelData]) -> Dictionary[Vector3i, VoxelData]:
 	var AABB_lower: Vector3 = position
@@ -69,16 +72,6 @@ func get_only_changed(voxels: Dictionary[Vector3i, VoxelData]) -> Dictionary[Vec
 	
 	return final_voxels
 
-func get_previous(voxels: Dictionary[Vector3i, VoxelData]) -> Dictionary[Vector3i, VoxelData]:
-	var previous_voxels: Dictionary[Vector3i, VoxelData]
-	for pos in voxels:
-		if !voxel_grid.has(pos):
-			previous_voxels[pos] = null
-		else:
-			previous_voxels[pos] = voxel_grid[pos]
-	return previous_voxels
-
-
 func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
 	for pos in voxels:			
 		if voxels[pos] == null and voxel_grid.has(pos):
@@ -90,7 +83,7 @@ func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
 		
 		if voxels[pos] != null:
 			voxel_grid[pos] = voxels[pos]
-
+	
 func create_BB_outline() -> void:
 	var mesh_data = mesh_system.create_box(Vector3.ZERO, dimensions)
 	outline_object = mesh_system.create_mesh_instance(mesh_data)

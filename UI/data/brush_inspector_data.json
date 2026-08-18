@@ -6,9 +6,9 @@
 			"exposed_properties":
 				{
 					"named_as": "Name",
-					"depth": "Depth"
+					"depth": "Depth",
+					"erase": "Erase"
 				}
-
 		},
 	"BeamBrush":
 		{
@@ -21,7 +21,9 @@
 						"name": "Depth",
 						"min_value": 0,
 						"max_value": 1,
-					}
+					},
+					"gravity": "Gravity",
+					"erase": "Erase"
 				}
 		}
 }

@@ -3,6 +3,7 @@ class_name PointBrush
 
 @export var size: float = 5.2
 @export var requires_end: bool = true
+@export var erase: bool = false
 
 func get_voxels(input_data: Dictionary, object: VoxelObject, cols: Array[PaletteColor]) -> Dictionary[Vector3i, VoxelData]:
 	var voxels: Dictionary[Vector3i, VoxelData] = {}
@@ -22,7 +23,10 @@ func get_voxels(input_data: Dictionary, object: VoxelObject, cols: Array[Palette
 	
 		for pos in positions:
 			if !voxels.has(pos):
-				voxels[pos] = get_monochrome_voxel(VoxelData.new(), cols[0].color_id, cols[0].palette_id)
+				if erase:
+					voxels[pos] = null
+				else:
+					voxels[pos] = get_monochrome_voxel(VoxelData.new(), cols[0].color_id, cols[0].palette_id)
 	return voxels
 
 func get_collision_point(origin: Vector3, direction: Vector3, object: VoxelObject) -> Array[Vector3i]:

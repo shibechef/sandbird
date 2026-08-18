@@ -105,6 +105,7 @@ func update_color_RGB(color: Color) -> void:
 		palette_color.color = srgb_color.linear_to_srgb()
 		palette_color.update_hsl()
 		palette_color.update_hsv()
+		palette_color.update_material()
 	color_palette_manager.update_color_UI()
 	previous_color = color
 
@@ -127,6 +128,7 @@ func update_color_linear(color: Color) -> void:
 		palette_color.color.b += diff_b
 		palette_color.update_hsl()
 		palette_color.update_hsv()
+		palette_color.update_material()
 	color_palette_manager.update_color_UI()
 	previous_color = color
 
@@ -151,6 +153,7 @@ func update_color_HSV(color: Color) -> void:
 		palette_color.color.h = palette_color.hsv_hue
 		palette_color.color.s = palette_color.hsv_saturation
 		palette_color.update_hsl()
+		palette_color.update_material()
 	color_palette_manager.update_color_UI()
 	previous_color = color
 
@@ -174,6 +177,7 @@ func update_color_HSL(color: Color) -> void:
 		palette_color.color.ok_hsl_h = palette_color.hsl_hue
 		palette_color.color.ok_hsl_s = palette_color.hsl_saturation
 		palette_color.update_hsv()
+		palette_color.update_material()
 	color_palette_manager.update_color_UI()
 	previous_color = color
 
@@ -181,6 +185,7 @@ func update_color_single(color: Color) -> void:
 	var color_id = color_palette_manager.currently_selected_colors[0]
 	var palette_color: PaletteColor = color_palette_manager.get_color_from_id(color_id)
 	palette_color.color = color
+	palette_color.update_material()
 
 func update_UI_settings() -> void:
 	return

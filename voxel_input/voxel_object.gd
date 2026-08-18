@@ -72,7 +72,7 @@ func get_only_changed(voxels: Dictionary[Vector3i, VoxelData]) -> Dictionary[Vec
 		if !CollisionSystem.is_within_AABB(pos, AABB_lower, AABB_upper):
 			continue
 		
-		if voxel_grid.has(pos):
+		if voxels[pos] != null and voxel_grid.has(pos):
 			if voxels[pos].face_colors == voxel_grid[pos].face_colors:
 				continue
 		

@@ -8,12 +8,15 @@ class_name VoxelColorPalette
 @export var color_order: Array[int]
 @export var color_texture: ImageTexture
 
-## Remove this eventually 
 func _init():
+	for color_id in colors:
+		assert(colors[color_id].palette_id == id, palette_name + " palette ID does not line up")
+	
 	call_deferred("on_created")
 
 func on_created() -> void:
 	material = load("res://materials/color_palette.tres").duplicate()
+
 	update_texture()
 
 func update_texture() -> void:	

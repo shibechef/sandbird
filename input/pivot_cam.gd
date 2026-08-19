@@ -51,6 +51,7 @@ func _input(event):
 	if event is not InputEventMouseButton:
 		return
 		
+func handle_scroll(event: InputEvent):
 	if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 		applied_zoom -= zoom_sensitivity * pivot_position.distance_to(camera.position)
 	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN: 

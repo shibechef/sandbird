@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bfhr0cglnjbyq" path="res://input/camera_system.gd" id="2_h81p0"]
 [ext_resource type="Script" uid="uid://dqviapsa3ecm1" path="res://input/pivot_cam.gd" id="3_h81p0"]
 [ext_resource type="Script" uid="uid://kbvuo850mvoe" path="res://input/world_click.gd" id="5_xnlas"]
+[ext_resource type="Material" uid="uid://jbm7l7kbpru4" path="res://materials/flat_shaded.tres" id="6_4iife"]
 
 [node name="Program" type="Node3D" unique_id=1116754525]
 
@@ -34,3 +35,18 @@ script = ExtResource("5_xnlas")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=429697777]
 transform = Transform3D(0.9041944, -0.3771116, 0.20054756, 0, 0.46953318, 0.88291484, -0.42712116, -0.7983267, 0.42454928, 0, 0, 6.043182)
+shadow_enabled = true
+shadow_blur = 2.065
+directional_shadow_max_distance = 267.0
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=105756480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9194272, 2.3172767, 4.8669977)
+material = ExtResource("6_4iife")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=467011042]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.967323, 0.15020156, 3.5581267)
+material = ExtResource("6_4iife")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="." unique_id=1254215673]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9970958, 0.3534816, 5.7238827)
+material = ExtResource("6_4iife")

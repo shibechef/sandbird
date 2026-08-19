@@ -1,10 +1,13 @@
 extends UITabExtension
 class_name BrushPropertiesTab
 
+var brush_sidebar: BrushSidebarUI
+
 var available_types: Array
 
 func _ready():
 	super()
+	brush_sidebar = ProjectManager.current_project.get_node("%BrushSidebarUI")
 	available_types = BrushManager.brush_metadata.keys()
 	fill_properties(PointBrush.new())
 
@@ -20,20 +23,18 @@ func fill_properties(brush: BaseBrush) -> void:
 	var brush_data: Dictionary = BrushManager.brush_metadata
 	var properties: Dictionary = brush_data[brush_type]["exposed_properties"]
 	
+	var displayed_property_count: int = 0
 	for property in all_propertes:
 		var property_name = property["name"]
 		if !properties.has(property_name):
 			continue
+		displayed_property_count += 1
 		
 		var property_display_name = properties[property_name]
 		var property_value = brush.get(property_name)
 		
 		var scene = UIManager.get_data_entry_UI_scene(brush, property_name, property_value, property)
 		v_box.add_child(scene)
-		
-	var over_flow_scenes: int = max(v_box.get_child_count() - 5, 0)
-	size.y += over_flow_scenes * 36
-	position.y -= over_flow_scenes * 36
 
 func get_sidebar() -> Control:
 	return ui_manager.brush_sidebar

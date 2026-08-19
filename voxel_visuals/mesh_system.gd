@@ -107,8 +107,8 @@ func get_face_array(face_num: int, origin: Vector3) -> PackedVector3Array:
 	assert(face_num >= 0 and face_num < 8, " face " + str(face_num) + " is out of bounds")
 	face_num *= 6
 	return PackedVector3Array([
-		cube_vertices[face_num] + origin, cube_vertices[face_num + 1] + origin, cube_vertices[face_num + 2] + origin, 
-		cube_vertices[face_num + 3] + origin, cube_vertices[face_num + 4] + origin, cube_vertices[face_num + 5] + origin])
+		cube_vertices[face_num + 2] + origin, cube_vertices[face_num + 1] + origin, cube_vertices[face_num] + origin, 
+		cube_vertices[face_num + 5] + origin, cube_vertices[face_num + 4] + origin, cube_vertices[face_num + 3] + origin])
 		
 
 ## Bottom left, bottom right, top right, top left

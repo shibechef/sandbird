@@ -13,6 +13,7 @@ var creation_system: ObjectCreationSystem
 var color_palette_manager: ColorPaletteManager
 var edit_logging: EditLogging
 var move_obj_system: MoveObjectSystem
+var camera_system: CameraSystem
 
 var number_selection_sequence: String
 
@@ -23,6 +24,7 @@ func _ready():
 	color_palette_manager = get_node("%ColorPaletteManager")
 	edit_logging = get_node("%EditLogger")
 	move_obj_system = get_node("%MoveObjectSystem")
+	camera_system = ProjectManager.current_project.get_node("%CameraSystem")
 	reset_mouse_cursor()
 
 func _process(delta):
@@ -37,11 +39,14 @@ func _process(delta):
 
 func _unhandled_input(event: InputEvent):
 	handle_mouse_interaction(event)
+	handle_scroll_wheel(event)
 
 func _input(event):
 	if interaction_mode == InteractionMode.voxel:
 		if event.is_action_released("select"):
 			paint_system.click_ended()
+		if event.is_action_pressed("toggle_brush_erase"):
+			paint_system.toggle_brush_eraser()
 
 func handle_key_interaction():
 	if Input.is_action_just_pressed("create_new_object"):
@@ -53,7 +58,7 @@ func handle_key_interaction():
 			edit_logging.undo_last_edit()
 	if Input.is_action_just_pressed("redo_action"):
 		edit_logging.redo_last_edit()
-	
+		
 func handle_grab_inputs() -> void:
 	if Input.is_action_pressed("move_object"):
 		var diff = get_viewport().get_mouse_position() - last_mouse_pos
@@ -133,7 +138,21 @@ func handle_color_selection_inputs() -> void:
 			color_palette_manager.currently_selected_colors.append(color_id)
 	else:
 		color_palette_manager.currently_selected_colors = [color_id]
+
+func handle_scroll_wheel(event: InputEvent) -> void:
+	if event is not InputEventMouseButton:
+		return
+	
+	if interaction_mode == InteractionMode.voxel and Input.is_action_pressed("change_brush_size"):
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			paint_system.change_brush_size(1)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			paint_system.change_brush_size(-1)
+		return
 		
+	if camera_system.handle_scroll_motion(event):
+		return
+
 func save_number_input_chain() -> void:
 	## Get any other action like moving or resizing
 	if Input.is_action_pressed("color_selection"):

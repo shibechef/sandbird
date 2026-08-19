@@ -115,6 +115,23 @@ func add_existing_brush(brush: BaseBrush):
 	brush_list[brush.named_as] = brush
 	ui_manager.update_brush_sidebar(brush_list.values())	
 
+func change_brush_size(change: float) -> void:
+	var brush_size: float = brush_list[current_brush].get("size")
+	if brush_size == null:
+		return
+	
+	brush_size = max(1.0, brush_size + change)
+	brush_list[current_brush].set("size", brush_size)
+	brush_properties_UI.fill_properties(brush_list[current_brush])
+
+func toggle_brush_eraser() -> void:
+	var toggled = brush_list[current_brush].get("erase")
+	if toggled == null:
+		return
+	
+	brush_list[current_brush].set("erase", !toggled)
+	brush_properties_UI.fill_properties(brush_list[current_brush])
+	
 enum PaintingMode{
 	basic,
 	rail

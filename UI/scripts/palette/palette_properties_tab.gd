@@ -4,7 +4,7 @@ class_name PalettePropertiesTab
 func _ready():
 	super()
 	var blank_palette := VoxelColorPalette.new()
-	blank_palette.material = load("res://materials/pbr_basic.tres")
+	blank_palette.material = load("res://materials/flat_shaded.tres")
 	fill_properties(blank_palette)
 
 func open_and_fill(palette: VoxelColorPalette) -> void:

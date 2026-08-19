@@ -27,6 +27,19 @@ func handle_mouse_motion(event: InputEvent):
 		CameraMode.ortho_side_cam:
 			return
 
+func handle_scroll_motion(event: InputEvent) -> bool: 
+	match current_camera_mode:
+		CameraMode.free_cam:
+			return false
+		CameraMode.pivot_cam:
+			pivot_cam.handle_scroll(event)
+			return true
+		CameraMode.ortho_pivot_cam:
+			return false
+		CameraMode.ortho_side_cam:
+			return false
+	return false
+
 func _process(delta):
 	match current_camera_mode:
 		CameraMode.free_cam:
@@ -37,7 +50,6 @@ func _process(delta):
 			return
 		CameraMode.ortho_side_cam:
 			return
-
 
 enum CameraMode {
 	free_cam,

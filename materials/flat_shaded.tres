@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://jbm7l7kbpru4"]
+
+[ext_resource type="Shader" uid="uid://dv56s02p1xe0w" path="res://shaders/flat_shaded.gdshader" id="1_esi4g"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_esi4g")

@@ -21,9 +21,9 @@ func late_ready() -> void:
 	palette_manager = ProjectManager.current_project.get_node("%ColorPaletteManager")
 	update_hsv()
 	update_hsl()
+	update_material()
 
 func update_material() -> void:
-	print(color_id, " ", color.h, color.r)
 	assert(palette_manager.all_palettes.has(palette_id), "palette ID " + str(palette_id) + " missing")
 	palette_manager.all_palettes[palette_id].update_texture()
 

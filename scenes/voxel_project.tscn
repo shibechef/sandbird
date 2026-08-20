@@ -125,7 +125,7 @@ script = ExtResource("4_dvsgh")
 
 [node name="Node3D4" type="Node3D" parent="Hierarchy" unique_id=240919997]
 script = ExtResource("4_dvsgh")
-dimensions = Vector3i(200, 200, 200)
+dimensions = Vector3i(96, 96, 96)
 
 [node name="UIManager" type="Control" parent="." unique_id=956425776]
 unique_name_in_owner = true

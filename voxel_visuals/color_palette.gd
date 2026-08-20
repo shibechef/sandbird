@@ -15,7 +15,7 @@ func _init():
 	call_deferred("on_created")
 
 func on_created() -> void:
-	material = load("res://materials/pbr_basic.tres").duplicate()
+	material = load("res://materials/cascade_lighting.tres")#.duplicate()
 
 	update_texture()
 

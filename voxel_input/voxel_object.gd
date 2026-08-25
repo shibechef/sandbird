@@ -19,8 +19,7 @@ var project_prefs: ProjectPreferences
 var mesh_system: MeshSystem
 var collision_system: CollisionSystem
 var palette_manager: ColorPaletteManager
-
-var cascade_debug: ShaderMaterial = load("res://materials/cascade_lighting.tres")
+var cascade_solver: RadianceCascadeSolver
 
 var empty_col: Color = Color(0.0, 0.0, 0.0, 0.0)
 
@@ -41,6 +40,7 @@ func _ready():
 	project_prefs = get_parent().get_node("%ProjectPreferences")
 	collision_system = get_parent().get_node("%CollisionSystem")
 	palette_manager = get_parent().get_node("%ColorPaletteManager")
+	cascade_solver = get_parent().get_node("%RadianceCascadeSolver")
 	
 	outline_material = outline_material.duplicate()
 	
@@ -48,24 +48,18 @@ func _ready():
 		dimensions = project_prefs.default_object_size
 	
 	create_BB_outline()
-	
-	if dimensions.x < 40:
-		return
-	var start = Time.get_ticks_msec()
-	var texture_array: Texture2DArray = get_texture_array()
-	print((Time.get_ticks_msec() - start) / 1000.0)
-	cascade_debug.set_shader_parameter("voxels", texture_array)
 
 func update_mesh_chunks() -> void:
 	if edited_chunks.size() == 0:
 		return
 	
-	var texture_array: Texture2DArray = get_texture_array()
-	cascade_debug.set_shader_parameter("voxels", texture_array)
-	
 	var id = WorkerThreadPool.add_group_task(update_chunk_visual, edited_chunks.size())
 	WorkerThreadPool.wait_for_group_task_completion(id)
 	edited_chunks.clear()
+	
+	cascade_solver.compute_radiance_map([self])
+	#var texture_array: Texture2DArray = get_texture_array()
+	#cascade_debug.set_shader_parameter("voxels", texture_array)
 
 func update_chunk_visual(chunk_index) -> void:	
 	var chunk: Vector3i = edited_chunks[chunk_index]
@@ -127,55 +121,55 @@ func create_BB_outline() -> void:
 	add_child(outline_object)
 
 ## 6^3, 24^3, 96^3, 150^3, 216^3, etc are the only square texture sizes
-func get_texture_array(size: int = 96) -> Texture2DArray:
-	var text_size: float = sqrt(float(size * size * size * 6))
-	assert(text_size - floor(text_size) < .00001 and ceil(text_size) - text_size < .00001, " chunk size of " + String.num(size) + " is not a sufficient size.")
-	
-	var texture_array := Texture2DArray.new()
-	var all_images: Array[Image] = []
-	var size_x = ceili(float(dimensions.x) / float(96))
-	var size_y = ceili(float(dimensions.y) / float(96))
-	var size_z = ceili(float(dimensions.z) / float(96))
-	for x in size_x:
-		for y in size_y:
-			for z in size_z:
-				var chunk: Vector3i = Vector3i(x, y, z)
-				all_images.append(get_voxel_texture(chunk, size, int(text_size)))
+#func get_texture_array(size: int = 96) -> Texture2DArray:
+	#var text_size: float = sqrt(float(size * size * size * 6))
+	#assert(text_size - floor(text_size) < .00001 and ceil(text_size) - text_size < .00001, " chunk size of " + String.num(size) + " is not a sufficient size.")
+	#
+	#var texture_array := Texture2DArray.new()
+	#var all_images: Array[Image] = []
+	#var size_x = ceili(float(dimensions.x) / float(size))
+	#var size_y = ceili(float(dimensions.y) / float(size))
+	#var size_z = ceili(float(dimensions.z) / float(size))
+	#for x in size_x:
+		#for y in size_y:
+			#for z in size_z:
+				#var chunk: Vector3i = Vector3i(x, y, z)
+				#all_images.append(get_voxel_texture(chunk, size, int(text_size)))
+#
+	#texture_array.create_from_images(all_images)
+	#
+	#return texture_array
 
-	texture_array.create_from_images(all_images)
-	
-	return texture_array
-
-func get_voxel_texture(current_chunk: Vector3i, size: int, text_size: int) -> Image:
-	var image := Image.create(text_size, text_size, false, Image.FORMAT_RGBA16)
-	var offset: Vector3i = current_chunk * size
-	var current_x: int = 0
-	var current_y: int = 0
-	for x in size:
-		for y in size:
-			for z in size:
-				## probably cheaper than finding these with math
-				if current_x == text_size:
-					current_x = 0
-					current_y += 1
-				var pos: Vector3i = Vector3i(x, y, z) + offset
-				
-				if !voxel_grid.has(pos):
-					for i in 6:
-						image.set_pixel(current_x + i, current_y, empty_col)
-					current_x += 6
-					continue	
-				
-				var voxel: VoxelData = voxel_grid[pos]
-				if voxel.face_colors.size() == 1:
-					var col: Color = palette_manager.get_color_from_id(voxel.face_colors[0]).color
-					for i in 6:
-						image.set_pixel(current_x + i, current_y, col)
-				else:
-					for i in 6:
-						image.set_pixel(current_x + i, current_y, palette_manager.get_color_from_id(voxel.face_colors[i]).color)
-				current_x += 6
-	return image
+#func get_voxel_texture(current_chunk: Vector3i, size: int, text_size: int) -> Image:
+	#var image := Image.create(text_size, text_size, false, Image.FORMAT_RGBA16)
+	#var offset: Vector3i = current_chunk * size
+	#var current_x: int = 0
+	#var current_y: int = 0
+	#for x in size:
+		#for y in size:
+			#for z in size:
+				### probably cheaper than finding these with math
+				#if current_x == text_size:
+					#current_x = 0
+					#current_y += 1
+				#var pos: Vector3i = Vector3i(x, y, z) + offset
+				#
+				#if !voxel_grid.has(pos):
+					#for i in 6:
+						#image.set_pixel(current_x + i, current_y, empty_col)
+					#current_x += 6
+					#continue	
+				#
+				#var voxel: VoxelData = voxel_grid[pos]
+				#if voxel.face_colors.size() == 1:
+					#var col: Color = palette_manager.get_color_from_id(voxel.face_colors[0]).color
+					#for i in 6:
+						#image.set_pixel(current_x + i, current_y, col)
+				#else:
+					#for i in 6:
+						#image.set_pixel(current_x + i, current_y, palette_manager.get_color_from_id(voxel.face_colors[i]).color)
+				#current_x += 6
+	#return image
 
 func on_size_change() -> void:
 	## Needs to change the mesh offset

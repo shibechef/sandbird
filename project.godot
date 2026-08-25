@@ -256,3 +256,14 @@ toggle_brush_erase={
 
 lights_and_shadows/directional_shadow/size=16384
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
+
+[shader_globals]
+
+noise={
+"type": "sampler2D",
+"value": ""
+}
+cascade_text_array={
+"type": "sampler2DArray",
+"value": ""
+}

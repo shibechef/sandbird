@@ -21,7 +21,7 @@ metadata/_custom_type_script = "uid://c4cxqovgpocot"
 
 [sub_resource type="Resource" id="Resource_f23kq"]
 script = ExtResource("1_ktowp")
-color = Color(0.29922208, 0.5077467, 0.86921954, 1)
+color = Color(0.29803923, 0.5058824, 0.87058824, 1)
 palette_id = 1
 color_id = -125
 current_uv_index = 2

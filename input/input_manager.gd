@@ -142,12 +142,12 @@ func handle_color_selection_inputs() -> void:
 func handle_scroll_wheel(event: InputEvent) -> void:
 	if event is not InputEventMouseButton:
 		return
-	
+
 	if interaction_mode == InteractionMode.voxel and Input.is_action_pressed("change_brush_size"):
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			paint_system.change_brush_size(1)
+			paint_system.change_brush_size(0.5)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			paint_system.change_brush_size(-1)
+			paint_system.change_brush_size(-0.5)
 		return
 		
 	if camera_system.handle_scroll_motion(event):

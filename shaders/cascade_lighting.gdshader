@@ -12,22 +12,23 @@ render_mode unshaded;
 // texture, and instantly math out the texture's UV coords from the 3D coords
 // you would need to AABB test for every object in the scene to find out coords though
 
-// 2D tex array likely 96x96x96 x6 colors per face of a voxel
-// it is also a square root so it can fit snugly on a 2304x2304 texture 
+uniform sampler2DArray cascade_text_array;
 
-uniform sampler2DArray voxels;
-
-varying vec3 vertex_uv;
-
-vec3 get_grid_pos_from_tex() {
-	return vec3(1.0);
+vec3 get_tex_from_hit_pos(vec3 hit_pos) {
+	vec3 sub_voxel = fract(hit_pos);
+	vec3 main_voxel = round(hit_pos);
+	float vox_num = main_voxel.z + main_voxel.y * 96.0 + main_voxel.x * 96.0 * 96.0;
+	vox_num *= 6.0;
+	vec2 voxel_tex_pos = vec2(float(float(int(vox_num) % 2304)) / 2304.0, floor(vox_num / 2304.0) / 2304.0);
+	voxel_tex_pos += vec2(-0.0 / 2304.0, -0.0 / 2304.0);
+	return vec3(voxel_tex_pos.x, voxel_tex_pos.y, 0.0);
 }
 
-void vertex() {
-	vertex_uv = VERTEX;
+vec4 sample_cascade(vec3 position) {
+	vec2 text_pos = fract(vec2(cos(position.x * 151.263 + position.z * .3), sin(position.z * 52.512+ position.y * .521)));
+	return texture(cascade_text_array, vec3(text_pos, 0.0));
 }
 
 void fragment() {
-	
-	ALBEDO = texture(voxels, vec3(VERTEX.x / 96.0, VERTEX.y / 96.0, 0.0)).rgb;
+	ALBEDO = sample_cascade(vec3(UV.x, UV.y, 0.0)).rgb;
 }

@@ -3,11 +3,13 @@ class_name PointBrush
 
 @export var size: float = 5.2
 @export var requires_end: bool = true
+@export var shaved: bool = true
 @export var erase: bool = false
 
 func get_voxels(input_data: Dictionary, object: VoxelObject, cols: Array[PaletteColor]) -> Dictionary[Vector3i, VoxelData]:
 	var voxels: Dictionary[Vector3i, VoxelData] = {}
 	var positions: Array[Vector3i] = []
+	var effective_size: float = size * 0.9999 if shaved else 1.0
 	
 	var rays = get_interpolated_rays(input_data["origin_0"], input_data["dir_0"], input_data["origin_1"], input_data["dir_1"], .75, 1.0)
 	for ray in rays:
@@ -16,7 +18,7 @@ func get_voxels(input_data: Dictionary, object: VoxelObject, cols: Array[Palette
 		if col_pos.is_empty():
 			continue
 		
-		positions.append_array(ShapeGeneration.create_sphere(col_pos[0], size))
+		positions.append_array(ShapeGeneration.create_sphere(col_pos[0], effective_size))
 		var AABB_lower = Vector3i(object.position)
 		var AABB_upper = AABB_lower + object.dimensions
 		positions = CollisionSystem.get_within_AABB(positions, AABB_lower, AABB_upper)

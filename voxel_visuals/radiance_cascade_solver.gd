@@ -7,60 +7,104 @@ var palette_manager: ColorPaletteManager
 var voxel_input_uniform: RDUniform
 var output_text: Texture2DArrayRD = Texture2DArrayRD.new()
 
-var compute_shader = load("res://shaders/compute/compute_testing.glsl")
+var compute_shader = load("res://shaders/compute/radiance_cascades.glsl")
 var material: ShaderMaterial = load("res://materials/cascade_lighting.tres")
 
-var input_vox_text_RID: RID
-var output__text_RID: RID
+var vox_text_RID: RID
+var radiance_text_RID: RID
 
+var text_size: int = 2304
+var chunk_size: int = 96
+var cascades: int = 4
+var initial_rays: int = 6
+var initial_ray_length: int = 1
 
 func _ready():
+	test_shit_math()
 	hierarchy = get_node("%Hierarchy")
 	palette_manager = get_node("%ColorPaletteManager")
-	compute_radiance_texture()
-	#match_compute_material_buffers(2304, 2304, 2)
-	#compute_radiance_map([hierarchy.all_objects.values()[3]])
-	setup_basics()
-
-func setup_basics() -> void:
-	return
-
-func compute_radiance_texture() -> void:
-	var text_resolution: Vector3i = Vector3i(2304, 2304, 1)
 	
+	var chunks: int = 1
+	match_compute_material_buffers(chunks)
+	compute_radiance_texture(chunks)
+	
+	
+
+func test_shit_math():
+	var voxels_tested: Array[Vector3i] = [Vector3i.ZERO, Vector3i.ONE, 
+	Vector3i.ONE * 2, Vector3i(0, 1, 2), 
+	Vector3i.ONE * (chunk_size - 1)]
+	
+	for n in cascades:
+		var current_rays: int = initial_rays << n
+		
+		for voxel in voxels_tested:
+			var index: int = voxel.x + voxel.y * chunk_size + voxel.z * chunk_size * chunk_size
+			index *= 6
+			## output seems weird as it's 2298 2303, for 96^3 with 6 rays instead of 2303 2303
+			## but that's the start for the 6 pixel slots of that voxel 
+			var invocation := Vector2i(index % text_size, roundi(float(index / text_size)))
+			
+			## reconstruct voxel pos from invocation
+			var rays_f := float(current_rays)
+			var text_index: int = (invocation.x + invocation.y * text_size)
+			text_index = int(float(text_index) / float(current_rays))
+			var reconstructed_pos: Vector3i = Vector3i(
+				text_index % chunk_size,
+				int(float(text_index % (chunk_size * chunk_size)) / float(chunk_size)),
+				int(float(text_index % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size))
+			)
+			
+			
+			
+			print(voxel, " ", reconstructed_pos, " ", index, " ", invocation)
+			
+				
+
+func compute_radiance_texture(chunks: int) -> void:
 	var rd := RenderingServer.get_rendering_device()
-	var shader_file := load("res://shaders/compute/compute_testing.glsl")
 	var shader_spirv: RDShaderSPIRV = compute_shader.get_spirv()
 	var shader_RID := rd.shader_create_from_spirv(shader_spirv)
 	
 	var format_data := RDTextureFormat.new()
 	format_data.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
-	format_data.width = text_resolution.x
-	format_data.height = text_resolution.y
-	format_data.array_layers = text_resolution.z
+	format_data.width = text_size
+	format_data.height = text_size
+	format_data.array_layers = chunks
 	format_data.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
 	format_data.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
 	
-	var voxel_texture_rid = rd.texture_create(format_data,RDTextureView.new())
-	var radiance_texture_rid = rd.texture_create(format_data,RDTextureView.new())
+	vox_text_RID = rd.texture_create(format_data,RDTextureView.new())
 	
 	var voxel_uniform := RDUniform.new()	
 	voxel_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
-	voxel_uniform.add_id(voxel_texture_rid)
+	voxel_uniform.add_id(vox_text_RID)
 	
 	var radiance_uniform := RDUniform.new()	
 	radiance_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
-	radiance_uniform.add_id(radiance_texture_rid)
+	radiance_uniform.add_id(radiance_text_RID)
 	
-	var arr = PackedFloat32Array()
-	arr.resize(text_resolution.x * text_resolution.y * text_resolution.z * 4)
-	arr.fill(0.0) 
-	var bytes = arr.to_byte_array() 
+	var vox_bytes = PackedVector4Array()
+	vox_bytes.resize(text_size * text_size * chunks)
+	vox_bytes = grid_to_vec4_array(hierarchy.all_objects.values()[3])
+	#vox_bytes.fill(Vector4(.5, .2, .3, .9)) 
+	var bytes: PackedByteArray = vox_bytes.to_byte_array() 
+	rd.texture_update(vox_text_RID, 0, bytes)
 	
-	rd.texture_update(voxel_texture_rid, 0, bytes)
-	rd.texture_update(radiance_texture_rid, 0, bytes)
+	var cascade_bytes = PackedFloat32Array()
+	cascade_bytes.resize(text_size * text_size * chunks * cascades)
+	cascade_bytes.fill(0.0) 
+	var bytes_2: PackedByteArray = cascade_bytes.to_byte_array() 
+	rd.texture_update(radiance_text_RID, 0, bytes_2)
+	
+	var chunk_width: int = roundi(pow(float(text_size*text_size) / 6.0, 1.0/3.0))
+	var push_constant := PackedInt32Array()
+	push_constant.push_back(initial_rays)
+	push_constant.push_back(initial_ray_length)
+	push_constant.push_back(chunk_width)
+	push_constant.push_back(0)
 	
 	var uniform_set_0_RID := rd.uniform_set_create([voxel_uniform], shader_RID, 0)
 	var uniform_set_1_RID := rd.uniform_set_create([radiance_uniform], shader_RID, 1)
@@ -71,91 +115,48 @@ func compute_radiance_texture() -> void:
 	
 	rd.compute_list_bind_uniform_set(compute_list, uniform_set_0_RID, 0)
 	rd.compute_list_bind_uniform_set(compute_list, uniform_set_1_RID, 1)
+	rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), max(16, push_constant.to_byte_array().size()))
 	
-	rd.compute_list_dispatch(compute_list, 288, 288, 1)
+	rd.compute_list_dispatch(compute_list, 288, 288, cascades)
 	rd.compute_list_end()
-	var epic = rd.texture_get_data(voxel_texture_rid, 0).to_vector4_array()
-	var epic2 = rd.texture_get_data(radiance_texture_rid, 0).to_vector4_array()
-	print(epic[2304*2304-1], " ", epic2[2304*2304-1])
 
-## literally just this 1:1
-## https://docs.godotengine.org/en/latest/tutorials/shaders/compute_shaders.html
-func xdd(objects: Array[VoxelObject]) -> void:
-	var rd := RenderingServer.get_rendering_device()
-	var shader_file := load("res://shaders/compute/radiance_cascade.glsl")
-	var shader_spirv: RDShaderSPIRV = shader_file.get_spirv()
-	var shader_RID := rd.shader_create_from_spirv(shader_spirv)
+	var epic = rd.texture_get_data(radiance_text_RID, 0).to_vector4_array()
 	
-	var voxel_grid_input := grid_to_vec4_array(objects[0])
-	var voxel_grid_bytes := voxel_grid_input.to_byte_array()
-	voxel_grid_bytes.append_array(voxel_grid_bytes)
-	var voxel_buffer_RID := rd.storage_buffer_create(voxel_grid_bytes.size(), voxel_grid_bytes)
-	var voxel_uniform := RDUniform.new()
-	voxel_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
-	voxel_uniform.binding = 0
-	voxel_uniform.add_id(voxel_buffer_RID)
-	
-	#var uniform_chunks := RDUniform.new()
-	#uniform_chunks.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	#uniform_chunks.binding = 0
-	#uniform_chunks.add_id()
-	
-	#var output_bytes := PackedVector4Array()
-	#output_bytes.resize(output_text.get_width() * output_text.get_height() * output_text.get_layers())
-	#output_bytes.fill(Vector4(0.6, 0.7, 0.6, 1.0))
-	#var output_byte_array: PackedByteArray = output_bytes.to_byte_array()
-	#print(voxel_grid_bytes.size(), " ", output_byte_array.size())
-	#var output_buffer_RID := rd.texture_buffer_create(output_byte_array.size(), RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT, output_byte_array)
-	#output_uniform.add_id(output_text.texture_rd_rid)
-	#
-	#var uniform_set_0_RID := rd.uniform_set_create([voxel_uniform], shader_RID, 0)
-	#var uniform_set_1_RID := rd.uniform_set_create([output_uniform], shader_RID, 1)
-	#
-	#var pipeline_RID := rd.compute_pipeline_create(shader_RID)
-	#var compute_list := rd.compute_list_begin()
-	#rd.compute_list_bind_compute_pipeline(compute_list, pipeline_RID)
-	#rd.compute_list_bind_uniform_set(compute_list, uniform_set_0_RID, 0)
-	#rd.compute_list_bind_uniform_set(compute_list, uniform_set_1_RID, 1)
-	#rd.compute_list_dispatch(compute_list, 288, 288, 1)
-	#rd.compute_list_end()
-#
-	#var voxel_output_data := rd.buffer_get_data(voxel_buffer_RID)
-	#var output_voxel := voxel_output_data.to_vector4_array()
-	#var texture_output_data := rd.texture_get_data(output_text, 0)
-	#var goida_output_data := rd.buffer_get_data(output_buffer_RID)
-	#print("erm ", voxel_output_data.size())
-	#print("GUH ", texture_output_data.size(), " ", goida_output_data.size())
-#
-	#var unpacked = Array(voxel_output_data.to_vector4_array())
-	#print("er ", unpacked[0])
-	#for i in unpacked.size():
-		#if unpacked[i] != Vector4.ZERO:
-			#print("hello, ", i)
+	var n = 0
+	for vec4 in epic:
+		var voxel: int = roundi(float(n) / 6.0)
+		if !vec4.is_equal_approx(Vector4(0.0, 0.0, 0.0, 1.0)):
+			var x: float = voxel % chunk_size
+			var y: float = float(voxel) / float(chunk_size)
+			var z: float = float(voxel) / float(chunk_size) / float(chunk_size)
+			print(Vector3(x, y, z), " ", vec4)
+		n += 1
+	#for vec4 in epic:
+	#	if !is_equal_approx(vec4.x, 0.0):
+	#		print(vec4)
+	#print()
+	#print(epic[0])
 
 ## skip moving data through CPU from compute to material by using buffer
 ## https://github.com/godotengine/godot-proposals/issues/6989#issuecomment-2770544670
-func match_compute_material_buffers(x: int = 2304, y: int = 2304, layers: int = 2) -> void:
-	assert(layers > 1, "texture will not load with less than 2 layers")
-	#var rd := RenderingServer.get_rendering_device()
-	#var texture_format := RDTextureFormat.new()
-	#texture_format.width = x
-	#texture_format.height = y
-	#texture_format.array_layers = layers
-	#texture_format.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
-	#texture_format.usage_bits = RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT + RenderingDevice.TEXTURE_USAGE_COLOR_ATTACHMENT_BIT + RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + RenderingDevice.TEXTURE_USAGE_CAN_COPY_TO_BIT
-	#texture_format.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
-	#var texture_buffer_RID := rd.texture_create(texture_format, RDTextureView.new(), [])
-	#output_uniform = RDUniform.new()
-	#output_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
-	#output_uniform.binding = 0
-	#output_uniform.add_id(texture_buffer_RID)
-	#
-	#var clear_error: int = rd.texture_clear(texture_buffer_RID, Color(0.0, 1.0, 0.0), 0, 1, 0, 1)
-	#assert(clear_error == 0, "texture failed clearing with error " + error_string(clear_error))
-	#
-	#material.set_shader_parameter("cascade_text_array", output_text)
-	#var mat: Texture2DArrayRD = material.get_shader_parameter("cascade_text_array")
-	#mat.texture_rd_rid = texture_buffer_RID
+func match_compute_material_buffers(chunks: int) -> void:
+	var rd := RenderingServer.get_rendering_device()
+	var format_data := RDTextureFormat.new()
+	format_data.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
+	format_data.width = text_size
+	format_data.height = text_size
+	format_data.array_layers = chunks * cascades
+	format_data.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
+	format_data.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT + \
+	RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
+	
+	radiance_text_RID = rd.texture_create(format_data,RDTextureView.new())
+	
+	material.set_shader_parameter("cascade_text_array", output_text)
+	var mat: Texture2DArrayRD = material.get_shader_parameter("cascade_text_array")
+	mat.texture_rd_rid = radiance_text_RID
 
 func grid_to_vec4_array(voxel_object: VoxelObject) -> PackedVector4Array:
 	## quicker to simply append empty arrays 

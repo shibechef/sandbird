@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cll2dh0kq12re"]
+
+[ext_resource type="Shader" uid="uid://byrt5wkrbxou1" path="res://shaders/cascade_lighting/cascade_simple.gdshader" id="1_2x3nk"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_2x3nk")

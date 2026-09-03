@@ -8,7 +8,7 @@ var voxel_input_uniform: RDUniform
 var output_text: Texture2DArrayRD = Texture2DArrayRD.new()
 
 var compute_shader = load("res://shaders/compute/radiance_cascades.glsl")
-var material: ShaderMaterial = load("res://materials/cascade_lighting.tres")
+var material: ShaderMaterial = load("res://materials/cascade_simple.tres")
 
 var vox_text_RID: RID
 var radiance_text_RID: RID
@@ -17,7 +17,7 @@ var text_size: int = 2304
 var chunk_size: int = 96
 var cascades: int = 4
 var initial_rays: int = 6
-var initial_ray_length: int = 1
+var initial_ray_length: int = 3
 
 func _ready():
 	test_shit_math()
@@ -27,39 +27,38 @@ func _ready():
 	var chunks: int = 1
 	match_compute_material_buffers(chunks)
 	compute_radiance_texture(chunks)
-	
-	
 
 func test_shit_math():
 	var voxels_tested: Array[Vector3i] = [Vector3i.ZERO, Vector3i.ONE, 
 	Vector3i.ONE * 2, Vector3i(0, 1, 2), 
-	Vector3i.ONE * (chunk_size - 1)]
-	
+	Vector3i.ONE * (chunk_size - 1),
+	Vector3i(48, 2, 12), 
+	Vector3i(71, 15, 50)]
+		
 	for n in cascades:
-		var current_rays: int = initial_rays << n
+		## in a 3 dimensional space, halving the resolution in each direction 
+		## means you need to 8x the rays per voxel to cancel out the 2x2x2 reduction
+		## to maintain the same sized texture
+		var size_ratio: float = float(1 << 0)
+		var current_rays: int = initial_rays << (n * 3)
 		
 		for voxel in voxels_tested:
 			var index: int = voxel.x + voxel.y * chunk_size + voxel.z * chunk_size * chunk_size
 			index *= 6
 			## output seems weird as it's 2298 2303, for 96^3 with 6 rays instead of 2303 2303
 			## but that's the start for the 6 pixel slots of that voxel 
-			var invocation := Vector2i(index % text_size, roundi(float(index / text_size)))
+			var invocation := Vector2i(index % text_size, floori(float(index) / float(text_size)))
 			
 			## reconstruct voxel pos from invocation
-			var rays_f := float(current_rays)
 			var text_index: int = (invocation.x + invocation.y * text_size)
-			text_index = int(float(text_index) / float(current_rays))
+			text_index = int(float(text_index) / float(initial_rays))
 			var reconstructed_pos: Vector3i = Vector3i(
-				text_index % chunk_size,
-				int(float(text_index % (chunk_size * chunk_size)) / float(chunk_size)),
-				int(float(text_index % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size))
+				int(float(text_index % chunk_size) / size_ratio),
+				int(float(text_index % (chunk_size * chunk_size)) / float(chunk_size) / size_ratio),
+				int(float(text_index % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size) / size_ratio)
 			)
 			
-			
-			
-			print(voxel, " ", reconstructed_pos, " ", index, " ", invocation)
-			
-				
+			print(voxel, " ", reconstructed_pos, " ", index, " ", invocation, " ", current_rays)
 
 func compute_radiance_texture(chunks: int) -> void:
 	var rd := RenderingServer.get_rendering_device()
@@ -122,14 +121,19 @@ func compute_radiance_texture(chunks: int) -> void:
 
 	var epic = rd.texture_get_data(radiance_text_RID, 0).to_vector4_array()
 	
+	var size_ratio: float = float(1 << 0)
 	var n = 0
 	for vec4 in epic:
 		var voxel: int = roundi(float(n) / 6.0)
-		if !vec4.is_equal_approx(Vector4(0.0, 0.0, 0.0, 1.0)):
-			var x: float = voxel % chunk_size
-			var y: float = float(voxel) / float(chunk_size)
-			var z: float = float(voxel) / float(chunk_size) / float(chunk_size)
-			print(Vector3(x, y, z), " ", vec4)
+		if !vec4.is_equal_approx(Vector4(0.0, 0.0, 0.0, 1.0)) \
+		and !vec4.is_equal_approx(Vector4(0.0, 0.0, 0.0, 0.0)):
+			var reconstructed_pos: Vector3i = Vector3i(
+				int(float(n % chunk_size) / size_ratio),
+				int(float(n % (chunk_size * chunk_size)) / float(chunk_size) / size_ratio),
+				int(float(n % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size) / size_ratio)
+			)
+	
+			print(reconstructed_pos, " ", vec4)
 		n += 1
 	#for vec4 in epic:
 	#	if !is_equal_approx(vec4.x, 0.0):

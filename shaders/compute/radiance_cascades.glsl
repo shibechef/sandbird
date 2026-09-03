@@ -9,13 +9,14 @@ layout(set = 1, binding = 0, rgba32f) uniform restrict image2DArray cascade_data
 layout(push_constant, std430) uniform Params {
 	int starting_rays;
 	int starting_length;
-    int voxel_chunk_size;
+    int vox_chunk_size;
 } params;
 
 ivec3 worldPosToVoxelTextCoords(ivec3 world_pos, int layer, int face) {
     ivec3 text_size = imageSize(voxel_data);
     
-    int voxel_index = world_pos.x + world_pos.y * params.voxel_chunk_size + world_pos.z * params.voxel_chunk_size * params.voxel_chunk_size;
+    int voxel_index = world_pos.x + world_pos.y * params.vox_chunk_size + world_pos.z * params.vox_chunk_size * params.vox_chunk_size;
+    // voxel start multiplied by how many faces (pixels) are in a voxel
     voxel_index *= 6;
     int x = voxel_index % text_size.x;
     int y = int(floor(float(voxel_index) / float(text_size.x)));
@@ -25,26 +26,34 @@ ivec3 worldPosToVoxelTextCoords(ivec3 world_pos, int layer, int face) {
 
 vec3 rayTextToVoxelCoords(ivec3 text_pos) {
     int cascade_index = int(gl_GlobalInvocationID.z);
-    int rays = params.starting_rays << cascade_index;
+    int rays = params.starting_rays << (cascade_index * 3);
+    float size_ratio = float(1 << 0);
     float rays_f = float(rays);
+    int chunk_size = params.vox_chunk_size;
 
     ivec3 radiance_text_size = imageSize(cascade_data);
     int text_index = text_pos.x + text_pos.y * radiance_text_size.x;
+    //text_index *= 6; 
 
-    int x = text_index % rays;
-    int y = int(float(text_index) / rays_f);
-    int z = int(float(text_index) / rays_f / rays_f);
+    int x = int(float(text_index % chunk_size) / size_ratio);
+    int y = int(float(text_index % (chunk_size * chunk_size)) / float(chunk_size) / size_ratio);
+    int z = int(float(text_index % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size) / size_ratio);
     return vec3(x, y, z);
 }
 
 vec4 sampleWorld(vec3 world_pos) {
+    world_pos.x = clamp(world_pos.x, 0, params.vox_chunk_size);
+    world_pos.y = clamp(world_pos.y, 0, params.vox_chunk_size);
+    world_pos.z = clamp(world_pos.z, 0, params.vox_chunk_size);
     ivec3 sample_pos = worldPosToVoxelTextCoords(ivec3(world_pos), 0, 0);
     vec4 col = imageLoad(voxel_data, sample_pos);
+    
+    //vec4 col = vec4(world_pos.x, world_pos.y, world_pos.z, .5); 
     return col;
 }
 
 vec4 intersectRay(vec3 ray_start, vec3 ray_end, int cascade_index) {
-    int current_rays = params.starting_rays << cascade_index;
+    int rays = params.starting_rays << (cascade_index * 3);
     ivec3 dir = sign(ivec3(ray_end - ray_start));
 
     vec3 radiance = vec3(0.0);
@@ -77,10 +86,10 @@ void main() {
     ivec3 radiance_text_size = imageSize(cascade_data);
 
     int cascade_index = int(gl_GlobalInvocationID.z);
-    int current_rays = params.starting_rays << cascade_index;
+    int rays = params.starting_rays << (cascade_index * 3);
 
     int text_index = int(gl_GlobalInvocationID.x) + int(gl_GlobalInvocationID.y) * radiance_text_size.x;
-    int ray_index = text_index % current_rays;
+    int ray_index = text_index % rays;
 
     vec3 sample_pos = rayTextToVoxelCoords(ivec3(gl_GlobalInvocationID));
     vec3 end_pos = vec3(0.0);
@@ -106,4 +115,7 @@ void main() {
     vec4 col = intersectRay(sample_pos, vec3(0.0), 0);
 
     imageStore(cascade_data, ivec3(gl_GlobalInvocationID), col);
+
+    //vec4 cola = sampleWorld(sample_pos);
+    //imageStore(cascade_data, ivec3(gl_GlobalInvocationID), cola);
 }

@@ -4,6 +4,8 @@ class_name MeshSystem
 var project_prefs: ProjectPreferences
 var color_palette_manager: ColorPaletteManager
 
+var use_flat_normals: bool = true
+
 var cube_vertices: PackedVector3Array = [
 	## Y- face
 	Vector3(0, 0, 0), Vector3(1, 0, 0), Vector3(1, 0, 1), Vector3(1, 0, 1), Vector3(0, 0, 1), Vector3(0, 0, 0),
@@ -17,6 +19,22 @@ var cube_vertices: PackedVector3Array = [
 	Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 1), Vector3(0, 1, 1), Vector3(0, 1, 0), Vector3(0, 0, 0),
 	## X+ face
 	Vector3(1, 0, 1), Vector3(1, 0, 0), Vector3(1, 1, 0), Vector3(1, 1, 0), Vector3(1, 1, 1), Vector3(1, 0, 1)
+]
+
+var flat_normals: Array[PackedVector3Array] = [
+	## Y- face
+	PackedVector3Array([Vector3(0, 1, 0), Vector3(0, 1, 0), Vector3(0, 1, 0), Vector3(0, 1, 0), Vector3(0, 1, 0), Vector3(0, 1, 0)]),
+	## Y+ face
+	PackedVector3Array([Vector3(0, -1, 0), Vector3(0, -1, 0), Vector3(0, -1, 0), Vector3(0, -1, 0), Vector3(0, -1, 0), Vector3(0, -1, 0)]),
+	## Z- face
+	PackedVector3Array([Vector3(0, 0, 1), Vector3(0, 0, 1), Vector3(0, 0, 1), Vector3(0, 0, 1), Vector3(0, 0, 1), Vector3(0, 0, 1)]),
+	## Z+ face
+	PackedVector3Array([Vector3(0, 0, -1), Vector3(0, 0, -1), Vector3(0, 0, -1), Vector3(0, 0, -1), Vector3(0, 0, -1), Vector3(0, 0, -1)]),
+	## X- face
+	PackedVector3Array([Vector3(1, 0, 0), Vector3(1, 0, 0), Vector3(1, 0, 0), Vector3(1, 0, 0), Vector3(1, 0, 0), Vector3(1, 0, 0)]),
+	## X+ face
+	PackedVector3Array([Vector3(-1, 0, 0), Vector3(-1, 0, 0), Vector3(-1, 0, 0), Vector3(-1, 0, 0), Vector3(-1, 0, 0), Vector3(-1, 0, 0)])
+
 ]
 
 func _ready():
@@ -44,6 +62,7 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 	var mesh: MeshInstance3D
 	
 	var mesh_vertex_list: Dictionary[int, PackedVector3Array]
+	var mesh_normal_list: Dictionary[int, PackedVector3Array]
 	var mesh_UV_list: Dictionary[int, PackedVector2Array]
 	for x in range(AABB_lower.x, AABB_upper.x):
 		for y in range(AABB_lower.y, AABB_upper.y):
@@ -60,15 +79,23 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 				for n in 6:
 					var face_color: int = voxel.face_colors[n * multi]
 					var face_palette: int = voxel.face_palettes[n * multi]
+					
+					## initialize arrays for new surface
 					if !mesh_vertex_list.has(face_palette):
 						mesh_vertex_list[face_palette] = PackedVector3Array()
 						mesh_UV_list[face_palette] = PackedVector2Array()
+						mesh_normal_list[face_palette] = PackedVector3Array()
 					
 					mesh_vertex_list[face_palette].append_array(get_face_array(n, pos))
 					var palette = color_palette_manager.all_palettes[face_palette]
 					var UV_index = Vector2(palette.colors[face_color].current_uv_index + 0.5, 0)
 					mesh_UV_list[face_palette].append_array(
 						[UV_index, UV_index, UV_index, UV_index, UV_index, UV_index])
+					if use_flat_normals:
+						mesh_normal_list[face_palette].append_array(flat_normals[n])
+					else:
+						continue
+						
 	var array_mesh = ArrayMesh.new()
 	
 	var n: int = 0
@@ -76,6 +103,7 @@ func get_chunk_mesh(AABB_lower: Vector3i, AABB_upper: Vector3i, voxel_grid: Dict
 		var mesh_arrays: Array = [] 
 		mesh_arrays.resize(Mesh.ARRAY_MAX)
 		mesh_arrays[Mesh.ARRAY_VERTEX] = mesh_vertex_list[surface]
+		mesh_arrays[Mesh.ARRAY_NORMAL] = mesh_normal_list[surface]
 		mesh_arrays[Mesh.ARRAY_TEX_UV] = mesh_UV_list[surface]
 		
 		array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_arrays)
@@ -109,7 +137,6 @@ func get_face_array(face_num: int, origin: Vector3) -> PackedVector3Array:
 	return PackedVector3Array([
 		cube_vertices[face_num + 2] + origin, cube_vertices[face_num + 1] + origin, cube_vertices[face_num] + origin, 
 		cube_vertices[face_num + 5] + origin, cube_vertices[face_num + 4] + origin, cube_vertices[face_num + 3] + origin])
-		
 
 ## Bottom left, bottom right, top right, top left
 func create_square(vert_SW: Vector3, vert_SE: Vector3, vert_NE: Vector3, vert_NW: Vector3) -> PackedVector3Array:
@@ -134,3 +161,4 @@ func create_mesh_instance(vertices: PackedVector3Array, UVs: PackedVector2Array 
 func get_chunk_pos(pos: Vector3i, offset: Vector3i) -> Vector3i:
 	var chunk_pos: Vector3 = Vector3(pos + offset) / project_prefs.mesh_chunk_size
 	return Vector3i(floori(chunk_pos.x), floori(chunk_pos.y), floori(chunk_pos.z))
+	

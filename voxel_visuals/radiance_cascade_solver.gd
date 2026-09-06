@@ -133,7 +133,7 @@ func compute_radiance_texture(chunks: int) -> void:
 				int(float(n % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size) / size_ratio)
 			)
 	
-			print(reconstructed_pos, " ", vec4)
+			#print(reconstructed_pos, " ", vec4)
 		n += 1
 	#for vec4 in epic:
 	#	if !is_equal_approx(vec4.x, 0.0):

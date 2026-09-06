@@ -17,7 +17,7 @@ var text_size: int = 2304
 var chunk_size: int = 96
 var cascades: int = 4
 var initial_rays: int = 6
-var initial_ray_length: int = 3
+var initial_ray_length: int = 6
 
 func _ready():
 	test_shit_math()

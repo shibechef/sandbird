@@ -33,7 +33,7 @@ vec3 rayTextToVoxelCoords(ivec3 text_pos) {
 
     ivec3 radiance_text_size = imageSize(cascade_data);
     int text_index = text_pos.x + text_pos.y * radiance_text_size.x;
-    //text_index *= 6; 
+    text_index = int(float(text_index) / 6.0);
 
     int x = int(float(text_index % chunk_size) / size_ratio);
     int y = int(float(text_index % (chunk_size * chunk_size)) / float(chunk_size) / size_ratio);
@@ -48,13 +48,12 @@ vec4 sampleWorld(vec3 world_pos) {
     ivec3 sample_pos = worldPosToVoxelTextCoords(ivec3(world_pos), 0, 0);
     vec4 col = imageLoad(voxel_data, sample_pos);
     
-    //vec4 col = vec4(world_pos.x, world_pos.y, world_pos.z, .5); 
     return col;
 }
 
-vec4 intersectRay(vec3 ray_start, vec3 ray_end, int cascade_index) {
+vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
     int rays = params.starting_rays << (cascade_index * 3);
-    ivec3 dir = sign(ivec3(ray_end - ray_start));
+    ivec3 dir = sign(ivec3(offset));
 
     vec3 radiance = vec3(0.0);
     float transmittance = 1.0;
@@ -89,33 +88,30 @@ void main() {
     int rays = params.starting_rays << (cascade_index * 3);
 
     int text_index = int(gl_GlobalInvocationID.x) + int(gl_GlobalInvocationID.y) * radiance_text_size.x;
-    int ray_index = text_index % rays;
+    int ray_index = text_index % 6;
 
     vec3 sample_pos = rayTextToVoxelCoords(ivec3(gl_GlobalInvocationID));
-    vec3 end_pos = vec3(0.0);
+    vec3 offset = vec3(0.0);
 
     if (ray_index == 0){
-        end_pos = vec3(1.0, 0.0, 0.0);
+        offset = vec3(1.0, 0.0, 0.0);
     }
-    if (ray_index == 1){
-        end_pos = vec3(-1.0, 0.0, 0.0);
+    else if (ray_index == 1){
+        offset = vec3(-1.0, 0.0, 0.0);
     }
-    if (ray_index == 2){
-        end_pos = vec3(0.0, 1.0, 0.0);
+    else if (ray_index == 2){
+        offset = vec3(0.0, 1.0, 0.0);
     }
-    if (ray_index == 3){
-        end_pos = vec3(0.0, -1.0, 0.0);
+    else if (ray_index == 3){
+        offset = vec3(0.0, -1.0, 0.0);
     }
-    if (ray_index == 4){
-        end_pos = vec3(0.0, 0.0, 1.0);
+    else if (ray_index == 4){
+        offset = vec3(0.0, 0.0, 1.0);
     }
-    if (ray_index == 5){
-        end_pos = vec3(0.0, 0.0, -1.0);
+    else {
+        offset = vec3(0.0, 0.0, -1.0);
     }
-    vec4 col = intersectRay(sample_pos, vec3(0.0), 0);
+    vec4 col = intersectRay(sample_pos, offset, 0);
 
     imageStore(cascade_data, ivec3(gl_GlobalInvocationID), col);
-
-    //vec4 cola = sampleWorld(sample_pos);
-    //imageStore(cascade_data, ivec3(gl_GlobalInvocationID), cola);
 }

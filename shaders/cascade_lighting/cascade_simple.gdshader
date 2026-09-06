@@ -6,7 +6,7 @@ const int chunk_size = 96;
 varying vec3 john_normal;
 
 void vertex() {
-	// NORMAL in fragment and vector are different values
+	// NORMAL in fragment and vertex are different values
 	john_normal = NORMAL;
 }
 
@@ -16,9 +16,13 @@ void fragment() {
 	int text_size = textureSize(cascade_text_array, 0).x;
 	
 	int index = int(pos.x) + int(pos.y) * chunk_size + int(pos.z) * chunk_size * chunk_size;
+	index *= 6;
 	vec3 total = vec3(0.0);
+	int b = int(TIME) % 6;
 	for (int i = 0; i < 6; i++) {
-		ivec2 invocation_pos = ivec2((index + i) % text_size, int(floor(float(index) / float(text_size))));
+		vec2 invocation_pos = vec2(float((index + i) % text_size), floor(float(index + i) / float(text_size)));
+		invocation_pos += .5;
+		//total = max(total, texture(cascade_text_array, vec2(invocation_pos) / float(text_size)).rgb);
 		total += texture(cascade_text_array, vec2(invocation_pos) / float(text_size)).rgb;
 	}
 	

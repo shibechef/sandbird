@@ -6,6 +6,7 @@ layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 layout(set = 0, binding = 0, rgba32f) uniform restrict image2DArray voxel_data;
 layout(set = 1, binding = 0, rgba32f) uniform restrict image2DArray cascade_data;
 
+
 layout(push_constant, std430) uniform Params {
 	int starting_rays;
 	int starting_length;
@@ -27,7 +28,7 @@ ivec3 worldPosToVoxelTextCoords(ivec3 world_pos, int layer, int face) {
 vec3 rayTextToVoxelCoords(ivec3 text_pos) {
     int cascade_index = int(gl_GlobalInvocationID.z);
     int rays = params.starting_rays << (cascade_index * 3);
-    float size_ratio = float(1 << 0);
+    float size_ratio = float(1 << cascade_index);
     float rays_f = float(rays);
     int chunk_size = params.vox_chunk_size;
 
@@ -51,6 +52,20 @@ vec4 sampleWorld(vec3 world_pos) {
     return col;
 }
 
+vec3 sample_directional_lights(vec3 world_pos) {
+    vec3 light_rotation = normalize(vec3(1.0, 1.0, 1.0));
+    vec3 centralized_pos = world_pos - vec3(params.vox_chunk_size) / 2.0;
+
+    if (dot(light_rotation, normalize(centralized_pos)) < 0.0)
+        return vec3(0.0);
+    if (world_pos.x > params.vox_chunk_size || world_pos.x < 0.0 ||
+    world_pos.y > params.vox_chunk_size || world_pos.y < 0.0 ||
+    world_pos.z > params.vox_chunk_size || world_pos.z < 0.0) {
+        return vec3(1.0);
+    }
+    return vec3(0.0);
+}
+
 vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
     int rays = params.starting_rays << (cascade_index * 3);
     ivec3 dir = sign(ivec3(offset));
@@ -58,10 +73,18 @@ vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
     vec3 radiance = vec3(0.0);
     float transmittance = 1.0;
 
-    for (int i = 0; i < params.starting_length; i++){
-        vec4 world_data = sampleWorld(ray_start + dir * i);
-        radiance += world_data.rgb;
-        transmittance -= world_data.a;
+    int ray_start_length = 1 + sign(cascade_index) * (params.starting_length << (cascade_index - 1));
+    int ray_end_length = 1 + sign(cascade_index + 1) * (params.starting_length << cascade_index);
+
+    for (int i = ray_start_length; i < ray_end_length; i++){
+        vec3 sample_pos = ray_start + dir * (i + 1);
+        vec4 world_data = sampleWorld(sample_pos);
+
+        float current_transmittance = max(transmittance, 0.0);
+        radiance += sample_directional_lights(sample_pos) * current_transmittance;
+        radiance += world_data.rgb * current_transmittance;
+        // >1 alpha used for emission
+        transmittance -= min(world_data.a, 1.0);
     }
 
     if (radiance != vec3(0.0, 0.0, 0.0)) {
@@ -70,15 +93,6 @@ vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
 
     return vec4(radiance, transmittance);
 }
-
-// the emissive materials should have an alpha higher than 1.0, so write and read that for emission amounts
-// for the cascades, the first one has many samples of nearby voxels, tight angle, little distance
-// refer to castInterval https://www.shadertoy.com/view/wfyyDz
-// this will get the ray having a color and a value of how much has been transmitted to the end
-// this transmitted to end thing is important for merging, as further rays will use this to decide how much of that goes through the previous ray
-
-// on every voxel in the dimensions sample the basic 6 ways to get the radiance and transmittance of that voxel and save to cascade_data
-// with that cascade_data, put it in the material shader and have voxels mix between the nearby 3x3 just as a visual test
 
 void main() {
     ivec3 voxel_text_size = imageSize(voxel_data);
@@ -112,6 +126,7 @@ void main() {
         offset = vec3(0.0, 0.0, -1.0);
     }
     vec4 col = intersectRay(sample_pos, offset, 0);
+    col += sampleWorld(sample_pos);
 
     imageStore(cascade_data, ivec3(gl_GlobalInvocationID), col);
 }

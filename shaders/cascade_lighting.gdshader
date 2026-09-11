@@ -1,10 +1,6 @@
 shader_type spatial;
 render_mode unshaded;
 
-// https://www.shadertoy.com/view/mtlBzX
-// https://www.shadertoy.com/view/M3ycWt
-// https://www.shadertoy.com/view/X3XfRM
-// https://jason.today/rc
 
 // objects stored in vec3 array that has:
 // AABB for lookup and offsetting, and it's starting layer #

@@ -181,9 +181,9 @@ static func get_grid_traversal_collisions(origin: Vector3, direction: Vector3, g
 	return cols
 
 static func is_within_AABB(point: Vector3i, AABB_lower: Vector3i, AABB_higher: Vector3i) -> bool:
-	if (AABB_lower.x > point.x or point.x > AABB_higher.x or
-	 AABB_lower.y > point.y or point.y > AABB_higher.y or
-	 AABB_lower.z > point.z or point.z > AABB_higher.z):
+	if (AABB_lower.x > point.x or point.x >= AABB_higher.x or
+	 AABB_lower.y > point.y or point.y >= AABB_higher.y or
+	 AABB_lower.z > point.z or point.z >= AABB_higher.z):
 		return false
 	return true
 

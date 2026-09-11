@@ -17,14 +17,15 @@ var text_size: int = 2304
 var chunk_size: int = 96
 var cascades: int = 4
 var initial_rays: int = 6
-var initial_ray_length: int = 6
+var initial_ray_length: int = 3
 
 func _ready():
-	test_shit_math()
+	#test_shit_math()
 	hierarchy = get_node("%Hierarchy")
 	palette_manager = get_node("%ColorPaletteManager")
 	
 	var chunks: int = 1
+	setup_compute_materials(chunks)
 	match_compute_material_buffers(chunks)
 	compute_radiance_texture(chunks)
 
@@ -60,10 +61,19 @@ func test_shit_math():
 			
 			print(voxel, " ", reconstructed_pos, " ", index, " ", invocation, " ", current_rays)
 
-func compute_radiance_texture(chunks: int) -> void:
-	var rd := RenderingServer.get_rendering_device()
-	var shader_spirv: RDShaderSPIRV = compute_shader.get_spirv()
-	var shader_RID := rd.shader_create_from_spirv(shader_spirv)
+var rd: RenderingDevice
+var shader_spirv: RDShaderSPIRV
+var shader_RID: RID
+
+var voxel_uniform: RDUniform
+var vox_bytes: PackedVector4Array
+
+var radiance_uniform: RDUniform
+
+func setup_compute_materials(chunks: int) -> void:
+	rd = RenderingServer.get_rendering_device()
+	shader_spirv = compute_shader.get_spirv()
+	shader_RID = rd.shader_create_from_spirv(shader_spirv)
 	
 	var format_data := RDTextureFormat.new()
 	format_data.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
@@ -76,27 +86,32 @@ func compute_radiance_texture(chunks: int) -> void:
 	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
 	
 	vox_text_RID = rd.texture_create(format_data,RDTextureView.new())
-	
-	var voxel_uniform := RDUniform.new()	
+	voxel_uniform = RDUniform.new()	
 	voxel_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	voxel_uniform.add_id(vox_text_RID)
 	
-	var radiance_uniform := RDUniform.new()	
-	radiance_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
-	radiance_uniform.add_id(radiance_text_RID)
-	
-	var vox_bytes = PackedVector4Array()
+	vox_bytes = PackedVector4Array()
 	vox_bytes.resize(text_size * text_size * chunks)
-	vox_bytes = grid_to_vec4_array(hierarchy.all_objects.values()[3])
-	#vox_bytes.fill(Vector4(.5, .2, .3, .9)) 
-	var bytes: PackedByteArray = vox_bytes.to_byte_array() 
-	rd.texture_update(vox_text_RID, 0, bytes)
 	
 	var cascade_bytes = PackedFloat32Array()
 	cascade_bytes.resize(text_size * text_size * chunks * cascades)
 	cascade_bytes.fill(0.0) 
 	var bytes_2: PackedByteArray = cascade_bytes.to_byte_array() 
 	rd.texture_update(radiance_text_RID, 0, bytes_2)
+
+	
+	#radiance_uniform = RDUniform.new()	
+	#radiance_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
+	#radiance_uniform.add_id(radiance_text_RID)
+
+func compute_radiance_texture(chunks: int) -> void:
+	radiance_uniform = RDUniform.new()	
+	radiance_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
+	radiance_uniform.add_id(radiance_text_RID)
+
+	vox_bytes = grid_to_vec4_array(hierarchy.all_objects.values()[3])
+	var bytes: PackedByteArray = vox_bytes.to_byte_array() 
+	rd.texture_update(vox_text_RID, 0, bytes)
 	
 	var chunk_width: int = roundi(pow(float(text_size*text_size) / 6.0, 1.0/3.0))
 	var push_constant := PackedInt32Array()
@@ -115,36 +130,15 @@ func compute_radiance_texture(chunks: int) -> void:
 	rd.compute_list_bind_uniform_set(compute_list, uniform_set_0_RID, 0)
 	rd.compute_list_bind_uniform_set(compute_list, uniform_set_1_RID, 1)
 	rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), max(16, push_constant.to_byte_array().size()))
-	
+
 	rd.compute_list_dispatch(compute_list, 288, 288, cascades)
 	rd.compute_list_end()
-
-	var epic = rd.texture_get_data(radiance_text_RID, 0).to_vector4_array()
 	
-	var size_ratio: float = float(1 << 0)
-	var n = 0
-	for vec4 in epic:
-		var voxel: int = roundi(float(n) / 6.0)
-		if !vec4.is_equal_approx(Vector4(0.0, 0.0, 0.0, 1.0)) \
-		and !vec4.is_equal_approx(Vector4(0.0, 0.0, 0.0, 0.0)):
-			var reconstructed_pos: Vector3i = Vector3i(
-				int(float(n % chunk_size) / size_ratio),
-				int(float(n % (chunk_size * chunk_size)) / float(chunk_size) / size_ratio),
-				int(float(n % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size) / size_ratio)
-			)
-	
-			#print(reconstructed_pos, " ", vec4)
-		n += 1
-	#for vec4 in epic:
-	#	if !is_equal_approx(vec4.x, 0.0):
-	#		print(vec4)
-	#print()
-	#print(epic[0])
+	rd.free_rid(uniform_set_0_RID)
 
 ## skip moving data through CPU from compute to material by using buffer
 ## https://github.com/godotengine/godot-proposals/issues/6989#issuecomment-2770544670
 func match_compute_material_buffers(chunks: int) -> void:
-	var rd := RenderingServer.get_rendering_device()
 	var format_data := RDTextureFormat.new()
 	format_data.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
 	format_data.width = text_size

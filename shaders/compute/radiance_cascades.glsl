@@ -126,7 +126,6 @@ void main() {
         offset = vec3(0.0, 0.0, -1.0);
     }
     vec4 col = intersectRay(sample_pos, offset, 0);
-    col += sampleWorld(sample_pos);
 
     imageStore(cascade_data, ivec3(gl_GlobalInvocationID), col);
 }

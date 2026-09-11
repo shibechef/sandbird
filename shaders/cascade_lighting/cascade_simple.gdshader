@@ -8,6 +8,7 @@ render_mode unshaded;
 // https://jason.today/rc
 
 uniform sampler2D cascade_text_array; 
+uniform sampler2D color_palette_tex; 
 const int chunk_size = 96;
 varying vec3 normal;
 
@@ -69,5 +70,9 @@ void fragment() {
 		total += texture(cascade_text_array, vec2(invocation_pos) / float(text_size)).rgb;
 	}
 	
-	ALBEDO = total / 6.0;
+	// sample the actual texture for it's color
+	float palette_text_size = float(textureSize(color_palette_tex, 0).x);
+	ALBEDO = texture(color_palette_tex, vec2(UV.x / palette_text_size, 0.0)).rgb;
+	
+	ALBEDO += total / 6.0;
 }

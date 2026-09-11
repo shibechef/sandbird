@@ -13,11 +13,20 @@ var material: ShaderMaterial = load("res://materials/cascade_simple.tres")
 var vox_text_RID: RID
 var radiance_text_RID: RID
 
+var rd: RenderingDevice
+var shader_spirv: RDShaderSPIRV
+var shader_RID: RID
+
+var voxel_uniform: RDUniform
+var vox_bytes: PackedVector4Array
+
+var radiance_uniform: RDUniform
+
 var text_size: int = 2304
 var chunk_size: int = 96
 var cascades: int = 4
 var initial_rays: int = 6
-var initial_ray_length: int = 3
+var initial_ray_length: int = 6
 
 func _ready():
 	#test_shit_math()
@@ -61,15 +70,6 @@ func test_shit_math():
 			
 			print(voxel, " ", reconstructed_pos, " ", index, " ", invocation, " ", current_rays)
 
-var rd: RenderingDevice
-var shader_spirv: RDShaderSPIRV
-var shader_RID: RID
-
-var voxel_uniform: RDUniform
-var vox_bytes: PackedVector4Array
-
-var radiance_uniform: RDUniform
-
 func setup_compute_materials(chunks: int) -> void:
 	rd = RenderingServer.get_rendering_device()
 	shader_spirv = compute_shader.get_spirv()
@@ -99,7 +99,6 @@ func setup_compute_materials(chunks: int) -> void:
 	var bytes_2: PackedByteArray = cascade_bytes.to_byte_array() 
 	rd.texture_update(radiance_text_RID, 0, bytes_2)
 
-	
 	#radiance_uniform = RDUniform.new()	
 	#radiance_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	#radiance_uniform.add_id(radiance_text_RID)

@@ -15,10 +15,8 @@ func fill_menu() -> void:
 	var projects = FileReader.get_projects()
 
 func save_clicked() -> void:
-	var scene := PackedScene.new()
-	scene.pack(ProjectManager.current_project)
-	var path: String = "res://user_data/projects/" + ProjectManager.current_project.project_name + ".tscn"
-	ResourceSaver.save(scene, path)
+	var path: String = "res://user_data/projects/" + ProjectManager.current_project.project_name + ".tres"
+	ProjectManager.save_project(path)
 
 func save_as_clicked() -> void:
 	ProjectManager.current_project.project_name = get_node("%NameEditor").text

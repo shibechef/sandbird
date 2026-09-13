@@ -85,6 +85,9 @@ vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
         radiance += world_data.rgb * current_transmittance;
         // >1 alpha used for emission
         transmittance -= min(world_data.a, 1.0);
+
+        if (transmittance < 0.0)
+            break;
     }
 
     if (radiance != vec3(0.0, 0.0, 0.0)) {
@@ -102,29 +105,35 @@ void main() {
     int rays = params.starting_rays << (cascade_index * 3);
 
     int text_index = int(gl_GlobalInvocationID.x) + int(gl_GlobalInvocationID.y) * radiance_text_size.x;
-    int ray_index = text_index % 6;
+    int ray_index = text_index % rays;
 
     vec3 sample_pos = rayTextToVoxelCoords(ivec3(gl_GlobalInvocationID));
     vec3 offset = vec3(0.0);
+    
+    // mapping ray direction to points on a subdivided cube
+    int face = int(floor(float(ray_index) / float(rays)));
+    float rays_per_face_axis = float(params.starting_rays << cascade_index) / 6.0;
+    float ray_axis_1 = float(ray_index % rays) / rays_per_face_axis;
+    float ray_axis_2 = float(ray_index) / float(rays) / rays_per_face_axis;
+    
+    switch (face){
+        case 0:
+            offset = vec3(1.0, ray_axis_1, ray_axis_2);
+        case 1:
+            offset = vec3(-1.0, ray_axis_1, ray_axis_2);
+        case 2:
+            offset = vec3(ray_axis_1, 1.0, ray_axis_2);
+        case 3:
+            offset = vec3(ray_axis_1, -1.0, ray_axis_2);
+        case 4:
+            offset = vec3(ray_axis_1, ray_axis_2, 1.0);
+        case 5:
+            offset = vec3(ray_axis_1, ray_axis_2, -1.0);
+    }
 
-    if (ray_index == 0){
-        offset = vec3(1.0, 0.0, 0.0);
-    }
-    else if (ray_index == 1){
-        offset = vec3(-1.0, 0.0, 0.0);
-    }
-    else if (ray_index == 2){
-        offset = vec3(0.0, 1.0, 0.0);
-    }
-    else if (ray_index == 3){
-        offset = vec3(0.0, -1.0, 0.0);
-    }
-    else if (ray_index == 4){
-        offset = vec3(0.0, 0.0, 1.0);
-    }
-    else {
-        offset = vec3(0.0, 0.0, -1.0);
-    }
+    // spherically mapping the cube
+    offset = normalize(offset);
+
     vec4 col = intersectRay(sample_pos, offset, 0);
 
     imageStore(cascade_data, ivec3(gl_GlobalInvocationID), col);

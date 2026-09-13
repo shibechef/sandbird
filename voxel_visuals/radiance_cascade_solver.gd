@@ -29,7 +29,7 @@ var initial_rays: int = 6
 var initial_ray_length: int = 6
 
 func _ready():
-	#test_shit_math()
+	test_shit_math()
 	hierarchy = get_node("%Hierarchy")
 	palette_manager = get_node("%ColorPaletteManager")
 	
@@ -69,6 +69,14 @@ func test_shit_math():
 			)
 			
 			print(voxel, " ", reconstructed_pos, " ", index, " ", invocation, " ", current_rays)
+			
+			var ray_index: int = text_index % current_rays
+			var face: int = floori(float(ray_index) / float(current_rays))
+			var rays_per_face_axis: float = float(initial_rays << n) / 6.0
+			var ray_axis_1: float = float(ray_index % current_rays) / rays_per_face_axis
+			var ray_axis_2: float = float(ray_index) / float(current_rays)
+			
+			print(face, " ", ray_axis_1, " ", ray_axis_2)
 
 func setup_compute_materials(chunks: int) -> void:
 	rd = RenderingServer.get_rendering_device()

@@ -1,0 +1,741 @@
+[gd_resource type="Resource" script_class="SaveState" format=3]
+
+[ext_resource type="Script" path="res://voxel_painting/brushes/base_brush.gd" id="1_k62u4"]
+[ext_resource type="Script" path="res://voxel_painting/brushes/point_brush.gd" id="2_nfk4l"]
+[ext_resource type="Script" path="res://voxel_painting/brushes/beam_brush.gd" id="3_wwl6w"]
+[ext_resource type="Script" path="res://user/voxel_object_data.gd" id="4_y6rvo"]
+[ext_resource type="Script" path="res://voxel_input/voxel_data.gd" id="5_pfw8w"]
+[ext_resource type="Script" path="res://voxel_visuals/color_palette.gd" id="6_2abl1"]
+[ext_resource type="Resource" path="res://user_data/palettes/rainbow.tres" id="7_lu1ao"]
+[ext_resource type="Script" path="res://user/save_state.gd" id="8_drfpy"]
+
+[sub_resource type="Resource" id="Resource_uif21"]
+script = ExtResource("2_nfk4l")
+named_as = "pee"
+metadata/_custom_type_script = "uid://cabu1sttj61yr"
+
+[sub_resource type="Resource" id="Resource_4inyy"]
+script = ExtResource("3_wwl6w")
+named_as = "poo"
+metadata/_custom_type_script = "uid://rrg3dhpf3gdf"
+
+[sub_resource type="Resource" id="Resource_jtsil"]
+script = ExtResource("4_y6rvo")
+dimensions = Vector3i(16, 8, 16)
+position = Vector3i(0, 0, -97)
+
+[sub_resource type="Resource" id="Resource_j5wrm"]
+script = ExtResource("4_y6rvo")
+dimensions = Vector3i(35, 4, 1)
+position = Vector3i(0, 0, -40)
+
+[sub_resource type="Resource" id="Resource_u35nb"]
+script = ExtResource("4_y6rvo")
+
+[sub_resource type="Resource" id="Resource_32c4h"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_vgpew"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_kpp1k"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_3cdrc"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_4s3lg"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_3mewu"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_pufwc"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_q27y5"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_for6e"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_ejtli"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_blbk7"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_trtgy"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_bbdhj"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_q3oxr"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_tx18i"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_x4ggo"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_dmlk3"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_rjau3"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_8gojd"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_w22ra"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_sy7gd"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_oyh4f"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_jgjap"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_s5l5q"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_7vimx"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_dm01l"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_3pjcu"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_agc0u"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_0o1m3"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_ad27x"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_vcys0"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_u8p32"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_ovufe"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_2y1lv"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_hrulh"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_2dnyu"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_844d3"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_hgl1r"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_e52br"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_3u5a0"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_3nvc5"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_7ptmw"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_b8nbe"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_ius13"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_dkhl6"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_0ocfb"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_iokqs"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_028hx"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_417q4"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_ru78f"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_rilni"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_a2vrr"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_r6ygr"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_ufjb4"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_tdmjy"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_ybapc"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_drbdu"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_8lqei"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_yapls"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_031oi"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_tjxae"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_ghjco"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_pgk5y"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_56fre"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_2inj5"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_gjs25"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_v5tbr"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_cdqvv"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_l1x7d"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_p7hnx"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_r4cff"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_tph6x"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_5uv8m"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_kgjho"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_2ji11"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_t1use"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_nu0dc"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_4tmjm"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_op3l2"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_grdm7"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_62dgi"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_hsb5q"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_fd7ex"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_pssia"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_vor42"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_cpsid"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_kks3d"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_lec2v"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_dvdtx"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_uu5kq"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_7280k"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_56cq6"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_kulo8"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_2rhc7"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_fk3fi"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_ufdcb"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_b024p"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_fokfq"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_qo1ba"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_88ka2"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_hf16r"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_75syo"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_yl1v0"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_l32or"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_o3gn7"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_jwtrn"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_4myte"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_ogsk7"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_5txbf"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_yu2bj"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_po4q5"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_ab2nc"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_odcjc"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_mxnnd"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_emrxt"]
+script = ExtResource("5_pfw8w")
+face_palettes = PackedInt32Array(1)
+face_colors = PackedInt32Array(-935)
+
+[sub_resource type="Resource" id="Resource_jw6gx"]
+script = ExtResource("4_y6rvo")
+voxel_grid = Dictionary[Vector3i, ExtResource("5_pfw8w")]({
+Vector3i(90, 0, 0): SubResource("Resource_ab2nc"),
+Vector3i(90, 0, 1): SubResource("Resource_odcjc"),
+Vector3i(90, 1, 0): SubResource("Resource_mxnnd"),
+Vector3i(90, 1, 1): SubResource("Resource_emrxt"),
+Vector3i(91, 0, 0): SubResource("Resource_qo1ba"),
+Vector3i(91, 0, 1): SubResource("Resource_88ka2"),
+Vector3i(91, 0, 2): SubResource("Resource_hf16r"),
+Vector3i(91, 0, 3): SubResource("Resource_75syo"),
+Vector3i(91, 1, 0): SubResource("Resource_yl1v0"),
+Vector3i(91, 1, 1): SubResource("Resource_l32or"),
+Vector3i(91, 1, 2): SubResource("Resource_o3gn7"),
+Vector3i(91, 1, 3): SubResource("Resource_jwtrn"),
+Vector3i(91, 2, 0): SubResource("Resource_4myte"),
+Vector3i(91, 2, 1): SubResource("Resource_ogsk7"),
+Vector3i(91, 2, 2): SubResource("Resource_5txbf"),
+Vector3i(91, 3, 0): SubResource("Resource_yu2bj"),
+Vector3i(91, 3, 1): SubResource("Resource_po4q5"),
+Vector3i(92, 0, 0): SubResource("Resource_op3l2"),
+Vector3i(92, 0, 1): SubResource("Resource_grdm7"),
+Vector3i(92, 0, 2): SubResource("Resource_62dgi"),
+Vector3i(92, 0, 3): SubResource("Resource_hsb5q"),
+Vector3i(92, 0, 4): SubResource("Resource_fd7ex"),
+Vector3i(92, 1, 0): SubResource("Resource_pssia"),
+Vector3i(92, 1, 1): SubResource("Resource_vor42"),
+Vector3i(92, 1, 2): SubResource("Resource_cpsid"),
+Vector3i(92, 1, 3): SubResource("Resource_kks3d"),
+Vector3i(92, 1, 4): SubResource("Resource_lec2v"),
+Vector3i(92, 2, 0): SubResource("Resource_dvdtx"),
+Vector3i(92, 2, 1): SubResource("Resource_uu5kq"),
+Vector3i(92, 2, 2): SubResource("Resource_7280k"),
+Vector3i(92, 2, 3): SubResource("Resource_56cq6"),
+Vector3i(92, 3, 0): SubResource("Resource_kulo8"),
+Vector3i(92, 3, 1): SubResource("Resource_2rhc7"),
+Vector3i(92, 3, 2): SubResource("Resource_fk3fi"),
+Vector3i(92, 3, 3): SubResource("Resource_ufdcb"),
+Vector3i(92, 4, 0): SubResource("Resource_b024p"),
+Vector3i(92, 4, 1): SubResource("Resource_fokfq"),
+Vector3i(93, 0, 0): SubResource("Resource_drbdu"),
+Vector3i(93, 0, 1): SubResource("Resource_8lqei"),
+Vector3i(93, 0, 2): SubResource("Resource_yapls"),
+Vector3i(93, 0, 3): SubResource("Resource_031oi"),
+Vector3i(93, 0, 4): SubResource("Resource_tjxae"),
+Vector3i(93, 1, 0): SubResource("Resource_ghjco"),
+Vector3i(93, 1, 1): SubResource("Resource_pgk5y"),
+Vector3i(93, 1, 2): SubResource("Resource_56fre"),
+Vector3i(93, 1, 3): SubResource("Resource_2inj5"),
+Vector3i(93, 1, 4): SubResource("Resource_gjs25"),
+Vector3i(93, 2, 0): SubResource("Resource_v5tbr"),
+Vector3i(93, 2, 1): SubResource("Resource_cdqvv"),
+Vector3i(93, 2, 2): SubResource("Resource_l1x7d"),
+Vector3i(93, 2, 3): SubResource("Resource_p7hnx"),
+Vector3i(93, 2, 4): SubResource("Resource_r4cff"),
+Vector3i(93, 3, 0): SubResource("Resource_tph6x"),
+Vector3i(93, 3, 1): SubResource("Resource_5uv8m"),
+Vector3i(93, 3, 2): SubResource("Resource_kgjho"),
+Vector3i(93, 3, 3): SubResource("Resource_2ji11"),
+Vector3i(93, 4, 0): SubResource("Resource_t1use"),
+Vector3i(93, 4, 1): SubResource("Resource_nu0dc"),
+Vector3i(93, 4, 2): SubResource("Resource_4tmjm"),
+Vector3i(94, 0, 0): SubResource("Resource_0o1m3"),
+Vector3i(94, 0, 1): SubResource("Resource_ad27x"),
+Vector3i(94, 0, 2): SubResource("Resource_vcys0"),
+Vector3i(94, 0, 3): SubResource("Resource_u8p32"),
+Vector3i(94, 0, 4): SubResource("Resource_ovufe"),
+Vector3i(94, 0, 5): SubResource("Resource_2y1lv"),
+Vector3i(94, 1, 0): SubResource("Resource_hrulh"),
+Vector3i(94, 1, 1): SubResource("Resource_2dnyu"),
+Vector3i(94, 1, 2): SubResource("Resource_844d3"),
+Vector3i(94, 1, 3): SubResource("Resource_hgl1r"),
+Vector3i(94, 1, 4): SubResource("Resource_e52br"),
+Vector3i(94, 1, 5): SubResource("Resource_3u5a0"),
+Vector3i(94, 2, 0): SubResource("Resource_3nvc5"),
+Vector3i(94, 2, 1): SubResource("Resource_7ptmw"),
+Vector3i(94, 2, 2): SubResource("Resource_b8nbe"),
+Vector3i(94, 2, 3): SubResource("Resource_ius13"),
+Vector3i(94, 2, 4): SubResource("Resource_dkhl6"),
+Vector3i(94, 3, 0): SubResource("Resource_0ocfb"),
+Vector3i(94, 3, 1): SubResource("Resource_iokqs"),
+Vector3i(94, 3, 2): SubResource("Resource_028hx"),
+Vector3i(94, 3, 3): SubResource("Resource_417q4"),
+Vector3i(94, 3, 4): SubResource("Resource_ru78f"),
+Vector3i(94, 4, 0): SubResource("Resource_rilni"),
+Vector3i(94, 4, 1): SubResource("Resource_a2vrr"),
+Vector3i(94, 4, 2): SubResource("Resource_r6ygr"),
+Vector3i(94, 4, 3): SubResource("Resource_ufjb4"),
+Vector3i(94, 5, 0): SubResource("Resource_tdmjy"),
+Vector3i(94, 5, 1): SubResource("Resource_ybapc"),
+Vector3i(95, 0, 0): SubResource("Resource_32c4h"),
+Vector3i(95, 0, 1): SubResource("Resource_vgpew"),
+Vector3i(95, 0, 2): SubResource("Resource_kpp1k"),
+Vector3i(95, 0, 3): SubResource("Resource_3cdrc"),
+Vector3i(95, 0, 4): SubResource("Resource_4s3lg"),
+Vector3i(95, 0, 5): SubResource("Resource_3mewu"),
+Vector3i(95, 1, 0): SubResource("Resource_pufwc"),
+Vector3i(95, 1, 1): SubResource("Resource_q27y5"),
+Vector3i(95, 1, 2): SubResource("Resource_for6e"),
+Vector3i(95, 1, 3): SubResource("Resource_ejtli"),
+Vector3i(95, 1, 4): SubResource("Resource_blbk7"),
+Vector3i(95, 1, 5): SubResource("Resource_trtgy"),
+Vector3i(95, 2, 0): SubResource("Resource_bbdhj"),
+Vector3i(95, 2, 1): SubResource("Resource_q3oxr"),
+Vector3i(95, 2, 2): SubResource("Resource_tx18i"),
+Vector3i(95, 2, 3): SubResource("Resource_x4ggo"),
+Vector3i(95, 2, 4): SubResource("Resource_dmlk3"),
+Vector3i(95, 3, 0): SubResource("Resource_rjau3"),
+Vector3i(95, 3, 1): SubResource("Resource_8gojd"),
+Vector3i(95, 3, 2): SubResource("Resource_w22ra"),
+Vector3i(95, 3, 3): SubResource("Resource_sy7gd"),
+Vector3i(95, 3, 4): SubResource("Resource_oyh4f"),
+Vector3i(95, 4, 0): SubResource("Resource_jgjap"),
+Vector3i(95, 4, 1): SubResource("Resource_s5l5q"),
+Vector3i(95, 4, 2): SubResource("Resource_7vimx"),
+Vector3i(95, 4, 3): SubResource("Resource_dm01l"),
+Vector3i(95, 5, 0): SubResource("Resource_3pjcu"),
+Vector3i(95, 5, 1): SubResource("Resource_agc0u")
+})
+dimensions = Vector3i(96, 96, 96)
+
+[resource]
+script = ExtResource("8_drfpy")
+objects = Array[ExtResource("4_y6rvo")]([SubResource("Resource_jtsil"), SubResource("Resource_j5wrm"), SubResource("Resource_u35nb"), SubResource("Resource_jw6gx")])
+palettes = Dictionary[int, ExtResource("6_2abl1")]({
+1: ExtResource("7_lu1ao")
+})
+palette_order = Array[int]([1])
+brushes = Dictionary[String, ExtResource("1_k62u4")]({
+"pee": SubResource("Resource_uif21"),
+"poo": SubResource("Resource_4inyy")
+})

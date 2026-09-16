@@ -1,5 +1,7 @@
 extends Node
 
+var empty_scene: PackedScene = preload("res://scenes/blank_voxel_project.tscn")
+
 var current_project: VoxelProject
 
 func save_project(file_path: String) -> void:
@@ -8,7 +10,6 @@ func save_project(file_path: String) -> void:
 	var objs: Dictionary[int, VoxelObject] = current_project.get_node("%Hierarchy").all_objects
 	for key in objs:
 		var obj: VoxelObject = objs[key]
-		print(obj.dimensions)
 		var voxel_obj_data := VoxelObjectData.new()
 		voxel_obj_data.voxel_grid = obj.voxel_grid
 		voxel_obj_data.dimensions = obj.dimensions
@@ -23,5 +24,19 @@ func save_project(file_path: String) -> void:
 		
 	ResourceSaver.save(save_state, file_path)
 
-func load_project() -> void:
-	return
+func load_project(save_state: SaveState) -> void:
+	var project: VoxelProject = empty_scene.instantiate()
+	var hierarchy: Hierarchy = project.get_node("%Hierarchy")
+	var paint_system: PaintSystem = project.get_node("%PaintSystem")
+	var palette_manager: ColorPaletteManager = project.get_node("%ColorPaletteManager")
+	
+	for obj_data in save_state.objects:
+		var voxel_obj := VoxelObject.new()
+		hierarchy.add_object(voxel_obj, false)
+		voxel_obj.voxel_grid = obj_data.voxel_grid
+		voxel_obj.dimensions = obj_data.dimensions
+		voxel_obj.position = obj_data.position
+
+	paint_system.brush_list = save_state.brushes	
+	palette_manager.all_palettes = save_state.palettes
+	palette_manager.palettes_by_order = save_state.palette_order

@@ -1,22 +1,49 @@
 [gd_scene format=3 uid="uid://7clbq0hmu7d4"]
 
 [ext_resource type="Script" uid="uid://dcwm1elv3yrca" path="res://UI/scripts/project/project_menu.gd" id="1_hp40p"]
+[ext_resource type="Theme" uid="uid://jrr12qrejlo7" path="res://UI/data/themes/regular.tres" id="1_j80du"]
 [ext_resource type="Script" uid="uid://dret3dgnnoh5c" path="res://UI/scripts/themed_UI.gd" id="2_6il03"]
+[ext_resource type="StyleBox" uid="uid://dk85dq60j1qff" path="res://UI/data/stylebox/folder_tab/unselected_folder_tab.tres" id="3_3yu4r"]
 [ext_resource type="Script" uid="uid://uk5474a1gemp" path="res://UI/scripts/draggable_UI.gd" id="3_gbe7r"]
-[ext_resource type="Script" uid="uid://bbyyh5b8ngk67" path="res://UI/scripts/text_edit_extension.gd" id="3_ld0b3"]
+[ext_resource type="StyleBox" uid="uid://c5vbs1drh781k" path="res://UI/data/stylebox/folder_tab/selected_folder_tab.tres" id="4_1qlfa"]
+[ext_resource type="Texture2D" uid="uid://bfho8gl8e7uxa" path="res://UI/sprites/freesvg_add.png" id="4_qseyw"]
+[ext_resource type="StyleBox" uid="uid://dgy4yqy0vp12j" path="res://UI/data/stylebox/folder_tab/hovered_folder_tab.tres" id="5_j80du"]
+[ext_resource type="Texture2D" uid="uid://ceguumykuutmv" path="res://UI/sprites/freesvg_folder.png" id="5_skyq4"]
+[ext_resource type="Texture2D" uid="uid://du02gvdvt52ru" path="res://UI/sprites/freesvg_close.png" id="7_j80du"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gbe7r"]
-content_margin_left = 2.0
-content_margin_top = 4.0
-bg_color = Color(0.13174233, 0.13174233, 0.13174233, 1)
+[sub_resource type="Gradient" id="Gradient_qseyw"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.1288298, 0.1288298, 0.12882975, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_skyq4"]
+gradient = SubResource("Gradient_qseyw")
+width = 1
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_skyq4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1qlfa"]
+bg_color = Color(0.11415806, 0.11415812, 0.11415801, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
 
 [node name="ProjectMenu" type="Control" unique_id=228793466]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 308.0
+offset_top = 94.0
+offset_right = 308.0
+offset_bottom = 94.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_j80du")
 script = ExtResource("1_hp40p")
 
 [node name="Bound1" type="Button" parent="." unique_id=53582260]
@@ -46,94 +73,365 @@ offset_left = 10.0
 offset_top = 5.0
 offset_right = 224.0
 offset_bottom = 287.0
+theme_override_constants/separation = 4
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Row1" unique_id=1328523903]
+custom_minimum_size = Vector2(0, 173.125)
+layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Row1" unique_id=595919964]
+[node name="MarginContainer" type="MarginContainer" parent="Row1/HBoxContainer4" unique_id=1803833793]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_constants/margin_top = 2
 
-[node name="Label" type="Label" parent="Row1/HBoxContainer" unique_id=1960419981]
+[node name="ScrollContainer" type="ScrollContainer" parent="Row1/HBoxContainer4/MarginContainer" unique_id=47502496]
 layout_mode = 2
-text = "Load Project"
+horizontal_scroll_mode = 0
 
-[node name="ProjectFolderButton" type="Button" parent="Row1/HBoxContainer" unique_id=751420674]
-unique_name_in_owner = true
+[node name="MarginContainer" type="MarginContainer" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer" unique_id=1837423007]
 layout_mode = 2
-text = "folder icon!!"
-
-[node name="MarginContainer" type="MarginContainer" parent="Row1" unique_id=351997016]
-layout_mode = 2
-theme_override_constants/margin_left = 6
-
-[node name="RecentProjects" type="VBoxContainer" parent="Row1/MarginContainer" unique_id=107241555]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Row1/MarginContainer/RecentProjects" unique_id=206546867]
-layout_mode = 2
-text = "Project 1 - 01:33 May2/25"
-
-[node name="Label2" type="Label" parent="Row1/MarginContainer/RecentProjects" unique_id=875092724]
-layout_mode = 2
-text = "Project 2 - 01:32 May2/25"
-
-[node name="Label3" type="Label" parent="Row1/MarginContainer/RecentProjects" unique_id=579017339]
-layout_mode = 2
-text = "Project 3 - 01:31 May2/25"
-
-[node name="Seperater1" type="MarginContainer" parent="Row1" unique_id=1427143943]
-layout_mode = 2
-theme_override_constants/margin_top = 10
-
-[node name="SaveProjectButton" type="Button" parent="Row1" unique_id=2122906445]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Save Project"
-
-[node name="Seperater2" type="MarginContainer" parent="Row1" unique_id=372926769]
-layout_mode = 2
-theme_override_constants/margin_top = 10
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="Row1" unique_id=1802162248]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Row1/HBoxContainer3" unique_id=588067234]
-layout_mode = 2
-theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 3
 
-[node name="SaveProjectAsButton" type="Label" parent="Row1/HBoxContainer3/MarginContainer" unique_id=621213414]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer" unique_id=378966668]
+custom_minimum_size = Vector2(146, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer2" unique_id=2095136017]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="CenterContainer" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer2/HBoxContainer" unique_id=1185065279]
+layout_mode = 2
+
+[node name="AddFolderButton" type="TextureButton" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer2/HBoxContainer/CenterContainer" unique_id=140599645]
+custom_minimum_size = Vector2(69, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+texture_normal = SubResource("GradientTexture1D_skyq4")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer2/HBoxContainer/CenterContainer" unique_id=1358170925]
+z_index = 1
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("4_qseyw")
+expand_mode = 1
+
+[node name="CenterContainer2" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer2/HBoxContainer" unique_id=755253923]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="ProjectFolderButton" type="Button" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer2/HBoxContainer/CenterContainer2" unique_id=2003499034]
+custom_minimum_size = Vector2(69, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = ExtResource("3_3yu4r")
+theme_override_styles/pressed = ExtResource("4_1qlfa")
+theme_override_styles/hover = ExtResource("5_j80du")
+
+[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer2/HBoxContainer/CenterContainer2" unique_id=1741908636]
+z_index = 1
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("5_skyq4")
+expand_mode = 1
+
+[node name="Button4" type="Button" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer2" unique_id=581723283]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = ExtResource("3_3yu4r")
+theme_override_styles/pressed = ExtResource("4_1qlfa")
+theme_override_styles/hover = ExtResource("5_j80du")
+text = "Amazing Folder"
+alignment = 0
+autowrap_mode = 3
+clip_text = true
+
+[node name="Button5" type="Button" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer2" unique_id=1354693658]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = ExtResource("3_3yu4r")
+theme_override_styles/pressed = ExtResource("4_1qlfa")
+theme_override_styles/hover = ExtResource("5_j80du")
+text = "Amazing Folder"
+alignment = 0
+autowrap_mode = 3
+clip_text = true
+
+[node name="Button6" type="Button" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer2" unique_id=597458586]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = ExtResource("3_3yu4r")
+theme_override_styles/pressed = ExtResource("4_1qlfa")
+theme_override_styles/hover = ExtResource("5_j80du")
+text = "Amazing Folder"
+alignment = 0
+autowrap_mode = 3
+clip_text = true
+
+[node name="Button7" type="Button" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer2" unique_id=1148539460]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = ExtResource("3_3yu4r")
+theme_override_styles/pressed = ExtResource("4_1qlfa")
+theme_override_styles/hover = ExtResource("5_j80du")
+text = "Amazing Folder"
+alignment = 0
+autowrap_mode = 3
+clip_text = true
+
+[node name="Button8" type="Button" parent="Row1/HBoxContainer4/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer2" unique_id=1711829548]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = ExtResource("3_3yu4r")
+theme_override_styles/pressed = ExtResource("4_1qlfa")
+theme_override_styles/hover = ExtResource("5_j80du")
+text = "Amazing Folder"
+alignment = 0
+autowrap_mode = 3
+clip_text = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="Row1/HBoxContainer4" unique_id=2115927626]
+custom_minimum_size = Vector2(293.105, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Row1/HBoxContainer4/MarginContainer2" unique_id=1774161957]
+layout_mode = 2
+
+[node name="ProjectList" type="VBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer" unique_id=1578829674]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Save Project As"
 
-[node name="NameEditor" type="TextEdit" parent="Row1/HBoxContainer3" unique_id=206571530]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 0)
+[node name="CenterContainer" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList" unique_id=872650816]
 layout_mode = 2
-theme_override_constants/line_spacing = 0
-theme_override_styles/normal = SubResource("StyleBoxFlat_gbe7r")
-text = "Default"
-tab_input_mode = false
-script = ExtResource("3_ld0b3")
-metadata/_custom_type_script = "uid://bbyyh5b8ngk67"
 
-[node name="Seperater3" type="MarginContainer" parent="Row1" unique_id=936226972]
+[node name="Button" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer" unique_id=477477455]
+custom_minimum_size = Vector2(272, 32)
 layout_mode = 2
-theme_override_constants/margin_top = 10
+alignment = 0
+clip_text = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer" unique_id=1805698665]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer/HBoxContainer" unique_id=336829100]
+custom_minimum_size = Vector2(225, 0)
+layout_mode = 2
+text = "Create New Project"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer/HBoxContainer" unique_id=1634559368]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("4_qseyw")
+expand_mode = 1
+
+[node name="CenterContainer2" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList" unique_id=2064859538]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer2" unique_id=655028507]
+custom_minimum_size = Vector2(272, 32)
+layout_mode = 2
+alignment = 0
+clip_text = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer2" unique_id=256379340]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer2/HBoxContainer" unique_id=333683043]
+custom_minimum_size = Vector2(225, 0)
+layout_mode = 2
+text = "Shit Project!!!!"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer2/HBoxContainer" unique_id=662018321]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_skyq4")
+expand_mode = 1
+
+[node name="CenterContainer3" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList" unique_id=142670877]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer3" unique_id=25588960]
+custom_minimum_size = Vector2(272, 32)
+layout_mode = 2
+alignment = 0
+clip_text = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer3" unique_id=790835922]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer3/HBoxContainer" unique_id=2001176976]
+custom_minimum_size = Vector2(225, 0)
+layout_mode = 2
+text = "Shit Project!!!!"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer3/HBoxContainer" unique_id=1594621248]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_skyq4")
+expand_mode = 1
+
+[node name="CenterContainer4" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList" unique_id=1457841817]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer4" unique_id=1690840650]
+custom_minimum_size = Vector2(272, 32)
+layout_mode = 2
+alignment = 0
+clip_text = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer4" unique_id=1807853468]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer4/HBoxContainer" unique_id=1239824854]
+custom_minimum_size = Vector2(225, 0)
+layout_mode = 2
+text = "Shit Project!!!!"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer4/HBoxContainer" unique_id=270642430]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_skyq4")
+expand_mode = 1
+
+[node name="CenterContainer5" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList" unique_id=790168770]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer5" unique_id=201702177]
+custom_minimum_size = Vector2(272, 32)
+layout_mode = 2
+alignment = 0
+clip_text = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer5" unique_id=63801113]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer5/HBoxContainer" unique_id=1111259090]
+custom_minimum_size = Vector2(225, 0)
+layout_mode = 2
+text = "Shit Project!!!!"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer5/HBoxContainer" unique_id=933185586]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_skyq4")
+expand_mode = 1
+
+[node name="CenterContainer6" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList" unique_id=2113181917]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer6" unique_id=1203692216]
+custom_minimum_size = Vector2(272, 32)
+layout_mode = 2
+alignment = 0
+clip_text = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer6" unique_id=1228248455]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer6/HBoxContainer" unique_id=1215152803]
+custom_minimum_size = Vector2(225, 0)
+layout_mode = 2
+text = "Shit Project!!!!"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer2/ScrollContainer/ProjectList/CenterContainer6/HBoxContainer" unique_id=10443718]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_skyq4")
+expand_mode = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Row1" unique_id=987464896]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="RichTextLabel" parent="Row1/HBoxContainer" unique_id=373016643]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+bbcode_enabled = true
+text = "[u]Folder:[/u]"
+vertical_alignment = 1
+
+[node name="TextEdit" type="TextEdit" parent="Row1/HBoxContainer" unique_id=818624259]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_1qlfa")
+placeholder_text = "no name..."
+
+[node name="Label2" type="RichTextLabel" parent="Row1/HBoxContainer" unique_id=62253658]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+bbcode_enabled = true
+text = "[u]Project:[/u]"
+vertical_alignment = 1
+
+[node name="TextEdit2" type="TextEdit" parent="Row1/HBoxContainer" unique_id=1093672245]
+custom_minimum_size = Vector2(182, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_1qlfa")
+placeholder_text = "maybe put a name here"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Row1" unique_id=1406879832]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="Label" type="Label" parent="Row1/HBoxContainer2" unique_id=1182264188]
+[node name="UpdateThumbnailButton" type="Button" parent="Row1/HBoxContainer2" unique_id=1622228059]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Load Backup"
+theme_override_font_sizes/font_size = 16
+text = "Update Thumbnail"
 
-[node name="ProjectFolderButton" type="Button" parent="Row1/HBoxContainer2" unique_id=886194889]
+[node name="Button" type="Button" parent="Row1/HBoxContainer2" unique_id=1311655313]
 layout_mode = 2
-text = "folder icon!!"
+text = "Create Manual Backup"
+
+[node name="CenterContainer" type="CenterContainer" parent="Row1/HBoxContainer2" unique_id=1926118114]
+layout_mode = 2
+
+[node name="Button4" type="TextureButton" parent="Row1/HBoxContainer2/CenterContainer" unique_id=1364680873]
+custom_minimum_size = Vector2(110, 32)
+layout_mode = 2
+texture_normal = SubResource("GradientTexture1D_skyq4")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer2/CenterContainer" unique_id=2040861846]
+layout_mode = 2
+
+[node name="Label" type="RichTextLabel" parent="Row1/HBoxContainer2/CenterContainer/HBoxContainer" unique_id=1031943514]
+custom_minimum_size = Vector2(68, 0)
+layout_mode = 2
+text = "Backups"
+
+[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer2/CenterContainer/HBoxContainer" unique_id=45810785]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("5_skyq4")
+expand_mode = 1
 
 [node name="MarginContainer2" type="MarginContainer" parent="Row1" unique_id=970689919]
 layout_mode = 2
@@ -142,40 +440,29 @@ theme_override_constants/margin_left = 6
 [node name="VBoxContainer" type="VBoxContainer" parent="Row1/MarginContainer2" unique_id=1094099716]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Row1/MarginContainer2/VBoxContainer" unique_id=1886527570]
+[node name="Button" type="Button" parent="Row1/MarginContainer2/VBoxContainer" unique_id=207876131]
 layout_mode = 2
-text = "Project 1 - 10:23 May2/25"
-
-[node name="Label2" type="Label" parent="Row1/MarginContainer2/VBoxContainer" unique_id=890349943]
-layout_mode = 2
-text = "Project 2 - 22:24 Oct5/23"
-
-[node name="Label3" type="Label" parent="Row1/MarginContainer2/VBoxContainer" unique_id=431637450]
-layout_mode = 2
-text = "Project 3 - 22:24 Oct5/22"
-
-[node name="Row2" type="VBoxContainer" parent="." unique_id=2136564980]
-layout_mode = 0
-offset_left = 231.0
-offset_right = 271.0
-offset_bottom = 40.0
-
-[node name="Row3" type="VBoxContainer" parent="." unique_id=233174360]
-layout_mode = 0
-offset_left = 258.0
-offset_right = 298.0
-offset_bottom = 40.0
-
-[node name="CloseButton" type="Button" parent="." unique_id=134788172]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 640.0
-offset_top = 8.0
-offset_right = 674.0
-offset_bottom = 42.0
-text = "x"
+text = "Backup At: 22:24 Oct2/26"
 
 [node name="DraggableUI" type="Node" parent="." unique_id=588625201 node_paths=PackedStringArray("bounds_buttons")]
 script = ExtResource("3_gbe7r")
 bounds_buttons = [NodePath("../Bound1")]
 metadata/_custom_type_script = "uid://uk5474a1gemp"
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=2142638465]
+layout_mode = 0
+offset_left = 637.0
+offset_top = 4.0
+offset_right = 677.0
+offset_bottom = 44.0
+
+[node name="CloseButton" type="Button" parent="CenterContainer" unique_id=2115061462]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+
+[node name="CloseTexture" type="TextureRect" parent="CenterContainer" unique_id=1691857365]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("7_j80du")
+expand_mode = 1

@@ -1,615 +1,615 @@
-[gd_resource type="Resource" script_class="SaveState" format=3 uid="uid://dl4vc2l470cdj"]
+[gd_resource type="Resource" script_class="SaveState" format=3 uid="uid://vt16wmol0jhm"]
 
-[ext_resource type="Script" uid="uid://doicsuyh58fhn" path="res://voxel_painting/brushes/base_brush.gd" id="1_k62u4"]
-[ext_resource type="Script" uid="uid://cabu1sttj61yr" path="res://voxel_painting/brushes/point_brush.gd" id="2_nfk4l"]
-[ext_resource type="Script" uid="uid://rrg3dhpf3gdf" path="res://voxel_painting/brushes/beam_brush.gd" id="3_wwl6w"]
-[ext_resource type="Script" uid="uid://baiiwt5g3tikx" path="res://user/voxel_object_data.gd" id="4_y6rvo"]
-[ext_resource type="Script" uid="uid://dhxphv8esrf00" path="res://voxel_input/voxel_data.gd" id="5_pfw8w"]
-[ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="6_2abl1"]
-[ext_resource type="Resource" uid="uid://ce3m077vbf1hg" path="res://user_data/palettes/rainbow.tres" id="7_lu1ao"]
-[ext_resource type="Script" uid="uid://d055hay6dowp1" path="res://user/save_state.gd" id="8_drfpy"]
+[ext_resource type="Script" uid="uid://doicsuyh58fhn" path="res://voxel_painting/brushes/base_brush.gd" id="1_v7ayw"]
+[ext_resource type="Script" uid="uid://cabu1sttj61yr" path="res://voxel_painting/brushes/point_brush.gd" id="2_1ugx5"]
+[ext_resource type="Script" uid="uid://rrg3dhpf3gdf" path="res://voxel_painting/brushes/beam_brush.gd" id="3_6eul5"]
+[ext_resource type="Script" uid="uid://baiiwt5g3tikx" path="res://user/voxel_object_data.gd" id="4_eh8er"]
+[ext_resource type="Script" uid="uid://dhxphv8esrf00" path="res://voxel_input/voxel_data.gd" id="5_x2cca"]
+[ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="6_crk0l"]
+[ext_resource type="Resource" uid="uid://ce3m077vbf1hg" path="res://user_data/palettes/rainbow.tres" id="7_mcgac"]
+[ext_resource type="Script" uid="uid://d055hay6dowp1" path="res://user/save_state.gd" id="8_w5tjd"]
 
 [sub_resource type="Resource" id="Resource_uif21"]
-script = ExtResource("2_nfk4l")
+script = ExtResource("2_1ugx5")
 named_as = "pee"
 metadata/_custom_type_script = "uid://cabu1sttj61yr"
 
 [sub_resource type="Resource" id="Resource_4inyy"]
-script = ExtResource("3_wwl6w")
+script = ExtResource("3_6eul5")
 named_as = "poo"
 metadata/_custom_type_script = "uid://rrg3dhpf3gdf"
 
 [sub_resource type="Resource" id="Resource_jtsil"]
-script = ExtResource("4_y6rvo")
+script = ExtResource("4_eh8er")
 dimensions = Vector3i(16, 8, 16)
 position = Vector3i(0, 0, -97)
 
 [sub_resource type="Resource" id="Resource_j5wrm"]
-script = ExtResource("4_y6rvo")
+script = ExtResource("4_eh8er")
 dimensions = Vector3i(35, 4, 1)
 position = Vector3i(0, 0, -40)
 
 [sub_resource type="Resource" id="Resource_u35nb"]
-script = ExtResource("4_y6rvo")
+script = ExtResource("4_eh8er")
 
 [sub_resource type="Resource" id="Resource_ab2nc"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_odcjc"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_mxnnd"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_emrxt"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_qo1ba"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_88ka2"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_hf16r"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_75syo"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_yl1v0"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_l32or"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_o3gn7"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_jwtrn"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_4myte"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_ogsk7"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_5txbf"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_yu2bj"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_po4q5"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_op3l2"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_grdm7"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_62dgi"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_hsb5q"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_fd7ex"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_pssia"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_vor42"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_cpsid"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_kks3d"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_lec2v"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_dvdtx"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_uu5kq"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_7280k"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_56cq6"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_kulo8"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_2rhc7"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_fk3fi"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_ufdcb"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_b024p"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_fokfq"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_drbdu"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_8lqei"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_yapls"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_031oi"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_tjxae"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_ghjco"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_pgk5y"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_56fre"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_2inj5"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_gjs25"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_v5tbr"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_cdqvv"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_l1x7d"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_p7hnx"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_r4cff"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_tph6x"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_5uv8m"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_kgjho"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_2ji11"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_t1use"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_nu0dc"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_4tmjm"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_0o1m3"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_ad27x"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_vcys0"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_u8p32"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_ovufe"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_2y1lv"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_hrulh"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_2dnyu"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_844d3"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_hgl1r"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_e52br"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_3u5a0"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_3nvc5"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_7ptmw"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_b8nbe"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_ius13"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_dkhl6"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_0ocfb"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_iokqs"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_028hx"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_417q4"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_ru78f"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_rilni"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_a2vrr"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_r6ygr"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_ufjb4"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_tdmjy"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_ybapc"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_32c4h"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_vgpew"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_kpp1k"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_3cdrc"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_4s3lg"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_3mewu"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_pufwc"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_q27y5"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_for6e"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_ejtli"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_blbk7"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_trtgy"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_bbdhj"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_q3oxr"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_tx18i"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_x4ggo"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_dmlk3"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_rjau3"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_8gojd"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_w22ra"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_sy7gd"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_oyh4f"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_jgjap"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_s5l5q"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_7vimx"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_dm01l"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_3pjcu"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_agc0u"]
-script = ExtResource("5_pfw8w")
+script = ExtResource("5_x2cca")
 face_palettes = PackedInt32Array(1)
 face_colors = PackedInt32Array(-935)
 
 [sub_resource type="Resource" id="Resource_jw6gx"]
-script = ExtResource("4_y6rvo")
-voxel_grid = Dictionary[Vector3i, ExtResource("5_pfw8w")]({
+script = ExtResource("4_eh8er")
+voxel_grid = Dictionary[Vector3i, ExtResource("5_x2cca")]({
 Vector3i(90, 0, 0): SubResource("Resource_ab2nc"),
 Vector3i(90, 0, 1): SubResource("Resource_odcjc"),
 Vector3i(90, 1, 0): SubResource("Resource_mxnnd"),
@@ -729,13 +729,13 @@ Vector3i(95, 5, 1): SubResource("Resource_agc0u")
 dimensions = Vector3i(96, 96, 96)
 
 [resource]
-script = ExtResource("8_drfpy")
-objects = Array[ExtResource("4_y6rvo")]([SubResource("Resource_jtsil"), SubResource("Resource_j5wrm"), SubResource("Resource_u35nb"), SubResource("Resource_jw6gx")])
-palettes = Dictionary[int, ExtResource("6_2abl1")]({
-1: ExtResource("7_lu1ao")
+script = ExtResource("8_w5tjd")
+objects = Array[ExtResource("4_eh8er")]([SubResource("Resource_jtsil"), SubResource("Resource_j5wrm"), SubResource("Resource_u35nb"), SubResource("Resource_jw6gx")])
+palettes = Dictionary[int, ExtResource("6_crk0l")]({
+1: ExtResource("7_mcgac")
 })
 palette_order = Array[int]([1])
-brushes = Dictionary[String, ExtResource("1_k62u4")]({
+brushes = Dictionary[String, ExtResource("1_v7ayw")]({
 "pee": SubResource("Resource_uif21"),
 "poo": SubResource("Resource_4inyy")
 })

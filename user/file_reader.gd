@@ -10,11 +10,15 @@ func get_folder_contents(file_path: String, type: String, recursive: bool = fals
 	dir.list_dir_begin()
 	var file = dir.get_next()
 	var contents: Array[String] = []
-	while file != "":		
+	while file != "":
 		if recursive and dir.current_is_dir():
 			contents.append_array(get_folder_contents(dir.get_current_dir() + "/" + file, type, recursive))
 		else:
-			if type != file.get_extension():
+			if type == "":
+				file = dir.get_next()
+				contents.append(dir.get_current_dir() + "/" + file)
+				continue
+			elif type != file.get_extension():
 				file = dir.get_next()
 				continue
 			contents.append(dir.get_current_dir() + "/" + file)
@@ -55,24 +59,21 @@ func get_palettes() -> Dictionary[String, String]:
 			
 	return valid_palettes
 
-func get_projects() -> Dictionary[String, String]:
+func get_projects(folder: String = "") -> Dictionary[String, String]:
 	var dir := DirAccess.open("res://user_data/")
 	if !dir.dir_exists("projects"):
 		dir.make_dir("projects")
 		
-	var folder_contents: Array[String] = get_folder_contents(project_path, "tscn", true)
+	var folder_contents: Array[String] = get_folder_contents(project_path + "/" + folder, "tres", false)
 	var valid_projects: Dictionary[String, String]
 	
 	for file_path in folder_contents:
 		var resource = load(file_path)
-		if resource is not PackedScene:
+		if resource is not SaveState:
 			continue
 		
-		var scene = resource.instantiate()
-		if scene is not VoxelProject:
-			continue
-		
-		valid_projects[scene.project_name] = file_path
+		var file_name: String = file_path.get_file().left(-file_path.get_extension().length() - 1)
+		valid_projects[file_name] = file_path
 		
 	return valid_projects
 

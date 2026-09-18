@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://bsn6c51o5cnhp"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_skyq4"]
+
+[node name="CenterContainer2" type="CenterContainer" unique_id=829094768]
+
+[node name="Button" type="Button" parent="." unique_id=1504842993]
+custom_minimum_size = Vector2(273, 32)
+layout_mode = 2
+alignment = 0
+clip_text = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1322291936]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer" unique_id=317914527]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(225, 0)
+layout_mode = 2
+text = "Shit Project!!!!"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=160707548]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_skyq4")
+expand_mode = 1

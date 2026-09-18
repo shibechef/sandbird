@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bs24bhjp8mwc1"]
+
+[ext_resource type="StyleBox" uid="uid://dk85dq60j1qff" path="res://UI/data/stylebox/folder_tab/unselected_folder_tab.tres" id="1_snpc2"]
+[ext_resource type="StyleBox" uid="uid://c5vbs1drh781k" path="res://UI/data/stylebox/folder_tab/selected_folder_tab.tres" id="2_mir4b"]
+[ext_resource type="StyleBox" uid="uid://dgy4yqy0vp12j" path="res://UI/data/stylebox/folder_tab/hovered_folder_tab.tres" id="3_lrtjo"]
+
+[node name="Button4" type="Button" unique_id=903552731]
+custom_minimum_size = Vector2(0, 32)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = ExtResource("1_snpc2")
+theme_override_styles/pressed = ExtResource("2_mir4b")
+theme_override_styles/hover = ExtResource("3_lrtjo")
+toggle_mode = true
+action_mode = 0
+text = "Amazing Folder"
+alignment = 0
+autowrap_mode = 3
+clip_text = true

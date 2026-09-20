@@ -45,7 +45,7 @@ func _ready():
 	if dimensions == Vector3i.ZERO:
 		dimensions = project_prefs.default_object_size
 	
-	create_BB_outline()
+	create_BB_outline()	
 
 func update_mesh_chunks() -> void:
 	if edited_chunks.size() == 0:

@@ -1,28 +1,44 @@
 [gd_scene format=3 uid="uid://bsn6c51o5cnhp"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_skyq4"]
+[ext_resource type="Material" uid="uid://c72j36aimsddn" path="res://materials/UI/texture_shader.tres" id="1_adyni"]
 
-[node name="CenterContainer2" type="CenterContainer" unique_id=829094768]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adyni"]
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 12
 
-[node name="Button" type="Button" parent="." unique_id=1504842993]
-custom_minimum_size = Vector2(273, 32)
-layout_mode = 2
-alignment = 0
-clip_text = true
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cfctf"]
+bg_color = Color(1, 0, 0.8833332, 0)
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1322291936]
-layout_mode = 2
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6wms2"]
+bg_color = Color(0.7390649, 0.4959, 0.87, 0.20392157)
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer" unique_id=317914527]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ia8du"]
+bg_color = Color(0.5301, 0.736715, 0.93, 0.21568628)
+
+[node name="Button" type="PanelContainer" unique_id=2103680530]
+material = ExtResource("1_adyni")
+custom_minimum_size = Vector2(134, 90)
+offset_right = 134.0
+offset_bottom = 90.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_adyni")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=317914527]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(225, 0)
 layout_mode = 2
-text = "Shit Project!!!!"
+mouse_filter = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+text = "Shit Project!!"
 scroll_active = false
-autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=160707548]
-custom_minimum_size = Vector2(24, 24)
+[node name="Button" type="Button" parent="." unique_id=496712115]
+unique_name_in_owner = true
 layout_mode = 2
-texture = SubResource("PlaceholderTexture2D_skyq4")
-expand_mode = 1
+theme_override_styles/normal = SubResource("StyleBoxFlat_cfctf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6wms2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ia8du")
+action_mode = 0

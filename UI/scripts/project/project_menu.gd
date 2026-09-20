@@ -48,7 +48,7 @@ func fill_folders() -> void:
 		open_folder("projects")
 	
 func fill_project_list() -> void:
-	var project_vbox: VBoxContainer = get_node("%ProjectList")
+	var project_vbox: GridContainer = get_node("%ProjectList")
 	
 	var children = project_vbox.get_children()
 	for child in children:
@@ -64,18 +64,23 @@ func fill_project_list() -> void:
 		var project_button: Control = project_button_scene.instantiate()
 		var label: RichTextLabel = project_button.get_node("%RichTextLabel")
 		label.text = project_name
+		var butt: Button = project_button.get_node("%Button")
+		butt.pressed.connect(open_project.bind(projects[project_name]))
 		project_vbox.add_child(project_button)
 
 func fill_backup_list() -> void:
 	return
 
-func open_project() -> void:
-	return
+func open_project(project_path: String) -> void:
+	var save_state: SaveState = load(project_path)
+	ProjectManager.load_project(save_state)
 
 func open_folder(folder_name: String) -> void:
 	for folder in folder_vbox.get_children():
 		if folder.text != folder_name:
 			folder.set_pressed_no_signal(false)
+		else:
+			folder.set_pressed_no_signal(true)
 	current_folder = folder_name
 	fill_project_list()
 

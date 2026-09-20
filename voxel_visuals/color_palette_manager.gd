@@ -23,6 +23,7 @@ func add_new_color(palette_id: int) -> void:
 	palette.colors[id] = PaletteColor.new()
 	palette.color_order.append(id)
 	palette.colors[id].color = Color(randf(), randf(), randf())
+	palette.colors[id].palette_id = palette_id
 	palette_by_color[id] = palette.id
 	
 	## Find the lowest UV index available
@@ -53,6 +54,15 @@ func add_existing_palette(palette: VoxelColorPalette) -> void:
 	for color_id in palette.colors:
 		palette_by_color[color_id] = palette.id
 	update_color_UI()
+
+func add_palettes(palettes: Dictionary[int, VoxelColorPalette], order: Array[int]):
+	all_palettes = palettes
+	palettes_by_order = order
+	for palette_id in palettes:
+		var palette: VoxelColorPalette = palettes[palette_id]
+		for color_id in palette.colors:
+			palette_by_color[color_id] = palette_id
+	call_deferred("update_color_UI")
 
 func add_new_palette() -> void:
 	var id = randi()

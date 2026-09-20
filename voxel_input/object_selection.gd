@@ -8,7 +8,7 @@ var camera_system: CameraSystem
 var hierarchy: Hierarchy
 
 func _ready():
-	camera_system = get_parent().get_parent().get_node("%CameraSystem")
+	camera_system = get_tree().current_scene.get_node("%CameraSystem")
 	collision_system = get_node("%CollisionSystem")
 	hierarchy = get_node("%Hierarchy")
 	
@@ -21,7 +21,7 @@ func try_click() -> void:
 	for obj in hierarchy.all_objects:
 		objs[obj] = [hierarchy.all_objects[obj].position, hierarchy.all_objects[obj].dimensions]
 	
-	var click_data = get_parent().get_node("%WorldClick").get_mouse_world_pos()
+	var click_data = get_tree().current_scene.get_node("%WorldClick").get_mouse_world_pos()
 	
 	result = CollisionSystem.get_AABB_line_collisions(click_data[0], click_data[1], objs)
 	

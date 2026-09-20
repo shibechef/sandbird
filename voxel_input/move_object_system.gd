@@ -13,7 +13,7 @@ var edit_logging: EditLogging
 var previous_obj_positions: Dictionary[int, Vector3]
 
 func _ready():
-	world_click = get_parent().get_node("%WorldClick")
+	world_click = get_tree().current_scene.get_node("%WorldClick")
 	object_selection = get_node("%ObjectSelectionSystem")
 	edit_logging = get_node("%EditLogger")
 

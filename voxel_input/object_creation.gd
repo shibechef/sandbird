@@ -21,7 +21,7 @@ func get_placement() -> Vector3i:
 	if UserPreferences.object_creation_point == UserPreference.ObjectCreationPoint.origin:
 		return Vector3i.ZERO - Vector3i(dimensions / 2.0)
 	
-	var click_data = get_parent().get_node("%WorldClick").get_forwards_pos()
+	var click_data = get_tree().current_scene.get_node("%WorldClick").get_forwards_pos()
 	var dir: Vector3 = click_data[1]
 	dir *= (dimensions.x + dimensions.y + dimensions.z) / 3.0 * 1.25
 	var offset = click_data[0] - dimensions / 2.0	

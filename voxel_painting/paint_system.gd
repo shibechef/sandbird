@@ -25,13 +25,13 @@ func _ready():
 	mesh_system = get_node("%MeshSystem")
 	edit_logger = get_node("%EditLogger")
 	brush_properties_UI = get_node("%ExtendedBrushSidebarUI").get_node("%BrushProperties")
+	ui_manager = get_node("%UIManager")
 	call_deferred("late_ready")
 
 func _process(delta):
 	last_selected_time += delta
 
 func late_ready():
-	ui_manager = get_node("%UIManager")
 	ui_manager.update_brush_sidebar(brush_list.values())
 
 func try_click(hold_time: float) -> void:
@@ -39,7 +39,7 @@ func try_click(hold_time: float) -> void:
 		## No brush selected!
 		return
 	
-	var click_data: Array[Vector3] = get_parent().get_node("%WorldClick").get_mouse_world_pos()
+	var click_data: Array[Vector3] = get_tree().current_scene.get_node("%WorldClick").get_mouse_world_pos()
 	var obj: VoxelObject = object_selection.currently_selected_objects[object_selection.currently_selected_objects.keys()[0]]
 	
 	if hold_time == 0.0:
@@ -114,6 +114,12 @@ func add_new_brush():
 func add_existing_brush(brush: BaseBrush):
 	brush_list[brush.named_as] = brush
 	ui_manager.update_brush_sidebar(brush_list.values())	
+
+func add_brushes(brushes: Array[BaseBrush]):
+	for brush in brushes:
+		brush_list[brush.named_as] = brush
+	call_deferred("ui_manager.update_brush_sidebar", [brush_list.values()])
+	##ui_manager.update_brush_sidebar(brush_list.values())	
 
 func change_brush_size(change: float) -> void:
 	var brush_size: float = brush_list[current_brush].get("size")

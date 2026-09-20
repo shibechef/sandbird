@@ -24,7 +24,7 @@ func _ready():
 	color_palette_manager = get_node("%ColorPaletteManager")
 	edit_logging = get_node("%EditLogger")
 	move_obj_system = get_node("%MoveObjectSystem")
-	camera_system = ProjectManager.current_project.get_node("%CameraSystem")
+	camera_system = get_tree().current_scene.get_node("%CameraSystem")
 	reset_mouse_cursor()
 
 func _process(delta):

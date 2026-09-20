@@ -6,22 +6,15 @@
 [ext_resource type="StyleBox" uid="uid://dk85dq60j1qff" path="res://UI/data/stylebox/folder_tab/unselected_folder_tab.tres" id="3_3yu4r"]
 [ext_resource type="Script" uid="uid://uk5474a1gemp" path="res://UI/scripts/draggable_UI.gd" id="3_gbe7r"]
 [ext_resource type="StyleBox" uid="uid://c5vbs1drh781k" path="res://UI/data/stylebox/folder_tab/selected_folder_tab.tres" id="4_1qlfa"]
+[ext_resource type="StyleBox" uid="uid://cxw4tio3wdsot" path="res://UI/data/stylebox/basic_button/unselected.tres" id="4_ogxmn"]
 [ext_resource type="Texture2D" uid="uid://bfho8gl8e7uxa" path="res://UI/sprites/freesvg_add.png" id="4_qseyw"]
+[ext_resource type="StyleBox" uid="uid://bntxybdvp6pow" path="res://UI/data/stylebox/basic_button/selected.tres" id="5_a7w8q"]
 [ext_resource type="StyleBox" uid="uid://dgy4yqy0vp12j" path="res://UI/data/stylebox/folder_tab/hovered_folder_tab.tres" id="5_j80du"]
 [ext_resource type="Texture2D" uid="uid://ceguumykuutmv" path="res://UI/sprites/freesvg_folder.png" id="5_skyq4"]
+[ext_resource type="StyleBox" uid="uid://56ppm5olcsp0" path="res://UI/data/stylebox/basic_button/hovered.tres" id="6_y7rds"]
 [ext_resource type="Texture2D" uid="uid://du02gvdvt52ru" path="res://UI/sprites/freesvg_close.png" id="7_j80du"]
 [ext_resource type="PackedScene" uid="uid://bs24bhjp8mwc1" path="res://UI/scenes/project/project_folder_button.tscn" id="9_vppu3"]
 [ext_resource type="PackedScene" uid="uid://bsn6c51o5cnhp" path="res://UI/scenes/project/project_list_button.tscn" id="10_ltbq0"]
-
-[sub_resource type="Gradient" id="Gradient_qseyw"]
-offsets = PackedFloat32Array(0)
-colors = PackedColorArray(0.1288298, 0.1288298, 0.12882975, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_skyq4"]
-gradient = SubResource("Gradient_qseyw")
-width = 1
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_skyq4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1qlfa"]
 bg_color = Color(0.11415806, 0.11415812, 0.11415801, 1)
@@ -33,6 +26,14 @@ expand_margin_left = 2.0
 expand_margin_top = 2.0
 expand_margin_right = 2.0
 expand_margin_bottom = 2.0
+
+[sub_resource type="Gradient" id="Gradient_qseyw"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.1288298, 0.1288298, 0.12882975, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_skyq4"]
+gradient = SubResource("Gradient_qseyw")
+width = 1
 
 [node name="ProjectMenu" type="Control" unique_id=228793466]
 layout_mode = 3
@@ -97,14 +98,15 @@ theme_override_constants/separation = 8
 [node name="CenterContainer" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1185065279]
 layout_mode = 2
 
-[node name="AddFolderButton" type="TextureButton" parent="Row1/HBoxContainer4/MarginContainer/VBoxContainer/HBoxContainer/CenterContainer" unique_id=140599645]
+[node name="AddFolderButton" type="Button" parent="Row1/HBoxContainer4/MarginContainer/VBoxContainer/HBoxContainer/CenterContainer" unique_id=1259116148]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(69, 32)
 layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = SubResource("GradientTexture1D_skyq4")
-ignore_texture_size = true
-stretch_mode = 0
+theme_override_styles/normal = ExtResource("4_ogxmn")
+theme_override_styles/pressed = ExtResource("5_a7w8q")
+theme_override_styles/hover = ExtResource("6_y7rds")
+action_mode = 0
 
 [node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer/VBoxContainer/HBoxContainer/CenterContainer" unique_id=1358170925]
 z_index = 1
@@ -127,6 +129,7 @@ theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = ExtResource("3_3yu4r")
 theme_override_styles/pressed = ExtResource("4_1qlfa")
 theme_override_styles/hover = ExtResource("5_j80du")
+action_mode = 0
 
 [node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer/VBoxContainer/HBoxContainer/CenterContainer2" unique_id=1741908636]
 z_index = 1
@@ -219,14 +222,20 @@ theme_override_constants/margin_right = 15
 [node name="Button" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/MarginContainer" unique_id=477477455]
 custom_minimum_size = Vector2(273, 32)
 layout_mode = 2
+theme_override_styles/normal = ExtResource("4_ogxmn")
+theme_override_styles/pressed = ExtResource("5_a7w8q")
+theme_override_styles/hover = ExtResource("6_y7rds")
+action_mode = 0
 alignment = 0
 clip_text = true
 
 [node name="CenterContainer" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/MarginContainer" unique_id=426294800]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/MarginContainer/CenterContainer" unique_id=1805698665]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/MarginContainer/CenterContainer/HBoxContainer" unique_id=336829100]
 custom_minimum_size = Vector2(225, 0)
@@ -247,113 +256,24 @@ expand_mode = 1
 custom_minimum_size = Vector2(0, 135)
 layout_mode = 2
 
-[node name="ProjectList" type="VBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer" unique_id=1578829674]
+[node name="ProjectList" type="GridContainer" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer" unique_id=220953902]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 1
+theme_override_constants/h_separation = 5
+theme_override_constants/v_separation = 5
+columns = 2
 
-[node name="CenterContainer2" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList" unique_id=829094768 instance=ExtResource("10_ltbq0")]
+[node name="Button" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList" unique_id=443175611 instance=ExtResource("10_ltbq0")]
 layout_mode = 2
 
-[node name="CenterContainer3" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList" unique_id=142670877]
+[node name="Button2" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList" unique_id=541203145 instance=ExtResource("10_ltbq0")]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer3" unique_id=25588960]
-custom_minimum_size = Vector2(273, 32)
-layout_mode = 2
-alignment = 0
-clip_text = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer3" unique_id=790835922]
+[node name="Button3" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList" unique_id=283114207 instance=ExtResource("10_ltbq0")]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer3/HBoxContainer" unique_id=2001176976]
-custom_minimum_size = Vector2(225, 0)
+[node name="Button4" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList" unique_id=1732006948 instance=ExtResource("10_ltbq0")]
 layout_mode = 2
-text = "Shit Project!!!!"
-scroll_active = false
-autowrap_mode = 0
-
-[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer3/HBoxContainer" unique_id=1594621248]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = SubResource("PlaceholderTexture2D_skyq4")
-expand_mode = 1
-
-[node name="CenterContainer4" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList" unique_id=1457841817]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer4" unique_id=1690840650]
-custom_minimum_size = Vector2(273, 32)
-layout_mode = 2
-alignment = 0
-clip_text = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer4" unique_id=1807853468]
-layout_mode = 2
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer4/HBoxContainer" unique_id=1239824854]
-custom_minimum_size = Vector2(225, 0)
-layout_mode = 2
-text = "Shit Project!!!!"
-scroll_active = false
-autowrap_mode = 0
-
-[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer4/HBoxContainer" unique_id=270642430]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = SubResource("PlaceholderTexture2D_skyq4")
-expand_mode = 1
-
-[node name="CenterContainer5" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList" unique_id=790168770]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer5" unique_id=201702177]
-custom_minimum_size = Vector2(273, 32)
-layout_mode = 2
-alignment = 0
-clip_text = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer5" unique_id=63801113]
-layout_mode = 2
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer5/HBoxContainer" unique_id=1111259090]
-custom_minimum_size = Vector2(225, 0)
-layout_mode = 2
-text = "Shit Project!!!!"
-scroll_active = false
-autowrap_mode = 0
-
-[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer5/HBoxContainer" unique_id=933185586]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = SubResource("PlaceholderTexture2D_skyq4")
-expand_mode = 1
-
-[node name="CenterContainer6" type="CenterContainer" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList" unique_id=2113181917]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer6" unique_id=1203692216]
-custom_minimum_size = Vector2(273, 32)
-layout_mode = 2
-alignment = 0
-clip_text = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer6" unique_id=1228248455]
-layout_mode = 2
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer6/HBoxContainer" unique_id=1215152803]
-custom_minimum_size = Vector2(225, 0)
-layout_mode = 2
-text = "Shit Project!!!!"
-scroll_active = false
-autowrap_mode = 0
-
-[node name="TextureRect" type="TextureRect" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/ScrollContainer/ProjectList/CenterContainer6/HBoxContainer" unique_id=10443718]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = SubResource("PlaceholderTexture2D_skyq4")
-expand_mode = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Row1" unique_id=987464896]
 custom_minimum_size = Vector2(0, 32)
@@ -396,16 +316,19 @@ theme_override_constants/separation = 4
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
+action_mode = 0
 text = "Save Project"
 
 [node name="UpdateThumbnailButton" type="Button" parent="Row1/HBoxContainer2" unique_id=1622228059]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
+action_mode = 0
 text = "Update Thumbnail"
 
 [node name="Button" type="Button" parent="Row1/HBoxContainer2" unique_id=1311655313]
 layout_mode = 2
+action_mode = 0
 text = "Add Backup"
 
 [node name="CenterContainer" type="CenterContainer" parent="Row1/HBoxContainer2" unique_id=1926118114]
@@ -414,6 +337,7 @@ layout_mode = 2
 [node name="Button4" type="TextureButton" parent="Row1/HBoxContainer2/CenterContainer" unique_id=1364680873]
 custom_minimum_size = Vector2(110, 32)
 layout_mode = 2
+action_mode = 0
 texture_normal = SubResource("GradientTexture1D_skyq4")
 ignore_texture_size = true
 stretch_mode = 0

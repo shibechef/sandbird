@@ -5,6 +5,9 @@ class_name UserPreference
 @export var default_export_size: float = .03125
 @export var object_creation_point: ObjectCreationPoint = ObjectCreationPoint.y_zero_cursor
 
+## just for testing
+@export var open_last_project = true
+
 ## So higher = more time for each reconstruction but less draw calls which has trade offs maybe.
 @export var mesh_chunk_size: int = 24
 

@@ -118,8 +118,10 @@ func add_existing_brush(brush: BaseBrush):
 func add_brushes(brushes: Array[BaseBrush]):
 	for brush in brushes:
 		brush_list[brush.named_as] = brush
-	call_deferred("ui_manager.update_brush_sidebar", [brush_list.values()])
-	##ui_manager.update_brush_sidebar(brush_list.values())	
+	call_deferred("update_brush_sidebar")
+
+func update_brush_sidebar() -> void:
+	ui_manager.update_brush_sidebar(brush_list.values())
 
 func change_brush_size(change: float) -> void:
 	var brush_size: float = brush_list[current_brush].get("size")

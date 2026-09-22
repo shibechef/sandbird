@@ -25,7 +25,7 @@ func update_folder_visuals() -> void:
 	var brushes = FileReader.get_brushes()
 	for brush_name in brushes:
 		var folder_name: String = brushes[brush_name].get_base_dir().get_file()
-		if v_box.get_node(folder_name) == null:
+		if !v_box.has_node(folder_name):
 			var name_label := Label.new()
 			name_label.use_parent_material = true
 			name_label.text = folder_name

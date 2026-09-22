@@ -16,6 +16,8 @@ func save_project(file_path: String) -> void:
 		voxel_obj_data.position = obj.global_position
 		save_state.objects.append(voxel_obj_data)
 	
+	save_state.save_time = Time.get_datetime_dict_from_system()
+	
 	save_state.brushes = current_project.get_node("%PaintSystem").brush_list.duplicate(true)
 	
 	var palette_manager: ColorPaletteManager = current_project.get_node("%ColorPaletteManager")
@@ -42,7 +44,8 @@ func load_project(save_state: SaveState) -> void:
 	palette_manager.add_palettes(save_state.palettes, save_state.palette_order)
 	
 	var program = get_tree().current_scene
-	program.get_node("VoxelProject").name = "stupid"
-	program.get_node("stupid").queue_free()
+	if program.has_node("VoxelProject"):
+		program.get_node("VoxelProject").name = "stupid"
+		program.get_node("stupid").queue_free()
 	program.add_child(project)
 	project.name = "VoxelProject"

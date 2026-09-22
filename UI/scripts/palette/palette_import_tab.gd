@@ -25,7 +25,7 @@ func update_folder_visuals() -> void:
 	var palettes = FileReader.get_palettes()
 	for palette_name in palettes:
 		var folder_name: String = palettes[palette_name].get_base_dir().get_file()
-		if v_box.get_node(folder_name) == null:
+		if !v_box.has_node(folder_name):
 			var name_label := Label.new()
 			name_label.use_parent_material = true
 			name_label.text = folder_name

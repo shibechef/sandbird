@@ -59,12 +59,12 @@ func get_palettes() -> Dictionary[String, String]:
 			
 	return valid_palettes
 
-func get_projects(folder: String = "") -> Dictionary[String, String]:
+func get_projects(folder: String = "", all_projects: bool = false) -> Dictionary[String, String]:
 	var dir := DirAccess.open("res://user_data/")
 	if !dir.dir_exists("projects"):
 		dir.make_dir("projects")
 		
-	var folder_contents: Array[String] = get_folder_contents(project_path + "/" + folder, "tres", false)
+	var folder_contents: Array[String] = get_folder_contents(project_path + "/" + folder, "tres", all_projects)
 	var valid_projects: Dictionary[String, String]
 	
 	for file_path in folder_contents:

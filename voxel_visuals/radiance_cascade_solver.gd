@@ -29,7 +29,7 @@ var initial_rays: int = 6
 var initial_ray_length: int = 6
 
 func _ready():
-	#test_shit_math()
+	test_shit_math()
 	hierarchy = get_node("%Hierarchy")
 	palette_manager = get_node("%ColorPaletteManager")
 	
@@ -68,7 +68,7 @@ func test_shit_math():
 				int(float(text_index % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size) / size_ratio)
 			)
 			
-			print(voxel, " ", reconstructed_pos, " ", index, " ", invocation, " ", current_rays)
+			#print(voxel, " ", reconstructed_pos, " ", index, " ", invocation, " ", current_rays)
 			
 			var ray_index: int = text_index % current_rays
 			var face: int = floori(float(ray_index) / float(current_rays))
@@ -116,7 +116,7 @@ func compute_radiance_texture(chunks: int) -> void:
 	radiance_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	radiance_uniform.add_id(radiance_text_RID)
 
-	vox_bytes = grid_to_vec4_array(hierarchy.all_objects.values()[3])
+	vox_bytes = grid_to_vec4_array(hierarchy.all_objects.values()[0])
 	var bytes: PackedByteArray = vox_bytes.to_byte_array() 
 	rd.texture_update(vox_text_RID, 0, bytes)
 	

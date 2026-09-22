@@ -97,7 +97,7 @@ func get_only_changed(voxels: Dictionary[Vector3i, VoxelData]) -> Dictionary[Vec
 	return final_voxels
 
 func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
-	for pos in voxels:			
+	for pos in voxels:
 		if voxels[pos] == null and voxel_grid.has(pos):
 			voxel_grid.erase(pos)
 		

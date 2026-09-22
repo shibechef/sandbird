@@ -72,7 +72,7 @@ void fragment() {
 	
 	// sample the actual texture for it's color
 	float palette_text_size = float(textureSize(color_palette_tex, 0).x);
-	ALBEDO = texture(color_palette_tex, vec2(UV.x / palette_text_size, 0.0)).rgb;
+	//ALBEDO = texture(color_palette_tex, vec2(UV.x / palette_text_size, 0.0)).rgb;
 	
 	ALBEDO += total / 6.0;
 }

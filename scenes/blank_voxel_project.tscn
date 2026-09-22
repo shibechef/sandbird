@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://cj0jdwoskk87h" path="res://voxel_input/voxel_project.gd" id="1_sb2wc"]
 [ext_resource type="Script" uid="uid://81a2nxrx8cf5" path="res://user/project_preference.gd" id="2_dvsgh"]
 [ext_resource type="Script" uid="uid://pe00bjvkjlbp" path="res://voxel_visuals/mesh_system.gd" id="3_g3mpy"]
-[ext_resource type="Script" uid="uid://cmhyx88dt02dx" path="res://voxel_input/voxel_object.gd" id="4_dvsgh"]
 [ext_resource type="Script" uid="uid://cq72t00uw47bq" path="res://voxel_input/collision_system.gd" id="4_o46e3"]
 [ext_resource type="Script" uid="uid://cw07yos5ueqli" path="res://voxel_painting/paint_system.gd" id="5_5ubjp"]
 [ext_resource type="Script" uid="uid://cm1ndittglsvb" path="res://input/input_manager.gd" id="5_55qs4"]
@@ -48,23 +47,6 @@ metadata/_custom_type_script = "uid://cj0jdwoskk87h"
 unique_name_in_owner = true
 script = ExtResource("7_wapjm")
 metadata/_custom_type_script = "uid://b1jlrdrtghd7"
-
-[node name="Node3D2" type="Node3D" parent="Hierarchy" unique_id=1189882118]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -97.41853)
-script = ExtResource("4_dvsgh")
-dimensions = Vector3i(16, 8, 16)
-
-[node name="Node3D3" type="Node3D" parent="Hierarchy" unique_id=1594163214]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
-script = ExtResource("4_dvsgh")
-dimensions = Vector3i(35, 4, 1)
-
-[node name="Node3D" type="Node3D" parent="Hierarchy" unique_id=1238180466]
-script = ExtResource("4_dvsgh")
-
-[node name="Node3D4" type="Node3D" parent="Hierarchy" unique_id=240919997]
-script = ExtResource("4_dvsgh")
-dimensions = Vector3i(96, 96, 96)
 
 [node name="ProjectPreferences" type="Node" parent="." unique_id=779933586]
 unique_name_in_owner = true

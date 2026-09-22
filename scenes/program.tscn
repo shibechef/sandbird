@@ -1,17 +1,18 @@
 [gd_scene format=3 uid="uid://clulcc4a4dbod"]
 
-[ext_resource type="PackedScene" uid="uid://klgkftems2xb" path="res://scenes/blank_voxel_project.tscn" id="1_mxm13"]
+[ext_resource type="Script" uid="uid://b7boofwutx4tm" path="res://user/program.gd" id="1_4iife"]
 [ext_resource type="Script" uid="uid://dw1s15v6e33gx" path="res://input/free_cam.gd" id="2_5h2ur"]
 [ext_resource type="Script" uid="uid://bfhr0cglnjbyq" path="res://input/camera_system.gd" id="2_h81p0"]
 [ext_resource type="Script" uid="uid://dqviapsa3ecm1" path="res://input/pivot_cam.gd" id="3_h81p0"]
 [ext_resource type="Script" uid="uid://kbvuo850mvoe" path="res://input/world_click.gd" id="5_xnlas"]
 
-[node name="Program" type="Node3D" unique_id=1116754525]
-
-[node name="VoxelProject" parent="." unique_id=690339630 instance=ExtResource("1_mxm13")]
+[node name="Program" type="Node" unique_id=1401604535]
+script = ExtResource("1_4iife")
+metadata/_custom_type_script = "uid://b7boofwutx4tm"
 
 [node name="CameraSystem" type="Camera3D" parent="." unique_id=937751454]
 unique_name_in_owner = true
+current = true
 script = ExtResource("2_h81p0")
 
 [node name="FreeCam" type="Node" parent="CameraSystem" unique_id=1526513214]

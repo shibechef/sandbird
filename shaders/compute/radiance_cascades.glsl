@@ -6,7 +6,6 @@ layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 layout(set = 0, binding = 0, rgba32f) uniform restrict image2DArray voxel_data;
 layout(set = 1, binding = 0, rgba32f) uniform restrict image2DArray cascade_data;
 
-
 layout(push_constant, std430) uniform Params {
 	int starting_rays;
 	int starting_length;
@@ -27,7 +26,7 @@ ivec3 worldPosToVoxelTextCoords(ivec3 world_pos, int layer, int face) {
 
 vec3 rayTextToVoxelCoords(ivec3 text_pos) {
     int cascade_index = int(gl_GlobalInvocationID.z);
-    int rays = params.starting_rays << (cascade_index * 3);
+    int rays = params.starting_rays << (cascade_index * 2);
     float size_ratio = float(1 << cascade_index);
     float rays_f = float(rays);
     int chunk_size = params.vox_chunk_size;
@@ -46,7 +45,8 @@ vec4 sampleWorld(vec3 world_pos) {
     world_pos.x = clamp(world_pos.x, 0, params.vox_chunk_size);
     world_pos.y = clamp(world_pos.y, 0, params.vox_chunk_size);
     world_pos.z = clamp(world_pos.z, 0, params.vox_chunk_size);
-    ivec3 sample_pos = worldPosToVoxelTextCoords(ivec3(world_pos), 0, 0);
+    
+    ivec3 sample_pos = worldPosToVoxelTextCoords(ivec3(floor(world_pos)), 0, 0);
     vec4 col = imageLoad(voxel_data, sample_pos);
     
     return col;
@@ -67,8 +67,8 @@ vec3 sample_directional_lights(vec3 world_pos) {
 }
 
 vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
-    int rays = params.starting_rays << (cascade_index * 3);
-    ivec3 dir = sign(ivec3(offset));
+    int rays = params.starting_rays << (cascade_index * 2);
+    offset = sign(ivec3(offset));
 
     vec3 radiance = vec3(0.0);
     float transmittance = 1.0;
@@ -77,11 +77,11 @@ vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
     int ray_end_length = 1 + sign(cascade_index + 1) * (params.starting_length << cascade_index);
 
     for (int i = ray_start_length; i < ray_end_length; i++){
-        vec3 sample_pos = ray_start + dir * (i + 1);
+        vec3 sample_pos = ray_start + offset * float(i);
         vec4 world_data = sampleWorld(sample_pos);
 
         float current_transmittance = max(transmittance, 0.0);
-        radiance += sample_directional_lights(sample_pos) * current_transmittance;
+        //radiance += sample_directional_lights(sample_pos) * current_transmittance;
         radiance += world_data.rgb * current_transmittance;
         // >1 alpha used for emission
         transmittance -= min(world_data.a, 1.0);
@@ -102,7 +102,7 @@ void main() {
     ivec3 radiance_text_size = imageSize(cascade_data);
 
     int cascade_index = int(gl_GlobalInvocationID.z);
-    int rays = params.starting_rays << (cascade_index * 3);
+    int rays = params.starting_rays << (cascade_index * 2);
 
     int text_index = int(gl_GlobalInvocationID.x) + int(gl_GlobalInvocationID.y) * radiance_text_size.x;
     int ray_index = text_index % rays;
@@ -111,25 +111,22 @@ void main() {
     vec3 offset = vec3(0.0);
     
     // mapping ray direction to points on a subdivided cube
-    int face = int(floor(float(ray_index) / float(rays)));
-    float rays_per_face_axis = float(params.starting_rays << cascade_index) / 6.0;
-    float ray_axis_1 = float(ray_index % rays) / rays_per_face_axis;
-    float ray_axis_2 = float(ray_index) / float(rays) / rays_per_face_axis;
+    int face = int(floor(6.0 * float(ray_index) / float(rays)));
+    float rays_per_face_axis = float(rays) / 6.0;
+
+    float face_offset = 0.5 / rays_per_face_axis;
+    float ray_axis_1 = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis);
+    float ray_axis_2 = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis);
     
-    switch (face){
-        case 0:
-            offset = vec3(1.0, ray_axis_1, ray_axis_2);
-        case 1:
-            offset = vec3(-1.0, ray_axis_1, ray_axis_2);
-        case 2:
-            offset = vec3(ray_axis_1, 1.0, ray_axis_2);
-        case 3:
-            offset = vec3(ray_axis_1, -1.0, ray_axis_2);
-        case 4:
-            offset = vec3(ray_axis_1, ray_axis_2, 1.0);
-        case 5:
-            offset = vec3(ray_axis_1, ray_axis_2, -1.0);
-    }
+    ray_axis_1 = 0.0;
+    ray_axis_2 = 0.0;
+    
+    offset = face == 0 ? vec3(1.0, ray_axis_1, ray_axis_2) : offset;
+    offset = face == 1 ? vec3(-1.0, ray_axis_1, ray_axis_2) : offset;
+    offset = face == 2 ? vec3(ray_axis_1, 1.0, ray_axis_2) : offset;
+    offset = face == 3 ? vec3(ray_axis_1, -1.0, ray_axis_2) : offset;
+    offset = face == 4 ? vec3(ray_axis_1, ray_axis_2, 1.0) : offset;
+    offset = face == 5 ? vec3(ray_axis_1, ray_axis_2, -1.0) : offset;
 
     // spherically mapping the cube
     offset = normalize(offset);

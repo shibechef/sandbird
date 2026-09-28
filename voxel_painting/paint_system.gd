@@ -124,6 +124,9 @@ func update_brush_sidebar() -> void:
 	ui_manager.update_brush_sidebar(brush_list.values())
 
 func change_brush_size(change: float) -> void:
+	if !brush_list.has(current_brush):
+		return
+		
 	var brush_size: float = brush_list[current_brush].get("size")
 	if brush_size == null:
 		return
@@ -133,6 +136,9 @@ func change_brush_size(change: float) -> void:
 	brush_properties_UI.fill_properties(brush_list[current_brush])
 
 func toggle_brush_eraser() -> void:
+	if !brush_list.has(current_brush):
+		return
+	
 	var toggled = brush_list[current_brush].get("erase")
 	if toggled == null:
 		return

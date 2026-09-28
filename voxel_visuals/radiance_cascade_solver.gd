@@ -34,8 +34,9 @@ func _ready():
 	palette_manager = get_node("%ColorPaletteManager")
 	
 	var chunks: int = 1
-	setup_compute_materials(chunks)
+	rd = RenderingServer.get_rendering_device()
 	match_compute_material_buffers(chunks)
+	setup_compute_materials(chunks)
 	compute_radiance_texture(chunks)
 
 func test_shit_math():
@@ -46,11 +47,13 @@ func test_shit_math():
 	Vector3i(71, 15, 50)]
 		
 	for n in cascades:
-		## in a 3 dimensional space, halving the resolution in each direction 
-		## means you need to 8x the rays per voxel to cancel out the 2x2x2 reduction
-		## to maintain the same sized texture
-		var size_ratio: float = float(1 << 0)
-		var current_rays: int = initial_rays << (n * 3)
+		var size_ratio: float = pow(2.0, float(n) * 2.0 / 3.0)
+		## higher ray count results in proportionally lower sample points to maintain text size
+		## 6 * 2^(3*cascade) makes simple cube to sphere mapping impossible
+		## 6 * 2^(6*cascade) is too big of a leap per cascade but allows the simple mapping
+		## 6 * 2^(2*cascade) is a small leap, allows sphere mapping, 
+		## but the sample points are not spaced by a whole number in all 3 directions like the others
+		var current_rays: int = initial_rays << (n * 2)
 		
 		for voxel in voxels_tested:
 			var index: int = voxel.x + voxel.y * chunk_size + voxel.z * chunk_size * chunk_size
@@ -71,15 +74,16 @@ func test_shit_math():
 			#print(voxel, " ", reconstructed_pos, " ", index, " ", invocation, " ", current_rays)
 			
 			var ray_index: int = text_index % current_rays
-			var face: int = floori(float(ray_index) / float(current_rays))
-			var rays_per_face_axis: float = float(initial_rays << n) / 6.0
-			var ray_axis_1: float = float(ray_index % current_rays) / rays_per_face_axis
-			var ray_axis_2: float = float(ray_index) / float(current_rays)
+			var face: int = floori(6 * float(ray_index) / float(current_rays))
+			var rays_per_face_axis: float = float(current_rays) / 6.0
+			var offset: float = 0.5 / rays_per_face_axis
+			var ray_axis_1: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis)
+			var ray_axis_2: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis)
 			
-			print(face, " ", ray_axis_1, " ", ray_axis_2)
+			print(ray_index, " ", rays_per_face_axis)
+			print("JOHN ", face, " ", ray_axis_1, " ", ray_axis_2)
 
 func setup_compute_materials(chunks: int) -> void:
-	rd = RenderingServer.get_rendering_device()
 	shader_spirv = compute_shader.get_spirv()
 	shader_RID = rd.shader_create_from_spirv(shader_spirv)
 	
@@ -87,13 +91,13 @@ func setup_compute_materials(chunks: int) -> void:
 	format_data.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
 	format_data.width = text_size
 	format_data.height = text_size
-	format_data.array_layers = chunks
+	format_data.array_layers = chunks * cascades
 	format_data.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
 	format_data.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
 	
-	vox_text_RID = rd.texture_create(format_data,RDTextureView.new())
+	vox_text_RID = rd.texture_create(format_data, RDTextureView.new())
 	voxel_uniform = RDUniform.new()	
 	voxel_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	voxel_uniform.add_id(vox_text_RID)
@@ -142,6 +146,11 @@ func compute_radiance_texture(chunks: int) -> void:
 	rd.compute_list_end()
 	
 	rd.free_rid(uniform_set_0_RID)
+	
+	#var col_arr: PackedColorArray = rd.texture_get_data(radiance_text_RID, 0).to_color_array()
+	#for col in col_arr:
+		#if !col.is_equal_approx(Color(0.0, 0.0, 0.0, 1.0)):
+			#print(col)
 
 ## skip moving data through CPU from compute to material by using buffer
 ## https://github.com/godotengine/godot-proposals/issues/6989#issuecomment-2770544670
@@ -157,11 +166,15 @@ func match_compute_material_buffers(chunks: int) -> void:
 	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT + \
 	RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
 	
-	radiance_text_RID = rd.texture_create(format_data,RDTextureView.new())
+	radiance_text_RID = rd.texture_create(format_data, RDTextureView.new())
 	
-	material.set_shader_parameter("cascade_text_array", output_text)
-	var mat: Texture2DArrayRD = material.get_shader_parameter("cascade_text_array")
-	mat.texture_rd_rid = radiance_text_RID
+	var text_arr := Texture2DArrayRD.new()
+	text_arr.texture_rd_rid = radiance_text_RID
+	RenderingServer.global_shader_parameter_set("cascade_text_array", text_arr)
+	#var mat: Texture2DArrayRD = RenderingServer.global_shader_parameter_get("cascade_text_array")
+	#material.set_shader_parameter("cascade_text_array", output_text)
+	#var mat: Texture2DArrayRD = material.get_shader_parameter("cascade_text_array")
+	
 
 func grid_to_vec4_array(voxel_object: VoxelObject) -> PackedVector4Array:
 	## quicker to simply append empty arrays 

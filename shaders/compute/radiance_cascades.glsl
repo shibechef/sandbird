@@ -27,7 +27,7 @@ ivec3 worldPosToVoxelTextCoords(ivec3 world_pos, int layer, int face) {
 vec3 rayTextToVoxelCoords(ivec3 text_pos) {
     int cascade_index = int(gl_GlobalInvocationID.z);
     int rays = params.starting_rays << (cascade_index * 2);
-    float size_ratio = float(1 << cascade_index);
+    float size_ratio = pow(2.0, float(cascade_index * 2.0 / 3.0));
     float rays_f = float(rays);
     int chunk_size = params.vox_chunk_size;
 
@@ -35,10 +35,11 @@ vec3 rayTextToVoxelCoords(ivec3 text_pos) {
     int text_index = text_pos.x + text_pos.y * radiance_text_size.x;
     text_index = int(float(text_index) / 6.0);
 
-    int x = int(float(text_index % chunk_size) / size_ratio);
-    int y = int(float(text_index % (chunk_size * chunk_size)) / float(chunk_size) / size_ratio);
-    int z = int(float(text_index % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size) / size_ratio);
-    return vec3(x, y, z);
+    vec3 offset = vec3(0.5 / float(chunk_size));
+    int x = int(float(text_index % chunk_size));
+    int y = int(float(text_index % (chunk_size * chunk_size)) / float(chunk_size));
+    int z = int(float(text_index % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size));
+    return vec3(x, y, z) + offset;
 }
 
 vec4 sampleWorld(vec3 world_pos) {
@@ -68,14 +69,13 @@ vec3 sample_directional_lights(vec3 world_pos) {
 
 vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
     int rays = params.starting_rays << (cascade_index * 2);
-    offset = sign(ivec3(offset));
 
     vec3 radiance = vec3(0.0);
     float transmittance = 1.0;
 
-    int ray_start_length = 1 + sign(cascade_index) * (params.starting_length << (cascade_index - 1));
-    int ray_end_length = 1 + sign(cascade_index + 1) * (params.starting_length << cascade_index);
-
+    int ray_start_length = 1 + int(sign(cascade_index)) * (params.starting_length << (cascade_index - 1));
+    int ray_end_length = 1 + (params.starting_length << cascade_index);
+    
     for (int i = ray_start_length; i < ray_end_length; i++){
         vec3 sample_pos = ray_start + offset * float(i);
         vec4 world_data = sampleWorld(sample_pos);
@@ -117,10 +117,7 @@ void main() {
     float face_offset = 0.5 / rays_per_face_axis;
     float ray_axis_1 = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis);
     float ray_axis_2 = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis);
-    
-    ray_axis_1 = 0.0;
-    ray_axis_2 = 0.0;
-    
+        
     offset = face == 0 ? vec3(1.0, ray_axis_1, ray_axis_2) : offset;
     offset = face == 1 ? vec3(-1.0, ray_axis_1, ray_axis_2) : offset;
     offset = face == 2 ? vec3(ray_axis_1, 1.0, ray_axis_2) : offset;
@@ -131,7 +128,7 @@ void main() {
     // spherically mapping the cube
     offset = normalize(offset);
 
-    vec4 col = intersectRay(sample_pos, offset, 0);
+    vec4 col = intersectRay(sample_pos, offset, cascade_index);
 
     imageStore(cascade_data, ivec3(gl_GlobalInvocationID), col);
 }

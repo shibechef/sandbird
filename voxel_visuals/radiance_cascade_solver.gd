@@ -29,7 +29,7 @@ var initial_rays: int = 6
 var initial_ray_length: int = 6
 
 func _ready():
-	test_shit_math()
+	#test_shit_math()
 	hierarchy = get_node("%Hierarchy")
 	palette_manager = get_node("%ColorPaletteManager")
 	
@@ -65,10 +65,10 @@ func test_shit_math():
 			## reconstruct voxel pos from invocation
 			var text_index: int = (invocation.x + invocation.y * text_size)
 			text_index = int(float(text_index) / float(initial_rays))
-			var reconstructed_pos: Vector3i = Vector3i(
-				int(float(text_index % chunk_size) / size_ratio),
-				int(float(text_index % (chunk_size * chunk_size)) / float(chunk_size) / size_ratio),
-				int(float(text_index % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size) / size_ratio)
+			var reconstructed_pos: Vector3 = Vector3(
+				float(text_index % chunk_size),
+				float(text_index % (chunk_size * chunk_size)) / float(chunk_size),
+				float(text_index % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size)
 			)
 			
 			#print(voxel, " ", reconstructed_pos, " ", index, " ", invocation, " ", current_rays)
@@ -80,8 +80,7 @@ func test_shit_math():
 			var ray_axis_1: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis)
 			var ray_axis_2: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis)
 			
-			print(ray_index, " ", rays_per_face_axis)
-			print("JOHN ", face, " ", ray_axis_1, " ", ray_axis_2)
+			print(voxel, " ", reconstructed_pos, " ", size_ratio)
 
 func setup_compute_materials(chunks: int) -> void:
 	shader_spirv = compute_shader.get_spirv()
@@ -148,6 +147,7 @@ func compute_radiance_texture(chunks: int) -> void:
 	rd.free_rid(uniform_set_0_RID)
 	
 	#var col_arr: PackedColorArray = rd.texture_get_data(radiance_text_RID, 0).to_color_array()
+
 	#for col in col_arr:
 		#if !col.is_equal_approx(Color(0.0, 0.0, 0.0, 1.0)):
 			#print(col)

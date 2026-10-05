@@ -10,6 +10,7 @@ layout(push_constant, std430) uniform Params {
 	int starting_rays;
 	int starting_length;
     int vox_chunk_size;
+    int cascade_index;
 } params;
 
 ivec3 worldPosToVoxelTextCoords(ivec3 world_pos, int layer, int face) {
@@ -31,9 +32,9 @@ vec3 rayTextToVoxelCoords(ivec3 text_pos) {
     ivec3 radiance_text_size = imageSize(cascade_data);
     int voxel_index = text_pos.x + text_pos.y * radiance_text_size.x;
     voxel_index = int(floor(float(voxel_index) / 6.0));
-    voxel_index = int(float(voxel_index / 4.0)) * 4;
+    //voxel_index = int(float(voxel_index / 4.0)) * 4;
 
-    int probes_per_axis = 96;//params.vox_chunk_size << 2 * int(floor(float(cascade_index) / 3.0));
+    //int probes_per_axis = params.vox_chunk_size << 2 * int(floor(float(cascade_index) / 3.0));
 
     // as the 3 axes cannot be uniformly shrunk, it goes 96x96x96, 48x96x48, 48x24x48, 24x24x24 etc
     vec3 probe_shrinkage = vec3(
@@ -41,15 +42,13 @@ vec3 rayTextToVoxelCoords(ivec3 text_pos) {
         cascade_index % 3 == 2 ? 4.0 : 1.0,
         cascade_index % 3 == 0 ? 1.0 : 2.0
     );    
-
-    int ya = cascade_index % 3 == 2 ? 2 : 1;
     
     vec3 center = vec3(0.5 / float(params.vox_chunk_size));
     float x = float(voxel_index % params.vox_chunk_size);
     float y = float(voxel_index % (params.vox_chunk_size * params.vox_chunk_size)) / float(params.vox_chunk_size);
     float z = float(voxel_index % (params.vox_chunk_size * params.vox_chunk_size * params.vox_chunk_size)) / float(params.vox_chunk_size * params.vox_chunk_size);
 
-    return vec3(x, y, z) / probe_shrinkage;
+    return vec3(vec3(x, y, z) + center) / probe_shrinkage;
 }
 
 vec4 sampleWorld(vec3 world_pos) {
@@ -140,6 +139,8 @@ void main() {
 
     vec4 col = intersectRay(sample_pos, offset, cascade_index);
     col.rgb = sample_pos / 96.0;
+
+    vec4 colero = imageLoad(cascade_data, ivec3(gl_GlobalInvocationID)) + vec4(.2) * float(params.cascade_index);
 
     imageStore(cascade_data, ivec3(gl_GlobalInvocationID), col);
 }

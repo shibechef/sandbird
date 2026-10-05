@@ -48,26 +48,12 @@ void fragment() {
 	vec2 invocation_pos = vec2(float((index + dir_num) % text_size), floor(float(index + dir_num) / float(text_size)));
 	invocation_pos += 0.5;
 	vec4 radiance_color = texture(cascade_text_array, vec3(invocation_pos / float(text_size), 0.0));
-	vec4 next_cascade_color = vec4(0.0);
-	int m = int(TIME * 2.0) % 24;
-	
-	int goida_index = voxel_pos.x + voxel_pos.y * 48 + voxel_pos.z * 48 * 96;
-	for (int cascade = 0; cascade < cascades; cascade++) {
-		for (int i = 0; i < 4; i++) {
-			int next_index = index; 
-			vec2 next_invocation_pos = vec2(float((next_index + dir_num) % text_size), floor(float(next_index + dir_num) / float(text_size)));
-			next_invocation_pos += 0.5;
-			next_cascade_color += texture(cascade_text_array, vec3(next_invocation_pos / float(text_size), 1.0));
-		}
-		//next_cascade_color.rgb *= min(max(0.0, radiance_color.a), 1.0);
-	}
-	
+	vec4 next_cascade_color = vec4(0.0);	
 	
 	// sample the actual texture for it's color
 	float palette_text_size = float(textureSize(color_palette_tex, 0).x);
 	vec4 material_color = texture(color_palette_tex, vec2(UV.x / palette_text_size, 0.0));
 	
-	//ALBEDO = radiance_color.rgb / 2.0;
-	ALBEDO = next_cascade_color.rgb / 6.0;
-	//ALBEDO = radiance_color.rgb / 2.5 + material_color.rgb / 1.2 + next_cascade_color.rgb / 10.0;
+	ALBEDO = radiance_color.rgb / 2.0;
+	//ALBEDO = radiance_color.rgb / 2.0 + material_color.rgb / 1.2;
 }

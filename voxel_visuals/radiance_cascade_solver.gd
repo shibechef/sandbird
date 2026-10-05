@@ -40,48 +40,77 @@ func _ready():
 	compute_radiance_texture(chunks)
 
 func test_shit_math():
-	var voxels_tested: Array[Vector3i] = [Vector3i.ZERO, Vector3i.ONE, 
-	Vector3i.ONE * 2, Vector3i(0, 1, 2), 
-	Vector3i.ONE * (chunk_size - 1),
-	Vector3i(48, 2, 12), 
-	Vector3i(71, 15, 50)]
+	var tested_indices: Array[int] = [
+	0, 1, 6, 7, 18, 64, 96, 2552, 5554, 55523, 45*45*45+12, 85*85*85+35, 96*96*96-1
+	]
 		
-	for n in cascades:
+	for cascade in cascades:
 		## higher ray count results in proportionally lower sample points to maintain text size
 		## 6 * 2^(3*cascade) makes simple cube to sphere mapping impossible
 		## 6 * 2^(6*cascade) is too big of a leap per cascade but allows the simple mapping
 		## 6 * 2^(2*cascade) is a small leap, allows sphere mapping, 
 		## but the sample points are not spaced by a whole number in all 3 directions like the others
-		var current_rays: int = initial_rays << (n * 2)
+		var current_rays: int = initial_rays << (cascade * 2)
 		var sample_points: int = int(float(text_size * text_size) / float(current_rays))
-		print("cascade: ", n, ", rays per probe: ", current_rays, ", total probes: ", sample_points)
+		var spacing_shrinkage := Vector3(
+			1.0 if cascade % 3 == 0 else 2.0,
+			4.0 if cascade % 3 == 2 else 1.0,
+			1.0 if cascade % 3 == 0 else 2.0
+		)
+		spacing_shrinkage *= float(1 << 2 * int(floor(float(cascade) / 3.0)))
+		print("cascade: ", cascade, ", rays per probe: ", current_rays, ", total probes: ", sample_points, ", shrinkage: ", spacing_shrinkage)
 		
-		for voxel in voxels_tested:
-			var index: int = voxel.x + voxel.y * chunk_size + voxel.z * chunk_size * chunk_size
-			index *= 6
-			## output seems weird as it's 2298 2303, for 96^3 with 6 rays instead of 2303 2303
-			## but that's the start for the 6 pixel slots of that voxel 
+		var positions: Dictionary[Vector3, Array]
+		for index in tested_indices:
+			positions[test_position_sampling(index, cascade)] = []		
+			
+		for index in text_size * text_size:
+			var pos := test_position_sampling(index, cascade)		
+			
+			if positions.has(pos):
+				positions[pos].append(index)
+			
 			var invocation := Vector2i(index % text_size, floori(float(index) / float(text_size)))
-			
-			## reconstruct voxel pos from invocation
-			var text_index: int = (invocation.x + invocation.y * text_size)
-			text_index = int(float(text_index) / float(initial_rays))
-			var reconstructed_pos: Vector3 = Vector3(
-				float(text_index % chunk_size),
-				float(text_index % (chunk_size * chunk_size)) / float(chunk_size),
-				float(text_index % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size)
-			)
-			
-			#print(voxel, " ", reconstructed_pos, " ", index, " ", invocation, " ", current_rays)
-			
-			var ray_index: int = text_index % current_rays
+			var voxel_index: int = (invocation.x + invocation.y * text_size)
+				
+			var ray_index: int = voxel_index % current_rays
 			var face: int = floori(6 * float(ray_index) / float(current_rays))
 			var rays_per_face_axis: float = float(current_rays) / 6.0
 			var offset: float = 0.5 / rays_per_face_axis
 			var ray_axis_1: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis)
 			var ray_axis_2: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis)
+		
+		for position in positions:
+			print(positions[position].size())
+
+func test_position_sampling(index: int, cascade: int) -> Vector3:
+	var invocation := Vector2i(index % text_size, floori(float(index) / float(text_size)))
 			
-			#print(voxel, " ", reconstructed_pos, " ", size_ratio)
+	## reconstruct voxel pos from invocation
+	var voxel_index: int = (invocation.x + invocation.y * text_size)
+	voxel_index = int(float(voxel_index) / 6.0)
+	
+	var spacing_shrinkage := Vector3(
+		1.0 if cascade % 3 == 0 else 2.0,
+		4.0 if cascade % 3 == 2 else 1.0,
+		1.0 if cascade % 3 == 0 else 2.0
+	)
+	spacing_shrinkage *= float(1 << 2 * int(floor(float(cascade) / 3.0)))
+	var sample_center := Vector3(.5, .5, .5) * spacing_shrinkage
+	
+	var sample_pos := Vector3(
+		float(voxel_index % chunk_size),
+		float(voxel_index % (chunk_size * chunk_size)) / float(chunk_size),
+		float(voxel_index % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size)
+	)
+	
+	sample_pos.x = floor(sample_pos.x / spacing_shrinkage.x) * spacing_shrinkage.x
+	sample_pos.y = floor(sample_pos.y / spacing_shrinkage.y) * spacing_shrinkage.y
+	sample_pos.z = floor(sample_pos.z / spacing_shrinkage.z) * spacing_shrinkage.z
+				
+	sample_pos = sample_pos + sample_center
+	
+	return sample_pos
 
 func setup_compute_materials(chunks: int) -> void:
 	shader_spirv = compute_shader.get_spirv()
@@ -123,32 +152,37 @@ func compute_radiance_texture(chunks: int) -> void:
 	vox_bytes = grid_to_vec4_array(hierarchy.all_objects.values()[0])
 	var bytes: PackedByteArray = vox_bytes.to_byte_array() 
 	rd.texture_update(vox_text_RID, 0, bytes)
-	
-	var chunk_width: int = roundi(pow(float(text_size*text_size) / 6.0, 1.0/3.0))
-	var push_constant := PackedInt32Array()
-	push_constant.push_back(initial_rays)
-	push_constant.push_back(initial_ray_length)
-	push_constant.push_back(chunk_width)
-	push_constant.push_back(0)
-	
+
 	var uniform_set_0_RID := rd.uniform_set_create([voxel_uniform], shader_RID, 0)
 	var uniform_set_1_RID := rd.uniform_set_create([radiance_uniform], shader_RID, 1)
-	
-	var compute_list := rd.compute_list_begin()
-	var pipeline_RID := rd.compute_pipeline_create(shader_RID)
-	rd.compute_list_bind_compute_pipeline(compute_list, pipeline_RID)
-	
-	rd.compute_list_bind_uniform_set(compute_list, uniform_set_0_RID, 0)
-	rd.compute_list_bind_uniform_set(compute_list, uniform_set_1_RID, 1)
-	rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), max(16, push_constant.to_byte_array().size()))
 
-	rd.compute_list_dispatch(compute_list, 288, 288, cascades)
-	rd.compute_list_end()
+	for n in range(cascades - 1, -1, -1):
+		#var time: int = Time.get_ticks_usec()
+		var chunk_width: int = roundi(pow(float(text_size*text_size) / 6.0, 1.0/3.0))
+		var push_constant := PackedInt32Array()
+		push_constant.push_back(initial_rays)
+		push_constant.push_back(initial_ray_length)
+		push_constant.push_back(chunk_width)
+		push_constant.push_back(n)
+		
+		var compute_list := rd.compute_list_begin()
+		var pipeline_RID := rd.compute_pipeline_create(shader_RID)
+		rd.compute_list_bind_compute_pipeline(compute_list, pipeline_RID)
+		
+		rd.compute_list_bind_uniform_set(compute_list, uniform_set_0_RID, 0)
+		rd.compute_list_bind_uniform_set(compute_list, uniform_set_1_RID, 1)
+		rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), max(16, push_constant.to_byte_array().size()))
+	
+		rd.compute_list_dispatch(compute_list, 288, 288, 1)
+		rd.compute_list_add_barrier(compute_list)
+		rd.compute_list_end()
+		
+		#print(Time.get_ticks_usec() - time)
 	
 	rd.free_rid(uniform_set_0_RID)
 	
 	#var col_arr: PackedColorArray = rd.texture_get_data(radiance_text_RID, 0).to_color_array()
-
+	
 	#for col in col_arr:
 		#if !col.is_equal_approx(Color(0.0, 0.0, 0.0, 1.0)):
 			#print(col)

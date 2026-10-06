@@ -29,7 +29,7 @@ var initial_rays: int = 6
 var initial_ray_length: int = 6
 
 func _ready():
-	test_shit_math()
+	#test_shit_math()
 	hierarchy = get_node("%Hierarchy")
 	palette_manager = get_node("%ColorPaletteManager")
 	
@@ -81,7 +81,7 @@ func test_shit_math():
 			var ray_axis_2: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis)
 		
 		for position in positions:
-			print(positions[position].size())
+			print(positions[position])
 
 func test_position_sampling(index: int, cascade: int) -> Vector3:
 	var invocation := Vector2i(index % text_size, floori(float(index) / float(text_size)))

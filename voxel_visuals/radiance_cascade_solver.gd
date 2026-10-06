@@ -29,7 +29,7 @@ var initial_rays: int = 6
 var initial_ray_length: int = 6
 
 func _ready():
-	#test_shit_math()
+	test_shit_math()
 	hierarchy = get_node("%Hierarchy")
 	palette_manager = get_node("%ColorPaletteManager")
 	
@@ -41,7 +41,7 @@ func _ready():
 
 func test_shit_math():
 	var tested_indices: Array[int] = [
-	0, 1, 6, 7, 18, 64, 96, 2552, 5554, 55523, 45*45*45+12, 85*85*85+35, 96*96*96-1
+	0, 1, 5, 48*24-1, 48*24, 48*24+1, 48*24*2, 48*24*3, 6*96*96*96-1
 	]
 		
 	for cascade in cascades:
@@ -52,20 +52,15 @@ func test_shit_math():
 		## but the sample points are not spaced by a whole number in all 3 directions like the others
 		var current_rays: int = initial_rays << (cascade * 2)
 		var sample_points: int = int(float(text_size * text_size) / float(current_rays))
-		var spacing_shrinkage := Vector3(
-			1.0 if cascade % 3 == 0 else 2.0,
-			4.0 if cascade % 3 == 2 else 1.0,
-			1.0 if cascade % 3 == 0 else 2.0
-		)
-		spacing_shrinkage *= float(1 << 2 * int(floor(float(cascade) / 3.0)))
-		print("cascade: ", cascade, ", rays per probe: ", current_rays, ", total probes: ", sample_points, ", shrinkage: ", spacing_shrinkage)
+
+		print("cascade: ", cascade, ", rays per probe: ", current_rays, ", total probes: ", sample_points)
 		
 		var positions: Dictionary[Vector3, Array]
 		for index in tested_indices:
 			positions[test_position_sampling(index, cascade)] = []		
 			
-		for index in text_size * text_size:
-			var pos := test_position_sampling(index, cascade)		
+		for index in text_size*text_size:
+			var pos := test_position_sampling(index, cascade)
 			
 			if positions.has(pos):
 				positions[pos].append(index)
@@ -87,27 +82,23 @@ func test_position_sampling(index: int, cascade: int) -> Vector3:
 	var invocation := Vector2i(index % text_size, floori(float(index) / float(text_size)))
 			
 	## reconstruct voxel pos from invocation
-	var voxel_index: int = (invocation.x + invocation.y * text_size)
-	voxel_index = int(float(voxel_index) / 6.0)
-	
-	var spacing_shrinkage := Vector3(
-		1.0 if cascade % 3 == 0 else 2.0,
-		4.0 if cascade % 3 == 2 else 1.0,
-		1.0 if cascade % 3 == 0 else 2.0
+	var voxel_index: int = invocation.x + invocation.y * text_size
+	voxel_index = int(float(voxel_index) / 6.0 / float(1 << 2 * cascade))
+		
+	var eff_chunk_size := Vector3(
+		96 if cascade % 3 == 0 else 48,
+		24 if cascade % 3 == 2 else 96,
+		96 if cascade % 3 == 0 else 48
 	)
-	spacing_shrinkage *= float(1 << 2 * int(floor(float(cascade) / 3.0)))
-	var sample_center := Vector3(.5, .5, .5) * spacing_shrinkage
 	
+	eff_chunk_size /= float(1 << 2 * int(floor(float(cascade) / 3.0)))
+	var sample_center := Vector3(.5, .5, .5) * 96.0 / eff_chunk_size
 	var sample_pos := Vector3(
-		float(voxel_index % chunk_size),
-		float(voxel_index % (chunk_size * chunk_size)) / float(chunk_size),
-		float(voxel_index % (chunk_size * chunk_size * chunk_size)) / float(chunk_size * chunk_size)
+		voxel_index % int(eff_chunk_size.x),
+		floori(voxel_index % int(eff_chunk_size.x * eff_chunk_size.y) / float(eff_chunk_size.x)),
+		floori(voxel_index % int(eff_chunk_size.x * eff_chunk_size.y * eff_chunk_size.z) / float(eff_chunk_size.x * eff_chunk_size.y))
 	)
-	
-	sample_pos.x = floor(sample_pos.x / spacing_shrinkage.x) * spacing_shrinkage.x
-	sample_pos.y = floor(sample_pos.y / spacing_shrinkage.y) * spacing_shrinkage.y
-	sample_pos.z = floor(sample_pos.z / spacing_shrinkage.z) * spacing_shrinkage.z
-				
+					
 	sample_pos = sample_pos + sample_center
 	
 	return sample_pos

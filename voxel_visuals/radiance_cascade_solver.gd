@@ -54,16 +54,10 @@ func test_shit_math():
 		var sample_points: int = int(float(text_size * text_size) / float(current_rays))
 
 		print("cascade: ", cascade, ", rays per probe: ", current_rays, ", total probes: ", sample_points)
-		
-		var positions: Dictionary[Vector3, Array]
+					
 		for index in tested_indices:
-			positions[test_position_sampling(index, cascade)] = []		
-			
-		for index in text_size*text_size:
 			var pos := test_position_sampling(index, cascade)
-			
-			if positions.has(pos):
-				positions[pos].append(index)
+			print(pos)
 			
 			var invocation := Vector2i(index % text_size, floori(float(index) / float(text_size)))
 			var voxel_index: int = (invocation.x + invocation.y * text_size)
@@ -74,9 +68,6 @@ func test_shit_math():
 			var offset: float = 0.5 / rays_per_face_axis
 			var ray_axis_1: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis)
 			var ray_axis_2: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis)
-		
-		for position in positions:
-			print(positions[position])
 
 func test_position_sampling(index: int, cascade: int) -> Vector3:
 	var invocation := Vector2i(index % text_size, floori(float(index) / float(text_size)))
@@ -85,19 +76,23 @@ func test_position_sampling(index: int, cascade: int) -> Vector3:
 	var voxel_index: int = invocation.x + invocation.y * text_size
 	voxel_index = int(float(voxel_index) / 6.0 / float(1 << 2 * cascade))
 		
+	var chunk_size_f := float(chunk_size)
+	## basically it goes 96x96x96, 48x96x48, 48x24x48, 24x24x24...
+	## to shrink down 4x every cascade to keep up with the rays going up 4x
 	var eff_chunk_size := Vector3(
-		96 if cascade % 3 == 0 else 48,
-		24 if cascade % 3 == 2 else 96,
-		96 if cascade % 3 == 0 else 48
+		chunk_size_f if cascade % 3 == 0 else chunk_size_f / 2.0,
+		chunk_size_f / 4.0 if cascade % 3 == 2 else chunk_size_f,
+		chunk_size_f if cascade % 3 == 0 else chunk_size_f / 2.0
 	)
-	
 	eff_chunk_size /= float(1 << 2 * int(floor(float(cascade) / 3.0)))
-	var sample_center := Vector3(.5, .5, .5) * 96.0 / eff_chunk_size
+	
+	var sample_center := Vector3(.5, .5, .5) * chunk_size_f / eff_chunk_size
 	var sample_pos := Vector3(
 		voxel_index % int(eff_chunk_size.x),
-		floori(voxel_index % int(eff_chunk_size.x * eff_chunk_size.y) / float(eff_chunk_size.x)),
-		floori(voxel_index % int(eff_chunk_size.x * eff_chunk_size.y * eff_chunk_size.z) / float(eff_chunk_size.x * eff_chunk_size.y))
+		floori(voxel_index % int(eff_chunk_size.x * eff_chunk_size.y) / eff_chunk_size.x),
+		floori(voxel_index % int(eff_chunk_size.x * eff_chunk_size.y * eff_chunk_size.z) / eff_chunk_size.x / eff_chunk_size.y)
 	)
+	sample_pos *= Vector3(chunk_size_f, chunk_size_f, chunk_size_f) / eff_chunk_size
 					
 	sample_pos = sample_pos + sample_center
 	
@@ -148,13 +143,17 @@ func compute_radiance_texture(chunks: int) -> void:
 	var uniform_set_1_RID := rd.uniform_set_create([radiance_uniform], shader_RID, 1)
 
 	for n in range(cascades - 1, -1, -1):
-		#var time: int = Time.get_ticks_usec()
 		var chunk_width: int = roundi(pow(float(text_size*text_size) / 6.0, 1.0/3.0))
 		var push_constant := PackedInt32Array()
 		push_constant.push_back(initial_rays)
 		push_constant.push_back(initial_ray_length)
 		push_constant.push_back(chunk_width)
 		push_constant.push_back(n)
+		push_constant.push_back(cascades)
+		push_constant.push_back(0)
+		push_constant.push_back(0)
+		push_constant.push_back(0)
+		assert(push_constant.to_byte_array().size() % 16 == 0, "fix the damn push constant")
 		
 		var compute_list := rd.compute_list_begin()
 		var pipeline_RID := rd.compute_pipeline_create(shader_RID)
@@ -162,14 +161,12 @@ func compute_radiance_texture(chunks: int) -> void:
 		
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_0_RID, 0)
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_1_RID, 1)
-		rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), max(16, push_constant.to_byte_array().size()))
+		rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.to_byte_array().size())
 	
 		rd.compute_list_dispatch(compute_list, 288, 288, 1)
 		rd.compute_list_add_barrier(compute_list)
 		rd.compute_list_end()
-		
-		#print(Time.get_ticks_usec() - time)
-	
+			
 	rd.free_rid(uniform_set_0_RID)
 	
 	#var col_arr: PackedColorArray = rd.texture_get_data(radiance_text_RID, 0).to_color_array()

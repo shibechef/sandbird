@@ -40,7 +40,7 @@ void fragment() {
 	
 	int dir_num = face_num_from_normal(normal); 
 	
-	ivec3 voxel_pos = ivec3(pos += normal / 1000.0);
+	ivec3 voxel_pos = ivec3(pos + normal / 1000.0);
 	
 	int index = voxel_pos.x + voxel_pos.y * chunk_size + voxel_pos.z * chunk_size * chunk_size;
 	index *= 6;

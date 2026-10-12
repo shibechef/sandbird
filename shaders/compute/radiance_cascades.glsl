@@ -64,13 +64,24 @@ vec3 rayTextToVoxelCoords(ivec2 text_pos, int cascade_index) {
     return pos + center;
 }
 
-int[8] getNearbyPoints(int starting_point, int cascade_index) {
+ivec3 isCorner(int voxel_index, int cascade_index) {    
+    vec3 effective_chunk_size = getEffectiveChunkSize(cascade_index);
+    voxel_index = int(float(voxel_index) / 6.0 / float(1 << 2 * cascade_index));
+    
+    return ivec3(
+        voxel_index % int(effective_chunk_size.x) == int(effective_chunk_size.x) - 1 ? 0 : 1,
+        int(float(voxel_index % int(effective_chunk_size.x * effective_chunk_size.y)) / effective_chunk_size.x) == int(effective_chunk_size.y) - 1 ? 0 : 1,
+        int(float(voxel_index % int(effective_chunk_size.x * effective_chunk_size.y * effective_chunk_size.z)) / effective_chunk_size.x / effective_chunk_size.y) == int(effective_chunk_size.z) - 1 ? 0 : 1
+    );
+}
+
+int[8] getNearbyPoints(int starting_point, int cascade_index, ivec3 corner) {
     int rays = params.starting_rays << (cascade_index * 2);
     vec3 effective_chunk_size = getEffectiveChunkSize(cascade_index);
 
-    int x_spacing = rays * int(effective_chunk_size.x);
-    int y_spacing = rays * int(effective_chunk_size.x) * int(effective_chunk_size.y);
-    int z_spacing = rays * int(effective_chunk_size.x) * int(effective_chunk_size.y) * int(effective_chunk_size.z);
+    int x_spacing = rays * corner.x;
+    int y_spacing = rays * int(effective_chunk_size.x) * corner.y;
+    int z_spacing = rays * int(effective_chunk_size.x) * int(effective_chunk_size.y) * corner.z;
 
     return int[8](
         starting_point, 
@@ -78,7 +89,7 @@ int[8] getNearbyPoints(int starting_point, int cascade_index) {
         starting_point + y_spacing,
         starting_point + y_spacing + x_spacing,
         starting_point + z_spacing,
-        starting_point + z_spacing + y_spacing,
+        starting_point + x_spacing + z_spacing,
         starting_point + y_spacing + z_spacing,
         starting_point + x_spacing + y_spacing + z_spacing
     );
@@ -192,23 +203,23 @@ void main() {
 
     vec4 col = intersectRay(sample_pos, offset, params.cascade_index);
 
-    vec4 upper_cascade_color = vec4(0.0);
-
     int upper_cascade = params.cascade_index + 1;
     int starting_upper_index = voxelCoordsToIndex(sample_pos, upper_cascade);
     vec3 starting_upper_pos = rayTextToVoxelCoords(indexToTextPos(starting_upper_index), upper_cascade);
-    vec3 spacing = float(params.vox_chunk_size) / getEffectiveChunkSize(upper_cascade);
-    float x_bias = (sample_pos.x - starting_upper_pos.x) / spacing.x;
-    float y_bias = (sample_pos.y - starting_upper_pos.y) / spacing.y;
-    float z_bias = (sample_pos.z - starting_upper_pos.z) / spacing.z;
+    float x_bias = (sample_pos.x - starting_upper_pos.x);
+    float y_bias = (sample_pos.y - starting_upper_pos.y);
+    float z_bias = (sample_pos.z - starting_upper_pos.z);
 
+    ivec3 corner = isCorner(starting_upper_index, upper_cascade);
     int point = 0;
-    int[8] points = getNearbyPoints(starting_upper_index, upper_cascade);
+    int[8] points = getNearbyPoints(starting_upper_index, upper_cascade, corner);
+
+    vec4 upper_cascade_color = vec4(0.0);
 
     for (int z = 0; z < 2; z++) {
         for (int y = 0; y < 2; y++) {
             for (int x = 0; x < 2; x++) {
-                float bias = (x != 0 ? x_bias : 1.0 - x_bias) + (y != 0 ? y_bias : 1.0 - y_bias) + (z != 0 ? z_bias : 1.0 - z_bias);
+                float bias = (x == 0 ? 1.0 - x_bias : x_bias) + (y == 0 ? 1.0 - y_bias : y_bias) + (z == 0 ? 1.0 - z_bias : z_bias);
                 ivec2 text_pos = indexToTextPos(points[point]);
                 if (upper_cascade != params.cascades) {
                     upper_cascade_color += imageLoad(cascade_data, ivec3(text_pos, upper_cascade)) * bias;
@@ -227,9 +238,8 @@ void main() {
     }
 
     if (upper_cascade != params.cascades) {
-        col.rgb += col.rgb / 1.0 + upper_cascade_color.rgb / 16.0;
+        col.rgb += col.rgb / 2.0 + upper_cascade_color.rgb / 16.0;
     }
 
-    //col.rgb = params.cascade_index == 1 ? vec3(sample_pos / 96.0) : upper_cascade_color.rgb / 16.0;
     imageStore(cascade_data, ivec3(gl_GlobalInvocationID.xy, params.cascade_index), col);
 }

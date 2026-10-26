@@ -29,7 +29,7 @@ var initial_rays: int = 6
 var initial_ray_length: int = 6
 
 func _ready():
-	#test_shit_math()
+	test_shit_math()
 	hierarchy = get_node("%Hierarchy")
 	palette_manager = get_node("%ColorPaletteManager")
 	
@@ -57,17 +57,18 @@ func test_shit_math():
 					
 		for index in tested_indices:
 			var pos := test_position_sampling(index, cascade)
-			print(pos)
+			#print(pos)
 			
 			var invocation := Vector2i(index % text_size, floori(float(index) / float(text_size)))
 			var voxel_index: int = (invocation.x + invocation.y * text_size)
 				
 			var ray_index: int = voxel_index % current_rays
 			var face: int = floori(6 * float(ray_index) / float(current_rays))
-			var rays_per_face_axis: float = float(current_rays) / 6.0
+			var rays_per_face_axis: float = float(1 << cascade)
 			var offset: float = 0.5 / rays_per_face_axis
 			var ray_axis_1: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis)
 			var ray_axis_2: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis)
+			print(rays_per_face_axis, " ", offset, " ", ray_axis_1, " ", ray_axis_2)
 
 func test_position_sampling(index: int, cascade: int) -> Vector3:
 	var invocation := Vector2i(index % text_size, floori(float(index) / float(text_size)))

@@ -165,10 +165,35 @@ vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
     return vec4(radiance, transmittance);
 }
 
-vec4 getRay(float weight) {
-    //multiply the value of the rays of this sample by the weight of the sample
-    vec4 col = weight * vec4(0.0, 1.0, 1.0, 0.0);
-    return col;
+vec4 faceToFaceTranslation(int starting_index, int starting_face, int ray_axis_1, int ray_axis_2) {
+    int rays = params.starting_rays << (params.cascade_index * 2);
+    int rays_per_face_axis = 1 << starting_index;
+    ivec3 cube_pos = ivec3(0);
+
+    // traveling any direction past the initial face of a cube can just be solved by moving further from the axis that the face lies on,
+    // while increasing the axis you're moving in but clamped to the min/max to align with the next face
+    int surplus = max(ray_axis_1, rays_per_face_axis - 1) - min(ray_axis_1, 1) + max(ray_axis_2, rays_per_face_axis - 1) - min(ray_axis_2, 1);
+
+    cube_pos = starting_face != 0 ? cube_pos : ivec3(rays_per_face_axis - surplus, ray_axis_1, ray_axis_2);
+    cube_pos = starting_face != 1 ? cube_pos : ivec3(surplus, ray_axis_1, ray_axis_2);
+    cube_pos = starting_face != 2 ? cube_pos : ivec3(ray_axis_1, rays_per_face_axis - surplus, ray_axis_2);
+    cube_pos = starting_face != 3 ? cube_pos : ivec3(ray_axis_1, surplus, ray_axis_2);
+    cube_pos = starting_face != 4 ? cube_pos : ivec3(ray_axis_1, ray_axis_2, rays_per_face_axis - surplus);
+    cube_pos = starting_face != 5 ? cube_pos : ivec3(ray_axis_1, ray_axis_2, surplus);
+
+    cube_pos = clamp(cube_pos, 0, rays_per_face_axis);
+
+    int text_index = 0;
+
+    int rays_per_face = rays_per_face_axis * rays_per_face_axis;
+    text_index = cube_pos.x != rays_per_face_axis ? text_index : cube_pos.y + cube_pos.z * rays_per_face_axis;
+    text_index = cube_pos.x != 0 ? text_index : cube_pos.y + cube_pos.z * rays_per_face_axis + rays_per_face;
+    text_index = cube_pos.y != rays_per_face_axis ? text_index : cube_pos.x + cube_pos.z * rays_per_face_axis + rays_per_face * 2;
+    text_index = cube_pos.y != 0 ? text_index : cube_pos.x + cube_pos.z * rays_per_face_axis + rays_per_face * 3;
+    text_index = cube_pos.z != rays_per_face_axis ? text_index : cube_pos.x + cube_pos.y * rays_per_face_axis + rays_per_face * 4;
+    text_index = cube_pos.z != 0 ? text_index : cube_pos.x + cube_pos.y * rays_per_face_axis + rays_per_face * 5;
+
+    return imageLoad(cascade_data, ivec3(indexToTextPos(text_index), starting_index));
 }
 
 void main() {
@@ -185,18 +210,20 @@ void main() {
     
     // mapping ray direction to points on a subdivided cube
     int face = int(floor(6.0 * float(ray_index) / float(rays)));
-    float rays_per_face_axis = float(rays) / 6.0;
+    float rays_per_face_axis = float(1 << params.cascade_index);
+
+    ivec2 face_2d_pos = ivec2(ray_index % int(rays_per_face_axis), int(float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis));
 
     float face_offset = 0.5 / rays_per_face_axis;
     float ray_axis_1 = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis);
     float ray_axis_2 = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis);
         
-    offset = face == 0 ? vec3(1.0, ray_axis_1, ray_axis_2) : offset;
-    offset = face == 1 ? vec3(-1.0, ray_axis_1, ray_axis_2) : offset;
-    offset = face == 2 ? vec3(ray_axis_1, 1.0, ray_axis_2) : offset;
-    offset = face == 3 ? vec3(ray_axis_1, -1.0, ray_axis_2) : offset;
-    offset = face == 4 ? vec3(ray_axis_1, ray_axis_2, 1.0) : offset;
-    offset = face == 5 ? vec3(ray_axis_1, ray_axis_2, -1.0) : offset;
+    offset = face != 0 ? offset : vec3(1.0, ray_axis_1, ray_axis_2);
+    offset = face != 1 ? offset : vec3(-1.0, ray_axis_1, ray_axis_2);
+    offset = face != 2 ? offset : vec3(ray_axis_1, 1.0, ray_axis_2);
+    offset = face != 3 ? offset : vec3(ray_axis_1, -1.0, ray_axis_2);
+    offset = face != 4 ? offset : vec3(ray_axis_1, ray_axis_2, 1.0);
+    offset = face != 5 ? offset : vec3(ray_axis_1, ray_axis_2, -1.0);
 
     // spherically mapping the cube
     offset = normalize(offset);
@@ -211,10 +238,12 @@ void main() {
     float z_bias = (sample_pos.z - starting_upper_pos.z);
 
     ivec3 corner = isCorner(starting_upper_index, upper_cascade);
-    int point = 0;
     int[8] points = getNearbyPoints(starting_upper_index, upper_cascade, corner);
+    int point = 0;
 
     vec4 upper_cascade_color = vec4(0.0);
+
+    int ray_angular_samples = 1 << (params.cascade_index * 2) - 1;
 
     for (int z = 0; z < 2; z++) {
         for (int y = 0; y < 2; y++) {
@@ -222,9 +251,18 @@ void main() {
                 float bias = (x == 0 ? 1.0 - x_bias : x_bias) + (y == 0 ? 1.0 - y_bias : y_bias) + (z == 0 ? 1.0 - z_bias : z_bias);
                 ivec2 text_pos = indexToTextPos(points[point]);
                 if (upper_cascade != params.cascades) {
+                    for (int x_text = -ray_angular_samples; x_text < ray_angular_samples; x_text++) {
+                        for (int y_text = -ray_angular_samples; y_text < ray_angular_samples; y_text++) {
+                            ivec2 offset_pos = face_2d_pos + ivec2(x_text, y_text);
+                            // just make sure it doesn't go into the corners?
+                            if ((offset_pos.x > rays_per_face_axis || offset_pos.x < 0) && (offset_pos.y > rays_per_face_axis || offset_pos.y < 0)) {
+                                continue;
+                            }
+                            upper_cascade_color += bias * faceToFaceTranslation(points[point], face, x_text, y_text);
+                        }
+                    }
                     upper_cascade_color += imageLoad(cascade_data, ivec3(text_pos, upper_cascade)) * bias;
                 }
-                //getRay(bias / 3.0);
                 point += 1;
             }
         }

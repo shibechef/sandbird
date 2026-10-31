@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bkjym1n5pp76"]
+
+[ext_resource type="Shader" uid="uid://vblr18l621js" path="res://shaders/literally_vert_color.gdshader" id="1_vrjnh"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_vrjnh")

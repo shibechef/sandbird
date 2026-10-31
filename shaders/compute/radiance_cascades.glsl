@@ -165,9 +165,9 @@ vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
     return vec4(radiance, transmittance);
 }
 
-vec4 faceToFaceTranslation(int starting_index, int starting_face, int ray_axis_1, int ray_axis_2) {
-    int rays = params.starting_rays << (params.cascade_index * 2);
-    int rays_per_face_axis = 1 << starting_index;
+vec4 faceToFaceTranslation(int starting_index, int starting_face, int ray_axis_1, int ray_axis_2, int cascade_index) {
+    int rays = params.starting_rays << (cascade_index);
+    int rays_per_face_axis = 1 << cascade_index;
     ivec3 cube_pos = ivec3(0);
 
     // traveling any direction past the initial face of a cube can just be solved by moving further from the axis that the face lies on,
@@ -193,7 +193,9 @@ vec4 faceToFaceTranslation(int starting_index, int starting_face, int ray_axis_1
     text_index = cube_pos.z != rays_per_face_axis ? text_index : cube_pos.x + cube_pos.y * rays_per_face_axis + rays_per_face * 4;
     text_index = cube_pos.z != 0 ? text_index : cube_pos.x + cube_pos.y * rays_per_face_axis + rays_per_face * 5;
 
-    return imageLoad(cascade_data, ivec3(indexToTextPos(text_index), starting_index));
+    text_index += starting_index;
+
+    return imageLoad(cascade_data, ivec3(indexToTextPos(text_index), cascade_index));
 }
 
 void main() {
@@ -243,12 +245,12 @@ void main() {
 
     vec4 upper_cascade_color = vec4(0.0);
 
-    int ray_angular_samples = 1 << (params.cascade_index * 2) - 1;
+    int ray_angular_samples = 1 << (upper_cascade * 2) - 1;
 
     for (int z = 0; z < 2; z++) {
         for (int y = 0; y < 2; y++) {
             for (int x = 0; x < 2; x++) {
-                float bias = (x == 0 ? 1.0 - x_bias : x_bias) + (y == 0 ? 1.0 - y_bias : y_bias) + (z == 0 ? 1.0 - z_bias : z_bias);
+                float bias = ((x == 0 ? 1.0 - x_bias : x_bias) + (y == 0 ? 1.0 - y_bias : y_bias) + (z == 0 ? 1.0 - z_bias : z_bias)) / 3.0;
                 ivec2 text_pos = indexToTextPos(points[point]);
                 if (upper_cascade != params.cascades) {
                     for (int x_text = -ray_angular_samples; x_text < ray_angular_samples; x_text++) {
@@ -258,25 +260,28 @@ void main() {
                             if ((offset_pos.x > rays_per_face_axis || offset_pos.x < 0) && (offset_pos.y > rays_per_face_axis || offset_pos.y < 0)) {
                                 continue;
                             }
-                            upper_cascade_color += bias * faceToFaceTranslation(points[point], face, x_text, y_text);
+                            upper_cascade_color += bias * faceToFaceTranslation(points[point], face, x_text, y_text, upper_cascade);
                         }
                     }
-                    upper_cascade_color += imageLoad(cascade_data, ivec3(text_pos, upper_cascade)) * bias;
                 }
                 point += 1;
             }
         }
     }
 
-    if (params.cascade_index != 0) {
-        col.rgb = sample_pos / 96.0;
-    }
-    else {
-        col.rgb = vec3(0.0);
-    }
+    //if (params.cascade_index != 0) {
+    //    col.rgb = sample_pos / 96.0;
+    //}
+    //else {
+    //    col.rgb = vec3(0.0);
+    //}
 
     if (upper_cascade != params.cascades) {
-        col.rgb += col.rgb / 2.0 + upper_cascade_color.rgb / 16.0;
+        col.rgb += col.rgb + upper_cascade_color.rgb / 32.0 / max(1.0, float(ray_angular_samples * ray_angular_samples));
+    }
+
+    if (params.cascade_index == 0) {
+        col.rgb = upper_cascade_color.rgb / 8.0 / max(1.0, float(ray_angular_samples * ray_angular_samples));
     }
 
     imageStore(cascade_data, ivec3(gl_GlobalInvocationID.xy, params.cascade_index), col);

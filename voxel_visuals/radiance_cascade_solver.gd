@@ -29,7 +29,8 @@ var initial_rays: int = 6
 var initial_ray_length: int = 6
 
 func _ready():
-	test_shit_math()
+	#test_shit_math()
+	display_debug_visuals(3)
 	hierarchy = get_node("%Hierarchy")
 	palette_manager = get_node("%ColorPaletteManager")
 	
@@ -38,6 +39,48 @@ func _ready():
 	match_compute_material_buffers(chunks)
 	setup_compute_materials(chunks)
 	compute_radiance_texture(chunks)
+
+func display_debug_visuals(cascade: int):
+	var mesh_instance := MeshInstance3D.new()
+	mesh_instance.mesh = ArrayMesh.new()
+	
+	var rays: int = 6 << (cascade * 2)
+	var rays_per_face_axis: float = float(1 << cascade)
+	
+	var vertices: PackedVector3Array
+	var colors: PackedColorArray
+	
+	for i in 6*96*96*96:
+		var ray_index: int = i % rays
+		var face = int(floor(6.0 * float(ray_index) / float(rays)));
+		
+		var pos: Vector3 = test_position_sampling(i, cascade)
+		var face_offset: float = 0.5 / rays_per_face_axis;
+		var ray_axis_1: float = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis);
+		var ray_axis_2: float = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis);
+		
+		var offset := Vector3.ZERO
+		offset = offset if face != 0 else Vector3(1.0, ray_axis_1, ray_axis_2);
+		offset = offset if face != 1 else Vector3(-1.0, ray_axis_1, ray_axis_2);
+		offset = offset if face != 2 else Vector3(ray_axis_1, 1.0, ray_axis_2);
+		offset = offset if face != 3 else Vector3(ray_axis_1, -1.0, ray_axis_2);
+		offset = offset if face != 4 else Vector3(ray_axis_1, ray_axis_2, 1.0);
+		offset = offset if face != 5 else Vector3(ray_axis_1, ray_axis_2, -1.0);
+		
+		vertices.append(pos)
+		vertices.append(pos + offset * .2)
+		colors.append(Color.WHITE)
+		colors.append(Color.BLACK)
+	
+	var mesh_arrays: Array = [] 
+	mesh_arrays.resize(Mesh.ARRAY_MAX)
+	mesh_arrays[Mesh.ARRAY_VERTEX] = vertices
+	mesh_arrays[Mesh.ARRAY_COLOR] = colors
+	
+	mesh_instance.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_LINES, mesh_arrays)
+	mesh_instance.mesh.surface_set_material(0, load("res://materials/literally_vert_color.tres"))
+	get_node("%Hierarchy").add_child(mesh_instance)
+	
 
 func test_shit_math():
 	var tested_indices: Array[int] = [
@@ -144,6 +187,7 @@ func compute_radiance_texture(chunks: int) -> void:
 	var uniform_set_1_RID := rd.uniform_set_create([radiance_uniform], shader_RID, 1)
 
 	for n in range(cascades - 1, -1, -1):
+		var time = Time.get_ticks_usec()
 		var chunk_width: int = roundi(pow(float(text_size*text_size) / 6.0, 1.0/3.0))
 		var push_constant := PackedInt32Array()
 		push_constant.push_back(initial_rays)
@@ -167,6 +211,8 @@ func compute_radiance_texture(chunks: int) -> void:
 		rd.compute_list_dispatch(compute_list, 288, 288, 1)
 		rd.compute_list_add_barrier(compute_list)
 		rd.compute_list_end()
+		
+		print("cascade " + str(n) + " msec " + String.num(float(Time.get_ticks_usec() - time) / 1000.0), 6)
 			
 	rd.free_rid(uniform_set_0_RID)
 	

@@ -218,7 +218,7 @@ void main() {
 
     float face_offset = 0.5 / rays_per_face_axis;
     float ray_axis_1 = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis);
-    float ray_axis_2 = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis);
+    float ray_axis_2 = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis * rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis);
         
     offset = face != 0 ? offset : vec3(1.0, ray_axis_1, ray_axis_2);
     offset = face != 1 ? offset : vec3(-1.0, ray_axis_1, ray_axis_2);

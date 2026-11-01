@@ -57,7 +57,7 @@ func display_debug_visuals(cascade: int):
 		var pos: Vector3 = test_position_sampling(i, cascade)
 		var face_offset: float = 0.5 / rays_per_face_axis;
 		var ray_axis_1: float = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis);
-		var ray_axis_2: float = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis);
+		var ray_axis_2: float = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis * rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis);
 		
 		var offset := Vector3.ZERO
 		offset = offset if face != 0 else Vector3(1.0, ray_axis_1, ray_axis_2);
@@ -66,6 +66,8 @@ func display_debug_visuals(cascade: int):
 		offset = offset if face != 3 else Vector3(ray_axis_1, -1.0, ray_axis_2);
 		offset = offset if face != 4 else Vector3(ray_axis_1, ray_axis_2, 1.0);
 		offset = offset if face != 5 else Vector3(ray_axis_1, ray_axis_2, -1.0);
+		
+		offset = offset.normalized()
 		
 		vertices.append(pos)
 		vertices.append(pos + offset * .2)

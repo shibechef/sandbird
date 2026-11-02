@@ -105,8 +105,16 @@ func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
 		if !edited_chunks.has(mesh_chunk):
 			edited_chunks.append(mesh_chunk)
 		
+		#var tima = Time.get_ticks_usec()
 		if voxels[pos] != null:
 			voxel_grid[pos] = voxels[pos]
+			cascade_solver.update_voxel_text(pos, voxels[pos])
+		else:
+			cascade_solver.update_voxel_text(pos, null)
+			
+		#print(float(Time.get_ticks_usec() - tima) / 1000.0, " hai")
+		
+		
 	
 func create_BB_outline() -> void:
 	var mesh_data = mesh_system.create_box(Vector3.ZERO, dimensions)

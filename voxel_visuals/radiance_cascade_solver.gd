@@ -12,6 +12,7 @@ var material: ShaderMaterial = load("res://materials/cascade_simple.tres")
 
 var vox_text_RID: RID
 var radiance_text_RID: RID
+var copying_text_RID: RID
 
 var rd: RenderingDevice
 var shader_spirv: RDShaderSPIRV
@@ -30,7 +31,6 @@ var initial_ray_length: int = 6
 
 func _ready():
 	#test_shit_math()
-	display_debug_visuals(3)
 	hierarchy = get_node("%Hierarchy")
 	palette_manager = get_node("%ColorPaletteManager")
 	
@@ -38,7 +38,8 @@ func _ready():
 	rd = RenderingServer.get_rendering_device()
 	match_compute_material_buffers(chunks)
 	setup_compute_materials(chunks)
-	compute_radiance_texture(chunks)
+	
+	#display_debug_visuals(3)
 
 func display_debug_visuals(cascade: int):
 	var mesh_instance := MeshInstance3D.new()
@@ -83,6 +84,11 @@ func display_debug_visuals(cascade: int):
 	mesh_instance.mesh.surface_set_material(0, load("res://materials/literally_vert_color.tres"))
 	get_node("%Hierarchy").add_child(mesh_instance)
 	
+	var data: PackedColorArray = rd.texture_get_data(radiance_text_RID, 0).to_color_array()
+	
+	for color in data:
+		if color != Color(0.0, 0.0, 0.0, 1.0):
+			print(color)
 
 func test_shit_math():
 	var tested_indices: Array[int] = [
@@ -156,13 +162,25 @@ func setup_compute_materials(chunks: int) -> void:
 	format_data.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
 	format_data.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
-	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
+	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_COPY_TO_BIT
 	
 	vox_text_RID = rd.texture_create(format_data, RDTextureView.new())
 	voxel_uniform = RDUniform.new()	
 	voxel_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	voxel_uniform.add_id(vox_text_RID)
-	
+
+	var format_data_copying := RDTextureFormat.new()
+	format_data_copying.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
+	format_data_copying.width = 6
+	format_data_copying.height = 1
+	format_data.array_layers = 1
+	format_data_copying.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
+	format_data_copying.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
+	copying_text_RID = rd.texture_create(format_data_copying, RDTextureView.new())
+
 	vox_bytes = PackedVector4Array()
 	vox_bytes.resize(text_size * text_size * chunks)
 	
@@ -172,24 +190,37 @@ func setup_compute_materials(chunks: int) -> void:
 	var bytes_2: PackedByteArray = cascade_bytes.to_byte_array() 
 	rd.texture_update(radiance_text_RID, 0, bytes_2)
 
-	#radiance_uniform = RDUniform.new()	
-	#radiance_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
-	#radiance_uniform.add_id(radiance_text_RID)
-
 func compute_radiance_texture(chunks: int) -> void:
 	radiance_uniform = RDUniform.new()	
 	radiance_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	radiance_uniform.add_id(radiance_text_RID)
-
-	vox_bytes = grid_to_vec4_array(hierarchy.all_objects.values()[0])
-	var bytes: PackedByteArray = vox_bytes.to_byte_array() 
-	rd.texture_update(vox_text_RID, 0, bytes)
+	
+	#var time3a = Time.get_ticks_usec()
+	#vox_bytes = grid_to_vec4_array(hierarchy.all_objects.values()[0])
+	#var byte_arr: PackedByteArray
+	#byte_arr.resize(16 * text_size * text_size)
+	#var time5a = Time.get_ticks_usec()
+	#rd.texture_update(vox_text_RID, 0, byte_arr)
+	
+	var format_data := RDTextureFormat.new()
+	format_data.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
+	format_data.width = text_size
+	format_data.height = text_size
+	format_data.array_layers = chunks * cascades
+	format_data.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
+	format_data.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_COPY_TO_BIT
+		
+	#time5a = Time.get_ticks_usec()	
+	#var aaa = grid_to_vec4_array(hierarchy.all_objects.values()[0])
+	#print(float(Time.get_ticks_usec() - time5a) / 1000.0, " aha5")
 
 	var uniform_set_0_RID := rd.uniform_set_create([voxel_uniform], shader_RID, 0)
 	var uniform_set_1_RID := rd.uniform_set_create([radiance_uniform], shader_RID, 1)
-
-	for n in range(cascades - 1, -1, -1):
-		var time = Time.get_ticks_usec()
+	
+	for n in range(1, -1, -1):
 		var chunk_width: int = roundi(pow(float(text_size*text_size) / 6.0, 1.0/3.0))
 		var push_constant := PackedInt32Array()
 		push_constant.push_back(initial_rays)
@@ -209,13 +240,11 @@ func compute_radiance_texture(chunks: int) -> void:
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_0_RID, 0)
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_1_RID, 1)
 		rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.to_byte_array().size())
-	
+
 		rd.compute_list_dispatch(compute_list, 288, 288, 1)
 		rd.compute_list_add_barrier(compute_list)
 		rd.compute_list_end()
-		
-		print("cascade " + str(n) + " msec " + String.num(float(Time.get_ticks_usec() - time) / 1000.0), 6)
-			
+					
 	rd.free_rid(uniform_set_0_RID)
 	
 	#var col_arr: PackedColorArray = rd.texture_get_data(radiance_text_RID, 0).to_color_array()
@@ -243,15 +272,33 @@ func match_compute_material_buffers(chunks: int) -> void:
 	var text_arr := Texture2DArrayRD.new()
 	text_arr.texture_rd_rid = radiance_text_RID
 	RenderingServer.global_shader_parameter_set("cascade_text_array", text_arr)
-	#var mat: Texture2DArrayRD = RenderingServer.global_shader_parameter_get("cascade_text_array")
-	#material.set_shader_parameter("cascade_text_array", output_text)
-	#var mat: Texture2DArrayRD = material.get_shader_parameter("cascade_text_array")
 	
+var empty: PackedVector4Array = PackedVector4Array([Vector4.ZERO, Vector4.ZERO, Vector4.ZERO, Vector4.ZERO, Vector4.ZERO, Vector4.ZERO])
 
-func grid_to_vec4_array(voxel_object: VoxelObject) -> PackedVector4Array:
+func update_voxel_text(position: Vector3i, voxel: VoxelData):
+	print(position)
+	var cols: PackedVector4Array
+	
+	if voxel == null:
+		cols.append_array(empty)
+	elif voxel.face_colors.size() == 1:
+		var color: Color = palette_manager.get_color_from_id(voxel.face_colors[0]).color
+		for i in 6:
+			cols.append(color_to_vec4(color))
+	else:
+		for i in 6:
+			var color: Color = palette_manager.get_color_from_id(voxel.face_colors[i]).color
+			cols.append(color_to_vec4(color))
+
+	var voxel_index: int = position.x + position.y * chunk_size + position.z * chunk_size * chunk_size
+	voxel_index *= 6
+	var text_coords := Vector3(voxel_index % text_size, floor(float(voxel_index) / float(text_size)), 0.0)
+	rd.texture_update(copying_text_RID, 0, cols.to_byte_array())
+	rd.texture_copy(copying_text_RID, vox_text_RID, Vector3.ZERO, text_coords, Vector3(6.0, 1.0, 1.0), 0, 0, 0, 0)
+
+func grid_to_vec4_array(voxel_object: VoxelObject) -> PackedVector4Array:	
 	## quicker to simply append empty arrays 
 	## than to preset an array size and set() repeatedly
-	var empty: PackedVector4Array = PackedVector4Array([Vector4.ZERO, Vector4.ZERO, Vector4.ZERO, Vector4.ZERO, Vector4.ZERO, Vector4.ZERO])
 	var color_array: PackedVector4Array
 	var grid: Dictionary[Vector3i, VoxelData] = voxel_object.voxel_grid
 	
@@ -260,6 +307,7 @@ func grid_to_vec4_array(voxel_object: VoxelObject) -> PackedVector4Array:
 		for y in voxel_object.dimensions.y:
 			for x in voxel_object.dimensions.x:
 				var pos: Vector3i = Vector3i(x, y, z)
+								
 				if !grid.has(pos):
 					color_array.append_array(empty)
 				elif grid[pos].face_colors.size() == 1:

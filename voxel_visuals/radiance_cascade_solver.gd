@@ -51,52 +51,6 @@ func _ready():
 	create_ray_dot_texture()
 	match_compute_material_buffers(chunks)
 	setup_compute_materials(chunks)
-	#display_debug_visuals(3)
-
-func display_debug_visuals(cascade: int) -> void:
-	var mesh_instance := MeshInstance3D.new()
-	mesh_instance.mesh = ArrayMesh.new()
-	
-	var rays: int = 6 << (cascade * 2)
-	var rays_per_face_axis: float = float(1 << cascade)
-	
-	var vertices: PackedVector3Array
-	var colors: PackedColorArray
-	
-	for i in 6*96*96*96:
-		var ray_index: int = i % rays
-		var face = int(floor(6.0 * float(ray_index) / float(rays)));
-		
-		var pos: Vector3 = test_position_sampling(i, cascade)
-		var face_offset: float = 0.5 / rays_per_face_axis;
-		var ray_axis_1: float = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis);
-		var ray_axis_2: float = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis * rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis);
-		
-		var offset := Vector3.ZERO
-		offset = offset if face != 0 else Vector3(1.0, ray_axis_1, ray_axis_2);
-		offset = offset if face != 1 else Vector3(-1.0, ray_axis_1, ray_axis_2);
-		offset = offset if face != 2 else Vector3(ray_axis_1, 1.0, ray_axis_2);
-		offset = offset if face != 3 else Vector3(ray_axis_1, -1.0, ray_axis_2);
-		offset = offset if face != 4 else Vector3(ray_axis_1, ray_axis_2, 1.0);
-		offset = offset if face != 5 else Vector3(ray_axis_1, ray_axis_2, -1.0);
-		
-		offset = offset.normalized()
-		
-		vertices.append(pos)
-		vertices.append(pos + offset * .2)
-		colors.append(Color.WHITE)
-		colors.append(Color.BLACK)
-	
-	var mesh_arrays: Array = [] 
-	mesh_arrays.resize(Mesh.ARRAY_MAX)
-	mesh_arrays[Mesh.ARRAY_VERTEX] = vertices
-	mesh_arrays[Mesh.ARRAY_COLOR] = colors
-	
-	mesh_instance.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_LINES, mesh_arrays)
-	mesh_instance.mesh.surface_set_material(0, load("res://materials/literally_vert_color.tres"))
-	get_node("%Hierarchy").add_child(mesh_instance)
-	
-	var data: PackedColorArray = rd.texture_get_data(radiance_text_RID, 0).to_color_array()
 
 func setup_compute_materials(chunks: int) -> void:
 	radiance_shader_spirv = compute_shader.get_spirv()
@@ -159,6 +113,7 @@ func compute_radiance_texture(chunks: int) -> void:
 	#for col in col_arr:
 		#if !col.is_equal_approx(Color(0.0, 0.0, 0.0, 1.0)):
 			#print(col)
+	display_debug_visuals(0)
 
 ## skip moving data through CPU from compute to material by using buffer
 ## https://github.com/godotengine/godot-proposals/issues/6989#issuecomment-2770544670
@@ -329,7 +284,9 @@ func setup_text_formats(chunks: int) -> void:
 	radiance_text_format.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
 	radiance_text_format.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
-	RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
+	RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT + \
+	## FOR DEBUGGING
+	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
 	
 	copying_text_format = RDTextureFormat.new()
 	copying_text_format.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
@@ -366,6 +323,58 @@ func setup_text_formats(chunks: int) -> void:
 	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
 
+func display_debug_visuals(cascade: int) -> void:
+	var mesh_instance := MeshInstance3D.new()
+	mesh_instance.mesh = ArrayMesh.new()
+	
+	var rays: int = 6 << (cascade * 2)
+	var rays_per_face_axis: float = float(1 << cascade)
+	
+	var vertices: PackedVector3Array
+	var colors: PackedColorArray
+	
+	var byte_data: PackedByteArray = rd.texture_get_data(radiance_text_RID, 0)
+	var color_data: PackedColorArray = byte_data.to_color_array()
+	
+	for i in 6*96*96*96:
+		var ray_index: int = i % rays
+		var face = int(floor(6.0 * float(ray_index) / float(rays)));
+		
+		var pos: Vector3 = test_position_sampling(i, cascade)
+		var face_offset: float = 0.5 / rays_per_face_axis;
+		var ray_axis_1: float = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis);
+		var ray_axis_2: float = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis * rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis);
+		
+		var offset := Vector3.ZERO
+		offset = offset if face != 0 else Vector3(1.0, ray_axis_1, ray_axis_2);
+		offset = offset if face != 1 else Vector3(-1.0, ray_axis_1, ray_axis_2);
+		offset = offset if face != 2 else Vector3(ray_axis_1, 1.0, ray_axis_2);
+		offset = offset if face != 3 else Vector3(ray_axis_1, -1.0, ray_axis_2);
+		offset = offset if face != 4 else Vector3(ray_axis_1, ray_axis_2, 1.0);
+		offset = offset if face != 5 else Vector3(ray_axis_1, ray_axis_2, -1.0);
+		
+		offset = offset.normalized()
+		
+		vertices.append(pos)
+		vertices.append(pos + offset * .2)
+		
+		var col: Color = color_data[i]
+		
+		if col.r + col.g + col.b < .3:
+			col.a = 0.0
+		
+		colors.append(col)
+		colors.append(col)
+	
+	var mesh_arrays: Array = [] 
+	mesh_arrays.resize(Mesh.ARRAY_MAX)
+	mesh_arrays[Mesh.ARRAY_VERTEX] = vertices
+	mesh_arrays[Mesh.ARRAY_COLOR] = colors
+	
+	mesh_instance.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_LINES, mesh_arrays)
+	mesh_instance.mesh.surface_set_material(0, load("res://materials/literally_vert_color.tres"))
+	get_node("%Hierarchy").add_child(mesh_instance)
+	
 func test_shit_math() -> void:
 	var tested_indices: Array[int] = [
 	0, 1, 5, 48*24-1, 48*24, 48*24+1, 48*24*2, 48*24*3, 6*96*96*96-1

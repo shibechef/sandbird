@@ -215,7 +215,7 @@ void main() {
     for (int z = 0; z < 2; z++) {
         for (int y = 0; y < 2; y++) {
             for (int x = 0; x < 2; x++) {
-                float bias = ((x == 0 ? 1.0 - x_bias : x_bias) + (y == 0 ? 1.0 - y_bias : y_bias) + (z == 0 ? 1.0 - z_bias : z_bias)) / 3.0;
+                float bias = max(col.a, 0.0) * ((x == 0 ? 1.0 - x_bias : x_bias) + (y == 0 ? 1.0 - y_bias : y_bias) + (z == 0 ? 1.0 - z_bias : z_bias)) / 3.0;
                 if (upper_cascade != params.cascades) {
                     for (int ray_num = 0; ray_num < rays / 2; ray_num += 1) {
                         // using lower cascade number as opposed to upper, as a layer for the lowest one is never made, so its skipped here
@@ -230,11 +230,7 @@ void main() {
     }
 
     if (upper_cascade != params.cascades) {
-        col.rgb += col.rgb + upper_cascade_color.rgb / 2.0;
-    }
-
-    if (params.cascade_index == 0) {
-        col.rgb = upper_cascade_color.rgb / 2.0;
+        col.rgb += upper_cascade_color.rgb;
     }
 
     imageStore(cascade_data, ivec3(gl_GlobalInvocationID.xy, params.cascade_index), col);

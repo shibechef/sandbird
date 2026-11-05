@@ -5,6 +5,8 @@ layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 
 layout(set = 0, binding = 0, rgba32f) uniform restrict image2DArray voxel_data;
 layout(set = 1, binding = 0, rgba32f) uniform restrict image2DArray cascade_data;
+layout(set = 2, binding = 0, rgba32f) uniform restrict image2DArray ray_direction_data;
+layout(set = 3, binding = 0, rg32f) uniform restrict image2DArray ray_dot_data;
 
 layout(push_constant, std430) uniform Params {
 	int starting_rays;
@@ -121,20 +123,6 @@ vec4 sampleWorld(vec3 world_pos) {
     return col;
 }
 
-vec3 sampleDirectionalLights(vec3 world_pos) {
-    vec3 light_rotation = normalize(vec3(1.0, 1.0, 1.0));
-    vec3 centralized_pos = world_pos - vec3(params.vox_chunk_size) / 2.0;
-
-    if (dot(light_rotation, normalize(centralized_pos)) < 0.0)
-        return vec3(0.0);
-    if (world_pos.x > params.vox_chunk_size || world_pos.x < 0.0 ||
-    world_pos.y > params.vox_chunk_size || world_pos.y < 0.0 ||
-    world_pos.z > params.vox_chunk_size || world_pos.z < 0.0) {
-        return vec3(1.0);
-    }
-    return vec3(0.0);
-}
-
 vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
     int rays = params.starting_rays << (cascade_index * 2);
 
@@ -149,7 +137,6 @@ vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
         vec4 world_data = sampleWorld(sample_pos);
 
         float current_transmittance = max(transmittance, 0.0);
-        //radiance += sampleDirectionalLights(sample_pos) * current_transmittance;
         radiance += world_data.rgb * current_transmittance;
         // >1 alpha used for emission
         transmittance -= min(world_data.a, 1.0);
@@ -166,7 +153,7 @@ vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
 }
 
 vec4 faceToFaceTranslation(int starting_index, int starting_face, int ray_axis_1, int ray_axis_2, int cascade_index) {
-    int rays = params.starting_rays << (cascade_index);
+    int rays = params.starting_rays << (cascade_index * 2);
     int rays_per_face_axis = 1 << cascade_index;
     ivec3 cube_pos = ivec3(0);
 
@@ -208,27 +195,7 @@ void main() {
     int ray_index = text_index % rays;
 
     vec3 sample_pos = rayTextToVoxelCoords(ivec2(gl_GlobalInvocationID.xy), params.cascade_index);
-    vec3 offset = vec3(0.0);
-    
-    // mapping ray direction to points on a subdivided cube
-    int face = int(floor(6.0 * float(ray_index) / float(rays)));
-    float rays_per_face_axis = float(1 << params.cascade_index);
-
-    ivec2 face_2d_pos = ivec2(ray_index % int(rays_per_face_axis), int(float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis));
-
-    float face_offset = 0.5 / rays_per_face_axis;
-    float ray_axis_1 = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis);
-    float ray_axis_2 = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis * rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis);
-        
-    offset = face != 0 ? offset : vec3(1.0, ray_axis_1, ray_axis_2);
-    offset = face != 1 ? offset : vec3(-1.0, ray_axis_1, ray_axis_2);
-    offset = face != 2 ? offset : vec3(ray_axis_1, 1.0, ray_axis_2);
-    offset = face != 3 ? offset : vec3(ray_axis_1, -1.0, ray_axis_2);
-    offset = face != 4 ? offset : vec3(ray_axis_1, ray_axis_2, 1.0);
-    offset = face != 5 ? offset : vec3(ray_axis_1, ray_axis_2, -1.0);
-
-    // spherically mapping the cube
-    offset = normalize(offset);
+    vec3 offset = imageLoad(ray_direction_data, ivec3(ray_index, 0, params.cascade_index)).rgb;
 
     vec4 col = intersectRay(sample_pos, offset, params.cascade_index);
 
@@ -245,23 +212,16 @@ void main() {
 
     vec4 upper_cascade_color = vec4(0.0);
 
-    int ray_angular_samples = 1 << (upper_cascade * 2) - 1;
-
     for (int z = 0; z < 2; z++) {
         for (int y = 0; y < 2; y++) {
             for (int x = 0; x < 2; x++) {
                 float bias = ((x == 0 ? 1.0 - x_bias : x_bias) + (y == 0 ? 1.0 - y_bias : y_bias) + (z == 0 ? 1.0 - z_bias : z_bias)) / 3.0;
-                ivec2 text_pos = indexToTextPos(points[point]);
                 if (upper_cascade != params.cascades) {
-                    for (int x_text = -ray_angular_samples; x_text < ray_angular_samples; x_text++) {
-                        for (int y_text = -ray_angular_samples; y_text < ray_angular_samples; y_text++) {
-                            ivec2 offset_pos = face_2d_pos + ivec2(x_text, y_text);
-                            // just make sure it doesn't go into the corners?
-                            if ((offset_pos.x > rays_per_face_axis || offset_pos.x < 0) && (offset_pos.y > rays_per_face_axis || offset_pos.y < 0)) {
-                                continue;
-                            }
-                            upper_cascade_color += bias * faceToFaceTranslation(points[point], face, x_text, y_text, upper_cascade);
-                        }
+                    for (int ray_num = 0; ray_num < rays / 2; ray_num += 1) {
+                        // using lower cascade number as opposed to upper, as a layer for the lowest one is never made, so its skipped here
+                        vec4 dot_data = imageLoad(ray_dot_data, ivec3(ray_index, ray_num, params.cascade_index));
+                        ivec3 text_pos = ivec3(indexToTextPos(points[point] + int(dot_data.x)), upper_cascade);
+                        upper_cascade_color += imageLoad(cascade_data, text_pos) * bias / float(rays) * dot_data.y;
                     }
                 }
                 point += 1;
@@ -269,19 +229,12 @@ void main() {
         }
     }
 
-    //if (params.cascade_index != 0) {
-    //    col.rgb = sample_pos / 96.0;
-    //}
-    //else {
-    //    col.rgb = vec3(0.0);
-    //}
-
     if (upper_cascade != params.cascades) {
-        col.rgb += col.rgb + upper_cascade_color.rgb / 32.0 / max(1.0, float(ray_angular_samples * ray_angular_samples));
+        col.rgb += col.rgb + upper_cascade_color.rgb / 2.0;
     }
 
     if (params.cascade_index == 0) {
-        col.rgb = upper_cascade_color.rgb / 8.0 / max(1.0, float(ray_angular_samples * ray_angular_samples));
+        col.rgb = upper_cascade_color.rgb / 2.0;
     }
 
     imageStore(cascade_data, ivec3(gl_GlobalInvocationID.xy, params.cascade_index), col);

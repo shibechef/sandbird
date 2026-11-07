@@ -152,39 +152,6 @@ vec4 intersectRay(vec3 ray_start, vec3 offset, int cascade_index) {
     return vec4(radiance, transmittance);
 }
 
-vec4 faceToFaceTranslation(int starting_index, int starting_face, int ray_axis_1, int ray_axis_2, int cascade_index) {
-    int rays = params.starting_rays << (cascade_index * 2);
-    int rays_per_face_axis = 1 << cascade_index;
-    ivec3 cube_pos = ivec3(0);
-
-    // traveling any direction past the initial face of a cube can just be solved by moving further from the axis that the face lies on,
-    // while increasing the axis you're moving in but clamped to the min/max to align with the next face
-    int surplus = max(ray_axis_1, rays_per_face_axis - 1) - min(ray_axis_1, 1) + max(ray_axis_2, rays_per_face_axis - 1) - min(ray_axis_2, 1);
-
-    cube_pos = starting_face != 0 ? cube_pos : ivec3(rays_per_face_axis - surplus, ray_axis_1, ray_axis_2);
-    cube_pos = starting_face != 1 ? cube_pos : ivec3(surplus, ray_axis_1, ray_axis_2);
-    cube_pos = starting_face != 2 ? cube_pos : ivec3(ray_axis_1, rays_per_face_axis - surplus, ray_axis_2);
-    cube_pos = starting_face != 3 ? cube_pos : ivec3(ray_axis_1, surplus, ray_axis_2);
-    cube_pos = starting_face != 4 ? cube_pos : ivec3(ray_axis_1, ray_axis_2, rays_per_face_axis - surplus);
-    cube_pos = starting_face != 5 ? cube_pos : ivec3(ray_axis_1, ray_axis_2, surplus);
-
-    cube_pos = clamp(cube_pos, 0, rays_per_face_axis);
-
-    int text_index = 0;
-
-    int rays_per_face = rays_per_face_axis * rays_per_face_axis;
-    text_index = cube_pos.x != rays_per_face_axis ? text_index : cube_pos.y + cube_pos.z * rays_per_face_axis;
-    text_index = cube_pos.x != 0 ? text_index : cube_pos.y + cube_pos.z * rays_per_face_axis + rays_per_face;
-    text_index = cube_pos.y != rays_per_face_axis ? text_index : cube_pos.x + cube_pos.z * rays_per_face_axis + rays_per_face * 2;
-    text_index = cube_pos.y != 0 ? text_index : cube_pos.x + cube_pos.z * rays_per_face_axis + rays_per_face * 3;
-    text_index = cube_pos.z != rays_per_face_axis ? text_index : cube_pos.x + cube_pos.y * rays_per_face_axis + rays_per_face * 4;
-    text_index = cube_pos.z != 0 ? text_index : cube_pos.x + cube_pos.y * rays_per_face_axis + rays_per_face * 5;
-
-    text_index += starting_index;
-
-    return imageLoad(cascade_data, ivec3(indexToTextPos(text_index), cascade_index));
-}
-
 void main() {
     ivec3 voxel_text_size = imageSize(voxel_data);
     ivec3 radiance_text_size = imageSize(cascade_data);
@@ -196,7 +163,6 @@ void main() {
 
     vec3 sample_pos = rayTextToVoxelCoords(ivec2(gl_GlobalInvocationID.xy), params.cascade_index);
     vec3 offset = imageLoad(ray_direction_data, ivec3(ray_index, 0, params.cascade_index)).rgb;
-
     vec4 col = intersectRay(sample_pos, offset, params.cascade_index);
 
     int upper_cascade = params.cascade_index + 1;
@@ -217,11 +183,11 @@ void main() {
             for (int x = 0; x < 2; x++) {
                 float bias = max(col.a, 0.0) * ((x == 0 ? 1.0 - x_bias : x_bias) + (y == 0 ? 1.0 - y_bias : y_bias) + (z == 0 ? 1.0 - z_bias : z_bias)) / 3.0;
                 if (upper_cascade != params.cascades) {
-                    for (int ray_num = 0; ray_num < rays / 2; ray_num += 1) {
+                    for (int ray_num = 0; ray_num < int(float(rays) / 2.0); ray_num += 1) {
                         // using lower cascade number as opposed to upper, as a layer for the lowest one is never made, so its skipped here
                         vec4 dot_data = imageLoad(ray_dot_data, ivec3(ray_index, ray_num, params.cascade_index));
                         ivec3 text_pos = ivec3(indexToTextPos(points[point] + int(dot_data.x)), upper_cascade);
-                        upper_cascade_color += imageLoad(cascade_data, text_pos) * bias / float(rays) * dot_data.y;
+                        upper_cascade_color += imageLoad(cascade_data, text_pos) * bias * dot_data.y;
                     }
                 }
                 point += 1;
@@ -229,8 +195,11 @@ void main() {
         }
     }
 
+    if (params.cascade_index == 0) {
+        col.rgb += upper_cascade_color.rgb / float(rays);
+    }
     if (upper_cascade != params.cascades) {
-        col.rgb += upper_cascade_color.rgb;
+        col.rgb += upper_cascade_color.rgb / float(rays);
     }
 
     imageStore(cascade_data, ivec3(gl_GlobalInvocationID.xy, params.cascade_index), col);

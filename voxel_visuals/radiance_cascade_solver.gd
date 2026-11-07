@@ -39,6 +39,8 @@ var cascades: int = 4
 var initial_rays: int = 6
 var initial_ray_length: int = 4
 
+var display_debug: bool = true
+
 func _ready():
 	#test_shit_math()
 	hierarchy = get_node("%Hierarchy")
@@ -113,7 +115,8 @@ func compute_radiance_texture(chunks: int) -> void:
 	#for col in col_arr:
 		#if !col.is_equal_approx(Color(0.0, 0.0, 0.0, 1.0)):
 			#print(col)
-	display_debug_visuals(0)
+	if display_debug:
+		display_debug_visuals(0)
 
 ## skip moving data through CPU from compute to material by using buffer
 ## https://github.com/godotengine/godot-proposals/issues/6989#issuecomment-2770544670
@@ -191,7 +194,8 @@ func get_ray_direction(ray_index: int, rays: int, rays_per_face_axis: int) -> Ve
 			direction = Vector3(ray_axis_1, ray_axis_2, 1.0)
 		5:
 			direction = Vector3(ray_axis_1, ray_axis_2, -1.0)
-			
+	
+	#print(ray_index, " ", face, " ", direction, " ", direction.normalized(), " ", ray_axis_1, " ", ray_axis_2)
 	direction = direction.normalized()
 	
 	return direction
@@ -206,7 +210,7 @@ func create_ray_dir_texture() -> void:
 	## skip first cascade as you only look upwards
 	for cascade in cascades:
 		var angles: PackedVector4Array
-		var rays: int = initial_rays << 2 * cascade
+		var rays: int = initial_rays << (2 * cascade)
 		var rays_per_face_axis: int = 1 << cascade;
 		for ray in max_rays:
 			if ray < rays:
@@ -238,7 +242,7 @@ func create_ray_dot_texture() -> void:
 			
 			for ray_2 in rays:
 				var angle_2: Vector3 = get_ray_direction(ray_2, rays, rays_per_face_axis)
-				var dot: float = max(0.0, angle_1.dot(angle_2))
+				var dot: float = angle_1.dot(angle_2)
 				local_pairs.append([ray_2, dot]);
 			
 			local_pairs.sort_custom(func(a, b): return a[1] > b[1])
@@ -246,6 +250,7 @@ func create_ray_dot_texture() -> void:
 			for n in rays_half:
 				pairs.append(Vector2(local_pairs[n][0], local_pairs[n][1]))
 		
+		print(pairs.size())
 		pairs.resize(max_rays * int(float(max_rays) / 2.0))
 		
 		var bytes: PackedByteArray = pairs.to_byte_array()
@@ -324,44 +329,34 @@ func setup_text_formats(chunks: int) -> void:
 	RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
 
 func display_debug_visuals(cascade: int) -> void:
+	cascade = 2
 	var mesh_instance := MeshInstance3D.new()
 	mesh_instance.mesh = ArrayMesh.new()
 	
 	var rays: int = 6 << (cascade * 2)
-	var rays_per_face_axis: float = float(1 << cascade)
+	var rays_per_face_axis: int = 1 << cascade
 	
 	var vertices: PackedVector3Array
 	var colors: PackedColorArray
 	
-	var byte_data: PackedByteArray = rd.texture_get_data(radiance_text_RID, 0)
+	var byte_data: PackedByteArray = rd.texture_get_data(radiance_text_RID, cascade)
 	var color_data: PackedColorArray = byte_data.to_color_array()
 	
 	for i in 6*96*96*96:
 		var ray_index: int = i % rays
-		var face = int(floor(6.0 * float(ray_index) / float(rays)));
-		
 		var pos: Vector3 = test_position_sampling(i, cascade)
-		var face_offset: float = 0.5 / rays_per_face_axis;
-		var ray_axis_1: float = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis);
-		var ray_axis_2: float = -1.0 + 2.0 * (face_offset + float(ray_index % int(rays_per_face_axis * rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis);
-		
-		var offset := Vector3.ZERO
-		offset = offset if face != 0 else Vector3(1.0, ray_axis_1, ray_axis_2);
-		offset = offset if face != 1 else Vector3(-1.0, ray_axis_1, ray_axis_2);
-		offset = offset if face != 2 else Vector3(ray_axis_1, 1.0, ray_axis_2);
-		offset = offset if face != 3 else Vector3(ray_axis_1, -1.0, ray_axis_2);
-		offset = offset if face != 4 else Vector3(ray_axis_1, ray_axis_2, 1.0);
-		offset = offset if face != 5 else Vector3(ray_axis_1, ray_axis_2, -1.0);
-		
-		offset = offset.normalized()
+		var offset: Vector3 = get_ray_direction(ray_index, rays, rays_per_face_axis)
 		
 		vertices.append(pos)
-		vertices.append(pos + offset * .2)
+		vertices.append(pos - offset * .4)
 		
 		var col: Color = color_data[i]
-		
-		if col.r + col.g + col.b < .3:
+		col *= 2.0
+		col.a = sqrt(col.r + col.g + col.b)
+		if col.a < .2:
 			col.a = 0.0
+		else:
+			col.a = max(.5, col.a)
 		
 		colors.append(col)
 		colors.append(col)
@@ -373,6 +368,7 @@ func display_debug_visuals(cascade: int) -> void:
 	
 	mesh_instance.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_LINES, mesh_arrays)
 	mesh_instance.mesh.surface_set_material(0, load("res://materials/literally_vert_color.tres"))
+	mesh_instance.name = "john_debug"
 	get_node("%Hierarchy").add_child(mesh_instance)
 	
 func test_shit_math() -> void:
@@ -398,12 +394,9 @@ func test_shit_math() -> void:
 			var voxel_index: int = (invocation.x + invocation.y * text_size)
 				
 			var ray_index: int = voxel_index % current_rays
-			var face: int = floori(6 * float(ray_index) / float(current_rays))
-			var rays_per_face_axis: float = float(1 << cascade)
-			var offset: float = 0.5 / rays_per_face_axis
-			var ray_axis_1: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis)
-			var ray_axis_2: float = -1.0 + 2.0 * (offset + float(ray_index % int(rays_per_face_axis)) / rays_per_face_axis / rays_per_face_axis)
-			print(rays_per_face_axis, " ", offset, " ", ray_axis_1, " ", ray_axis_2)
+			var rays_per_face_axis: int = 1 << cascade
+			var offset: Vector3 = get_ray_direction(ray_index, current_rays, rays_per_face_axis)
+			print(rays_per_face_axis, " ", offset)
 
 func test_position_sampling(index: int, cascade: int) -> Vector3:
 	var invocation := Vector2i(index % text_size, floori(float(index) / float(text_size)))

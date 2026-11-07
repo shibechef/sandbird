@@ -219,7 +219,8 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/margin_right = 15
 
-[node name="Button" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/MarginContainer" unique_id=477477455]
+[node name="NewProjectButton" type="Button" parent="Row1/HBoxContainer4/MarginContainer2/VBoxContainer/MarginContainer" unique_id=477477455]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(273, 32)
 layout_mode = 2
 theme_override_styles/normal = ExtResource("4_ogxmn")

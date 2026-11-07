@@ -14,6 +14,7 @@ var color_palette_manager: ColorPaletteManager
 var edit_logging: EditLogging
 var move_obj_system: MoveObjectSystem
 var camera_system: CameraSystem
+var ui_manager: UIManager
 
 var number_selection_sequence: String
 
@@ -24,6 +25,7 @@ func _ready():
 	color_palette_manager = get_node("%ColorPaletteManager")
 	edit_logging = get_node("%EditLogger")
 	move_obj_system = get_node("%MoveObjectSystem")
+	ui_manager = get_node("%UIManager")
 	camera_system = get_tree().current_scene.get_node("%CameraSystem")
 	reset_mouse_cursor()
 
@@ -58,6 +60,9 @@ func handle_key_interaction():
 			edit_logging.undo_last_edit()
 	if Input.is_action_just_pressed("redo_action"):
 		edit_logging.redo_last_edit()
+		
+	if Input.is_action_just_pressed("ui_toggle"):
+		ui_manager.toggle_UI()
 		
 func handle_grab_inputs() -> void:
 	if Input.is_action_pressed("move_object"):

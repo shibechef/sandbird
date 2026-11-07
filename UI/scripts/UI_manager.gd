@@ -116,6 +116,12 @@ func keep_UI_pinned() -> void:
 	for pinned_obj in pinned_UI:
 		pinned_obj.global_position = pinned_UI[pinned_obj]
 
+func toggle_UI() -> void:
+	if is_visible_in_tree():
+		hide()
+	else:
+		show()
+
 static func get_data_entry_UI_scene(sync_location: Object, property_name: String, property_value, property_data) -> HBoxContainer:
 	var display_name: String
 	var input_scenes: Array[Control]

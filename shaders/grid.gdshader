@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, fog_disabled, ambient_light_disabled, cull_disabled, depth_test_disabled;
+render_mode unshaded, fog_disabled, ambient_light_disabled, cull_disabled;
 
 // Thank you https://www.shadertoy.com/view/wdK3Dy for the guidance as I am rusty
 

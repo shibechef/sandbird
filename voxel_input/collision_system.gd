@@ -3,10 +3,12 @@ class_name CollisionSystem
 
 var obj_hierarchy: Hierarchy
 var project_prefs: ProjectPreferences
+var camera_system: CameraSystem
 
 func _ready():
 	obj_hierarchy = get_node("%Hierarchy")
 	project_prefs = get_node("%ProjectPreferences")
+	camera_system = get_tree().current_scene.get_node("%CameraSystem")
 
 ## 3D slab technique but by someone that forgot how to do algebra
 static func get_AABB_line_collisions(origin: Vector3, direction: Vector3, targets: Dictionary[int, Array]) -> Array[Dictionary]:
@@ -95,7 +97,7 @@ static func get_AABB_line_collisions(origin: Vector3, direction: Vector3, target
 
 ## Do not use this for anything but voxel objects of course O_O
 func get_first_outline_col(collisions: Array[Dictionary]) -> int:
-	var margin: float = max(UserPreferences.outline_selection_width * 1.1, 1.0)
+	var margin: float = UserPreferences.outline_selection_width * 2.0
 	var closest_collision: float = 10000.0
 	var best_obj: int
 	for collision in collisions:
@@ -108,11 +110,12 @@ func get_first_outline_col(collisions: Array[Dictionary]) -> int:
 			cols.append(collision["col_2"])
 			
 		for i in cols.size():
-			var col = cols[i]
+			var col: Vector3 = cols[i]
 			var near: int = 0
-			near += int(AABB_lower.x > col.x - margin or col.x + margin > AABB_upper.x)
-			near += int(AABB_lower.y > col.y - margin or col.y + margin > AABB_upper.y)
-			near += int(AABB_lower.z > col.z - margin or col.z + margin > AABB_upper.z)
+			var eff_margin: float = margin * col.distance_to(camera_system.position) / 50.0
+			near += int(AABB_lower.x > col.x - eff_margin or col.x + eff_margin > AABB_upper.x)
+			near += int(AABB_lower.y > col.y - eff_margin or col.y + eff_margin > AABB_upper.y)
+			near += int(AABB_lower.z > col.z - eff_margin or col.z + eff_margin > AABB_upper.z)
 			
 			## Needs to be near 2 axises to be a corner
 			if near < 2:

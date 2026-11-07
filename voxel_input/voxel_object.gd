@@ -117,14 +117,15 @@ func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
 		
 	
 func create_BB_outline() -> void:
-	var mesh_data = mesh_system.create_box(Vector3.ZERO, dimensions)
+	var mesh_data = mesh_system.create_box(Vector3.ZERO, Vector3(dimensions) + Vector3.ONE * .005)
 	outline_object = mesh_system.create_mesh_instance(mesh_data)
 	outline_material.set_shader_parameter("grid_color", UserPreferences.unselected_color)
-	outline_material.set_shader_parameter("grid_size", dimensions)
-	outline_material.set_shader_parameter("line_width", UserPreferences.outline_selection_width)
+	outline_material.set_shader_parameter("grid_size", Vector3(dimensions) + Vector3.ONE * .005)
+	outline_material.set_shader_parameter("line_width", .1)
 		
 	outline_object.mesh.surface_set_material(0, outline_material)
 	add_child(outline_object)
+	outline_object.position += -Vector3.ONE * .0025
 
 func on_size_change() -> void:
 	## Needs to change the mesh offset

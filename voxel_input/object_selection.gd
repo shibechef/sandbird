@@ -19,12 +19,15 @@ func try_click() -> void:
 	var result: Array[Dictionary]
 	var objs: Dictionary[int, Array]
 	for obj in hierarchy.all_objects:
-		objs[obj] = [hierarchy.all_objects[obj].position, hierarchy.all_objects[obj].dimensions]
+		var dist: float = camera_system.position.distance_to(hierarchy.all_objects[obj].position + hierarchy.all_objects[obj].dimensions / 2.0)
+		var offset: Vector3 = Vector3.ONE * UserPreferences.outline_selection_width * dist / 40.0
+		var pos: Vector3 = hierarchy.all_objects[obj].position - offset * .5
+		var dimensions: Vector3 = Vector3(hierarchy.all_objects[obj].dimensions) + offset
+		objs[obj] = [pos, dimensions]
 	
 	var click_data = get_tree().current_scene.get_node("%WorldClick").get_mouse_world_pos()
 	
 	result = CollisionSystem.get_AABB_line_collisions(click_data[0], click_data[1], objs)
-	
 	var hit_obj: int = collision_system.get_first_outline_col(result)
 	if hit_obj != 0:
 		select_object(hit_obj)

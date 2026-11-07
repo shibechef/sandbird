@@ -177,6 +177,7 @@ void main() {
     int point = 0;
 
     vec4 upper_cascade_color = vec4(0.0);
+    rays = params.cascade_index == params.cascades - 1 ? 0 : rays;
 
     for (int z = 0; z < 2; z++) {
         for (int y = 0; y < 2; y++) {
@@ -184,8 +185,7 @@ void main() {
                 float bias = max(col.a, 0.0) * ((x == 0 ? 1.0 - x_bias : x_bias) + (y == 0 ? 1.0 - y_bias : y_bias) + (z == 0 ? 1.0 - z_bias : z_bias)) / 3.0;
                 if (upper_cascade != params.cascades) {
                     for (int ray_num = 0; ray_num < int(float(rays) / 2.0); ray_num += 1) {
-                        // using lower cascade number as opposed to upper, as a layer for the lowest one is never made, so its skipped here
-                        vec4 dot_data = imageLoad(ray_dot_data, ivec3(ray_index, ray_num, params.cascade_index));
+                        vec4 dot_data = imageLoad(ray_dot_data, ivec3(ray_num, ray_index, params.cascade_index));
                         ivec3 text_pos = ivec3(indexToTextPos(points[point] + int(dot_data.x)), upper_cascade);
                         upper_cascade_color += imageLoad(cascade_data, text_pos) * bias * dot_data.y;
                     }
@@ -195,9 +195,6 @@ void main() {
         }
     }
 
-    if (params.cascade_index == 0) {
-        col.rgb += upper_cascade_color.rgb / float(rays);
-    }
     if (upper_cascade != params.cascades) {
         col.rgb += upper_cascade_color.rgb / float(rays);
     }

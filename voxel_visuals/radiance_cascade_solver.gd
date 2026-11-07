@@ -39,7 +39,7 @@ var cascades: int = 4
 var initial_rays: int = 6
 var initial_ray_length: int = 4
 
-var display_debug: bool = true
+var display_debug: bool = false
 
 func _ready():
 	#test_shit_math()
@@ -228,33 +228,38 @@ func create_ray_dot_texture() -> void:
 	ray_dot_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	ray_dot_uniform.add_id(ray_dot_text_RID)
 	
-	var max_rays: int = initial_rays << 2 * (cascades - 1)	
-	
-	## skip first cascade as you only look upwards
-	for cascade in range(1, cascades):
+	var max_rays_line: int = int(float((initial_rays << (2 * (cascades - 1))) * .5))	
+	var max_rays_total: int = max_rays_line * (initial_rays << 2 * (cascades - 2))
+
+	for cascade in cascades - 1:
 		var pairs: PackedVector2Array
-		var rays: int = initial_rays << 2 * cascade
-		var rays_per_face_axis: int = 1 << cascade;
-		var rays_half: int = int(float(rays) / 2.0)
-		for ray in rays:
+
+		var rays_lower: int = initial_rays << 2 * cascade
+		var rays_upper: int = initial_rays << 2 * (cascade + 1)
+		var rays_per_face_axis_lower: int = 1 << cascade;
+		var rays_per_face_axis_upper: int = 1 << (cascade + 1);
+		var rays_half_upper: int = int(float(rays_upper) / 2.0)
+		for ray in rays_lower:
 			var local_pairs: Array = []
-			var angle_1: Vector3 = get_ray_direction(ray, rays, rays_per_face_axis)
+			var angle_1: Vector3 = get_ray_direction(ray, rays_lower, rays_per_face_axis_lower)
 			
-			for ray_2 in rays:
-				var angle_2: Vector3 = get_ray_direction(ray_2, rays, rays_per_face_axis)
+			for ray_2 in rays_upper:
+				var angle_2: Vector3 = get_ray_direction(ray_2, rays_upper, rays_per_face_axis_upper)
 				var dot: float = angle_1.dot(angle_2)
 				local_pairs.append([ray_2, dot]);
 			
 			local_pairs.sort_custom(func(a, b): return a[1] > b[1])
 			
-			for n in rays_half:
-				pairs.append(Vector2(local_pairs[n][0], local_pairs[n][1]))
+			for n in max_rays_line:
+				if n < rays_half_upper:
+					pairs.append(Vector2(local_pairs[n][0], local_pairs[n][1]))
+				else:
+					pairs.append(Vector2.ZERO)
 		
-		print(pairs.size())
-		pairs.resize(max_rays * int(float(max_rays) / 2.0))
-		
+		pairs.resize(max_rays_total)
+
 		var bytes: PackedByteArray = pairs.to_byte_array()
-		rd.texture_update(ray_dot_text_RID, cascade - 1, bytes)
+		rd.texture_update(ray_dot_text_RID, cascade, bytes)
 
 func solve_global_lights() -> void:
 	## for every chunk figure out what chunks it will need to calculate into the sun
@@ -303,12 +308,13 @@ func setup_text_formats(chunks: int) -> void:
 	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
 	
-	var rays: int = initial_rays << (2 * (cascades - 1))
+	var max_rays: int = initial_rays << (2 * (cascades - 1))
+	var lower_max_rays: int = initial_rays << (2 * (cascades - 2))
 	
 	## alpha is wasted but R11G11B10 seems bad
 	ray_dir_text_format = RDTextureFormat.new()
 	ray_dir_text_format.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
-	ray_dir_text_format.width = rays
+	ray_dir_text_format.width = max_rays
 	ray_dir_text_format.height = 1
 	ray_dir_text_format.array_layers = cascades
 	ray_dir_text_format.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
@@ -320,8 +326,8 @@ func setup_text_formats(chunks: int) -> void:
 	## but its still so tiny.
 	ray_dot_text_format = RDTextureFormat.new()
 	ray_dot_text_format.format = RenderingDevice.DATA_FORMAT_R32G32_SFLOAT
-	ray_dot_text_format.width = rays
-	ray_dot_text_format.height = int(float(rays) / 2.0)
+	ray_dot_text_format.width = int(float(max_rays) / 2.0) 
+	ray_dot_text_format.height = lower_max_rays
 	ray_dot_text_format.array_layers = cascades - 1
 	ray_dot_text_format.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
 	ray_dot_text_format.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
@@ -329,7 +335,6 @@ func setup_text_formats(chunks: int) -> void:
 	RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
 
 func display_debug_visuals(cascade: int) -> void:
-	cascade = 2
 	var mesh_instance := MeshInstance3D.new()
 	mesh_instance.mesh = ArrayMesh.new()
 	
@@ -351,9 +356,9 @@ func display_debug_visuals(cascade: int) -> void:
 		vertices.append(pos - offset * .4)
 		
 		var col: Color = color_data[i]
-		col *= 2.0
+		col *= .4
 		col.a = sqrt(col.r + col.g + col.b)
-		if col.a < .2:
+		if col.a < .1:
 			col.a = 0.0
 		else:
 			col.a = max(.5, col.a)

@@ -8,12 +8,14 @@ layout(set = 1, binding = 0, rgba32f) uniform restrict image2DArray cascade_data
 layout(set = 2, binding = 0, rgba32f) uniform restrict image2DArray ray_direction_data;
 layout(set = 3, binding = 0, rg32f) uniform restrict image2DArray ray_dot_data;
 
+
 layout(push_constant, std430) uniform Params {
 	int starting_rays;
 	int starting_length;
     int vox_chunk_size;
     int cascade_index;
     int cascades;
+    int[8] nearby_chunks;
 } params;
 
 vec3 getEffectiveChunkSize(int cascade_index) {

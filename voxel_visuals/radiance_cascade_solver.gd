@@ -22,6 +22,9 @@ var copying_text_RID: RID
 var ray_dir_text_RID: RID
 var ray_dot_text_RID: RID
 
+var chunk_texture_lookup: Dictionary[Vector3i, int]
+var missing_chunks: Array[int] = []
+
 var voxel_uniform: RDUniform
 var radiance_uniform: RDUniform
 var ray_dir_uniform: RDUniform
@@ -47,6 +50,8 @@ func _ready():
 	palette_manager = get_node("%ColorPaletteManager")
 	
 	var chunks: int = 1
+	for chunk in chunks:
+		missing_chunks.append(chunk)
 	rd = RenderingServer.get_rendering_device()
 	setup_text_formats(chunks)
 	create_ray_dir_texture()
@@ -70,10 +75,11 @@ func setup_compute_materials(chunks: int) -> void:
 	copying_text_RID = rd.texture_create(copying_text_format, RDTextureView.new())
 		
 	var cascade_bytes = PackedFloat32Array()
-	cascade_bytes.resize(text_size * text_size * chunks * cascades)
+	cascade_bytes.resize(text_size * text_size * cascades)
 	cascade_bytes.fill(0.0) 
 	var bytes_2: PackedByteArray = cascade_bytes.to_byte_array() 
-	rd.texture_update(radiance_text_RID, 0, bytes_2)
+	for chunk in chunks:
+		rd.texture_update(radiance_text_RID, chunk, bytes_2)
 
 func compute_radiance_texture(chunks: int) -> void:	
 	var uniform_set_0_RID := rd.uniform_set_create([voxel_uniform], radiance_shader_RID, 0)
@@ -89,6 +95,14 @@ func compute_radiance_texture(chunks: int) -> void:
 		push_constant.push_back(chunk_width)
 		push_constant.push_back(n)
 		push_constant.push_back(cascades)
+		push_constant.push_back(0)
+		push_constant.push_back(0)
+		push_constant.push_back(0)
+		push_constant.push_back(0)
+		push_constant.push_back(0)
+		push_constant.push_back(0)
+		push_constant.push_back(0)
+		push_constant.push_back(0)
 		push_constant.push_back(0)
 		push_constant.push_back(0)
 		push_constant.push_back(0)
@@ -142,36 +156,21 @@ func update_voxel_text(position: Vector3i, voxel: VoxelData) -> void:
 		for i in 6:
 			var color: Color = palette_manager.get_color_from_id(voxel.face_colors[i]).color
 			cols.append(color_to_vec4(color))
-
+	
+	var chunk_pos: Vector3i = get_chunk(position)
+	if !chunk_texture_lookup.has(chunk_pos):
+		add_chunk(chunk_pos)
+	var chunk_num: int = chunk_texture_lookup[chunk_pos]
+	position = position % chunk_size
+	if position.x < 0 or position.y < 0 or position.z < 0:
+		print(position)
+	
 	var voxel_index: int = position.x + position.y * chunk_size + position.z * chunk_size * chunk_size
+	voxel_index = 0
 	voxel_index *= 6
 	var text_coords := Vector3(voxel_index % text_size, floor(float(voxel_index) / float(text_size)), 0.0)
 	rd.texture_update(copying_text_RID, 0, cols.to_byte_array())
-	rd.texture_copy(copying_text_RID, vox_text_RID, Vector3.ZERO, text_coords, Vector3(6.0, 1.0, 1.0), 0, 0, 0, 0)
-
-func grid_to_vec4_array(voxel_object: VoxelObject) -> PackedVector4Array:	
-	## quicker to simply append empty arrays 
-	## than to preset an array size and set() repeatedly
-	var color_array: PackedVector4Array
-	var grid: Dictionary[Vector3i, VoxelData] = voxel_object.voxel_grid
-	
-	## doing z-y-x so that x is iterated on first
-	for z in voxel_object.dimensions.z:
-		for y in voxel_object.dimensions.y:
-			for x in voxel_object.dimensions.x:
-				var pos: Vector3i = Vector3i(x, y, z)
-								
-				if !grid.has(pos):
-					color_array.append_array(empty)
-				elif grid[pos].face_colors.size() == 1:
-					var color: Color = palette_manager.get_color_from_id(grid[pos].face_colors[0]).color
-					for i in 6:
-						color_array.append(color_to_vec4(color))
-				else:
-					for i in 6:
-						var color: Color = palette_manager.get_color_from_id(grid[pos].face_colors[i]).color
-						color_array.append(color_to_vec4(color))					
-	return color_array
+	rd.texture_copy(copying_text_RID, vox_text_RID, Vector3.ZERO, text_coords, Vector3(6.0, 1.0, 1.0), 0, 0, 0, chunk_num)
 
 func get_ray_direction(ray_index: int, rays: int, rays_per_face_axis: int) -> Vector3:
 	var direction: Vector3
@@ -280,7 +279,7 @@ func setup_text_formats(chunks: int) -> void:
 	vox_text_format.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
 	vox_text_format.width = text_size
 	vox_text_format.height = text_size
-	vox_text_format.array_layers = chunks * cascades
+	vox_text_format.array_layers = chunks
 	vox_text_format.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
 	vox_text_format.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
@@ -432,5 +431,17 @@ func test_position_sampling(index: int, cascade: int) -> Vector3:
 	
 	return sample_pos
 
+func add_chunk(coords: Vector3i) -> void:
+	var chunk_num: int = missing_chunks.pop_back()
+	chunk_texture_lookup[coords] = chunk_num
+
+func remove_chunk(coords: Vector3i) -> void:
+	var chunk_num: int = chunk_texture_lookup[coords]
+	missing_chunks.append(chunk_num)
+	chunk_texture_lookup.erase(chunk_num)
+
 func color_to_vec4(color: Color) -> Vector4:
 	return Vector4(color.r, color.g, color.b, color.a) 
+
+func get_chunk(coords: Vector3i) -> Vector3i:
+	return Vector3i(floor(Vector3(coords) / float(chunk_size)))

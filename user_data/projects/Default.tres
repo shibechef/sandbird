@@ -82225,19 +82225,24 @@ Vector3i(95, 60, 11): SubResource("Resource_q0oxo")
 })
 dimensions = Vector3i(96, 96, 96)
 
+[sub_resource type="Resource" id="Resource_tet7k"]
+script = ExtResource("4_y6rvo")
+dimensions = Vector3i(32, 32, 32)
+position = Vector3i(31, 21, -56)
+
 [resource]
 script = ExtResource("8_drfpy")
 save_time = {
-"day": 5,
+"day": 9,
 "dst": false,
-"hour": 20,
-"minute": 5,
+"hour": 0,
+"minute": 41,
 "month": 11,
-"second": 39,
-"weekday": 4,
+"second": 28,
+"weekday": 1,
 "year": 2026
 }
-objects = Array[ExtResource("4_y6rvo")]([SubResource("Resource_j2poe")])
+objects = Array[ExtResource("4_y6rvo")]([SubResource("Resource_j2poe"), SubResource("Resource_tet7k")])
 palettes = Dictionary[int, ExtResource("6_2abl1")]({
 1: ExtResource("8_k62u4")
 })

@@ -3,10 +3,11 @@
 
 layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 
-layout(set = 0, binding = 0, rgba32f) uniform restrict image2DArray voxel_data;
+layout(set = 0, binding = 0, r16ui) uniform restrict uimage2DArray voxel_data;
 layout(set = 1, binding = 0, rgba32f) uniform restrict image2DArray cascade_data;
-layout(set = 2, binding = 0, rgba32f) uniform restrict image2DArray ray_direction_data;
-layout(set = 3, binding = 0, rg32f) uniform restrict image2DArray ray_dot_data;
+layout(set = 2, binding = 0, rgba32f) uniform restrict image2D col_data;
+layout(set = 3, binding = 0, rgba32f) uniform restrict image2DArray ray_direction_data;
+layout(set = 4, binding = 0, rg32f) uniform restrict image2DArray ray_dot_data;
 
 
 layout(push_constant, std430) uniform Params {
@@ -31,7 +32,7 @@ vec3 getEffectiveChunkSize(int cascade_index) {
     return effective_chunk_size;
 }
 
-ivec3 worldPosToVoxelTextCoords(ivec3 world_pos, int layer, int face) {
+ivec2 worldPosToVoxelTextCoords(ivec3 world_pos) {
     ivec3 text_size = imageSize(voxel_data);
     
     int voxel_index = world_pos.x + world_pos.y * params.vox_chunk_size + world_pos.z * params.vox_chunk_size * params.vox_chunk_size;
@@ -40,7 +41,7 @@ ivec3 worldPosToVoxelTextCoords(ivec3 world_pos, int layer, int face) {
     int x = voxel_index % text_size.x;
     int y = int(floor(float(voxel_index) / float(text_size.x)));
 
-    return ivec3(x, y, layer);
+    return ivec2(x, y);
 }
 
 ivec2 indexToTextPos(int index) {
@@ -119,8 +120,10 @@ vec4 sampleWorld(vec3 world_pos) {
     world_pos.y = clamp(world_pos.y, 0, params.vox_chunk_size);
     world_pos.z = clamp(world_pos.z, 0, params.vox_chunk_size);
     
-    ivec3 sample_pos = worldPosToVoxelTextCoords(ivec3(floor(world_pos)), 0, 0);
-    vec4 col = imageLoad(voxel_data, sample_pos);
+    ivec3 sample_pos = ivec3(worldPosToVoxelTextCoords(ivec3(floor(world_pos))), 0);
+    int col_index = int(imageLoad(voxel_data, sample_pos).x);
+    ivec2 col_text_pos = ivec2(col_index % 256, int(floor(float(col_index) / 256.0)));
+    vec4 col = imageLoad(col_data, col_text_pos);
     
     return col;
 }

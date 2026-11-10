@@ -12,21 +12,28 @@ var material: ShaderMaterial = load("res://materials/cascade_simple.tres")
 
 var vox_text_format: RDTextureFormat
 var radiance_text_format: RDTextureFormat
-var copying_text_format: RDTextureFormat
+var col_text_format: RDTextureFormat
+var copying_col_text_format: RDTextureFormat
+var copying_vox_text_format: RDTextureFormat
 var ray_dir_text_format: RDTextureFormat
 var ray_dot_text_format: RDTextureFormat
 
 var vox_text_RID: RID
 var radiance_text_RID: RID
-var copying_text_RID: RID
+var col_text_RID: RID
+var copying_col_text_RID: RID
+var copying_vox_text_RID: RID
 var ray_dir_text_RID: RID
 var ray_dot_text_RID: RID
 
 var chunk_texture_lookup: Dictionary[Vector3i, int]
+var col_id_to_index_lookup: Dictionary[int, int]
+var missing_colors: Array[int] = []
 var missing_chunks: Array[int] = []
 
 var voxel_uniform: RDUniform
 var radiance_uniform: RDUniform
+var col_uniform: RDUniform
 var ray_dir_uniform: RDUniform
 var ray_dot_uniform: RDUniform
 
@@ -48,7 +55,9 @@ func _ready():
 	#test_shit_math()
 	hierarchy = get_node("%Hierarchy")
 	palette_manager = get_node("%ColorPaletteManager")
-	
+		
+	for i in 65536:
+		missing_colors.append(i)
 	var chunks: int = 1
 	for chunk in chunks:
 		missing_chunks.append(chunk)
@@ -64,6 +73,10 @@ func setup_compute_materials(chunks: int) -> void:
 	radiance_shader_RID = rd.shader_create_from_spirv(radiance_shader_spirv)
 	
 	vox_text_RID = rd.texture_create(vox_text_format, RDTextureView.new())
+	col_text_RID = rd.texture_create(col_text_format, RDTextureView.new())
+	copying_col_text_RID = rd.texture_create(copying_col_text_format, RDTextureView.new())	
+	copying_vox_text_RID = rd.texture_create(copying_vox_text_format, RDTextureView.new())	
+
 	voxel_uniform = RDUniform.new()	
 	voxel_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	voxel_uniform.add_id(vox_text_RID)
@@ -71,8 +84,10 @@ func setup_compute_materials(chunks: int) -> void:
 	radiance_uniform = RDUniform.new()	
 	radiance_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	radiance_uniform.add_id(radiance_text_RID)
-
-	copying_text_RID = rd.texture_create(copying_text_format, RDTextureView.new())
+	
+	col_uniform = RDUniform.new()
+	col_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
+	col_uniform.add_id(col_text_RID)
 		
 	var cascade_bytes = PackedFloat32Array()
 	cascade_bytes.resize(text_size * text_size * cascades)
@@ -84,8 +99,9 @@ func setup_compute_materials(chunks: int) -> void:
 func compute_radiance_texture(chunks: int) -> void:	
 	var uniform_set_0_RID := rd.uniform_set_create([voxel_uniform], radiance_shader_RID, 0)
 	var uniform_set_1_RID := rd.uniform_set_create([radiance_uniform], radiance_shader_RID, 1)
-	var uniform_set_2_RID := rd.uniform_set_create([ray_dir_uniform], radiance_shader_RID, 2)
-	var uniform_set_3_RID := rd.uniform_set_create([ray_dot_uniform], radiance_shader_RID, 3)
+	var uniform_set_2_RID := rd.uniform_set_create([col_uniform], radiance_shader_RID, 2)
+	var uniform_set_3_RID := rd.uniform_set_create([ray_dir_uniform], radiance_shader_RID, 3)
+	var uniform_set_4_RID := rd.uniform_set_create([ray_dot_uniform], radiance_shader_RID, 4)
 	
 	for n in range(cascades - 1, -1, -1):
 		var chunk_width: int = roundi(pow(float(text_size*text_size) / 6.0, 1.0/3.0))
@@ -116,6 +132,7 @@ func compute_radiance_texture(chunks: int) -> void:
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_1_RID, 1)
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_2_RID, 2)
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_3_RID, 3)
+		rd.compute_list_bind_uniform_set(compute_list, uniform_set_4_RID, 4)
 		rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.to_byte_array().size())
 
 		rd.compute_list_dispatch(compute_list, 288, 288, 1)
@@ -141,36 +158,39 @@ func match_compute_material_buffers(chunks: int) -> void:
 	text_arr.texture_rd_rid = radiance_text_RID
 	RenderingServer.global_shader_parameter_set("cascade_text_array", text_arr)
 	
-var empty: PackedVector4Array = PackedVector4Array([Vector4.ZERO, Vector4.ZERO, Vector4.ZERO, Vector4.ZERO, Vector4.ZERO, Vector4.ZERO])
-
 func update_voxel_text(position: Vector3i, voxel: VoxelData) -> void:
-	var cols: PackedVector4Array
+	var cols: PackedByteArray
+	cols.resize(12)
 	
 	if voxel == null:
-		cols.append_array(empty)
-	elif voxel.face_colors.size() == 1:
-		var color: Color = palette_manager.get_color_from_id(voxel.face_colors[0]).color
 		for i in 6:
-			cols.append(color_to_vec4(color))
+			cols.encode_u16(i * 2, 0)
+	elif voxel.face_colors.size() == 1:
+		var color_id: int = voxel.face_colors[0]
+		if !col_id_to_index_lookup.has(color_id):
+			add_color(color_id, palette_manager.get_color_from_id(color_id).color)
+		var index: int = col_id_to_index_lookup[color_id]
+		for i in 6:
+			cols.encode_u16(i * 2, index)
 	else:
 		for i in 6:
-			var color: Color = palette_manager.get_color_from_id(voxel.face_colors[i]).color
-			cols.append(color_to_vec4(color))
-	
+			var color_id: int = voxel.face_colors[i]
+			if !col_id_to_index_lookup.has(color_id):
+				add_color(color_id, palette_manager.get_color_from_id(color_id).color)
+			var index: int = col_id_to_index_lookup[color_id]
+			cols.encode_u16(i * 2, index)
+			
 	var chunk_pos: Vector3i = get_chunk(position)
 	if !chunk_texture_lookup.has(chunk_pos):
 		add_chunk(chunk_pos)
 	var chunk_num: int = chunk_texture_lookup[chunk_pos]
 	position = position % chunk_size
-	if position.x < 0 or position.y < 0 or position.z < 0:
-		print(position)
 	
 	var voxel_index: int = position.x + position.y * chunk_size + position.z * chunk_size * chunk_size
-	voxel_index = 0
 	voxel_index *= 6
 	var text_coords := Vector3(voxel_index % text_size, floor(float(voxel_index) / float(text_size)), 0.0)
-	rd.texture_update(copying_text_RID, 0, cols.to_byte_array())
-	rd.texture_copy(copying_text_RID, vox_text_RID, Vector3.ZERO, text_coords, Vector3(6.0, 1.0, 1.0), 0, 0, 0, chunk_num)
+	rd.texture_update(copying_vox_text_RID, 0, cols)
+	rd.texture_copy(copying_vox_text_RID, vox_text_RID, Vector3.ZERO, text_coords, Vector3(6.0, 1.0, 1.0), 0, 0, 0, chunk_num)
 
 func get_ray_direction(ray_index: int, rays: int, rays_per_face_axis: int) -> Vector3:
 	var direction: Vector3
@@ -276,7 +296,7 @@ func solve_global_lights() -> void:
 
 func setup_text_formats(chunks: int) -> void:
 	vox_text_format = RDTextureFormat.new()
-	vox_text_format.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
+	vox_text_format.format = RenderingDevice.DATA_FORMAT_R16_UINT
 	vox_text_format.width = text_size
 	vox_text_format.height = text_size
 	vox_text_format.array_layers = chunks
@@ -297,13 +317,31 @@ func setup_text_formats(chunks: int) -> void:
 	## FOR DEBUGGING
 	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
 	
-	copying_text_format = RDTextureFormat.new()
-	copying_text_format.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
-	copying_text_format.width = 6
-	copying_text_format.height = 1
-	copying_text_format.array_layers = 1
-	copying_text_format.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
-	copying_text_format.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
+	col_text_format = RDTextureFormat.new()
+	col_text_format.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
+	col_text_format.width = 256
+	col_text_format.height = 256
+	col_text_format.texture_type = RenderingDevice.TEXTURE_TYPE_2D
+	col_text_format.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_COPY_TO_BIT
+
+	copying_col_text_format = RDTextureFormat.new()
+	copying_col_text_format.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
+	copying_col_text_format.width = 1
+	copying_col_text_format.height = 1
+	copying_col_text_format.texture_type = RenderingDevice.TEXTURE_TYPE_2D
+	copying_col_text_format.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
+	
+	copying_vox_text_format = RDTextureFormat.new()
+	copying_vox_text_format.format = RenderingDevice.DATA_FORMAT_R16_UINT
+	copying_vox_text_format.width = 6
+	copying_vox_text_format.height = 1
+	copying_vox_text_format.array_layers = 1
+	copying_vox_text_format.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
+	copying_vox_text_format.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
 	
@@ -439,6 +477,20 @@ func remove_chunk(coords: Vector3i) -> void:
 	var chunk_num: int = chunk_texture_lookup[coords]
 	missing_chunks.append(chunk_num)
 	chunk_texture_lookup.erase(chunk_num)
+
+func add_color(color_id: int, color: Color) -> int:
+	var text_index: int = missing_colors.pop_back()
+	col_id_to_index_lookup[color_id] = text_index
+	
+	var text_coords := Vector3(text_index % 256, floor(float(text_index) / 256.0), 0.0)
+	var bytes: PackedByteArray = PackedColorArray([color]).to_byte_array()
+	rd.texture_update(copying_col_text_RID, 0, bytes)
+	rd.texture_copy(copying_col_text_RID, col_text_RID, Vector3.ZERO, text_coords, Vector3(1.0, 1.0, 1.0), 0, 0, 0, 0)
+	
+	return text_index
+
+func change_color(color_id: int, new_color: Color) -> void:
+	return
 
 func color_to_vec4(color: Color) -> Vector4:
 	return Vector4(color.r, color.g, color.b, color.a) 

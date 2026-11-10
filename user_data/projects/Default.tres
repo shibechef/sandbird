@@ -1,13 +1,17 @@
-[gd_resource type="Resource" script_class="SaveState" format=3]
+[gd_resource type="Resource" script_class="SaveState" format=3 uid="uid://dadqcce4kl4e5"]
 
-[ext_resource type="Script" path="res://voxel_painting/brushes/base_brush.gd" id="1_k62u4"]
-[ext_resource type="Script" path="res://voxel_painting/brushes/point_brush.gd" id="2_nfk4l"]
-[ext_resource type="Script" path="res://voxel_painting/brushes/beam_brush.gd" id="3_wwl6w"]
-[ext_resource type="Script" path="res://user/voxel_object_data.gd" id="4_y6rvo"]
-[ext_resource type="Script" path="res://voxel_input/voxel_data.gd" id="5_pfw8w"]
-[ext_resource type="Script" path="res://voxel_visuals/color_palette.gd" id="6_2abl1"]
-[ext_resource type="Script" path="res://user/save_state.gd" id="8_drfpy"]
-[ext_resource type="Resource" path="res://user_data/palettes/rainbow.tres" id="8_k62u4"]
+[ext_resource type="Script" uid="uid://doicsuyh58fhn" path="res://voxel_painting/brushes/base_brush.gd" id="1_k62u4"]
+[ext_resource type="Script" uid="uid://cabu1sttj61yr" path="res://voxel_painting/brushes/point_brush.gd" id="2_nfk4l"]
+[ext_resource type="Script" uid="uid://rrg3dhpf3gdf" path="res://voxel_painting/brushes/beam_brush.gd" id="3_wwl6w"]
+[ext_resource type="Script" uid="uid://baiiwt5g3tikx" path="res://user/voxel_object_data.gd" id="4_y6rvo"]
+[ext_resource type="Script" uid="uid://dhxphv8esrf00" path="res://voxel_input/voxel_data.gd" id="5_pfw8w"]
+[ext_resource type="Script" uid="uid://ciubgxcnuov46" path="res://voxel_visuals/color_palette.gd" id="6_2abl1"]
+[ext_resource type="Script" uid="uid://d055hay6dowp1" path="res://user/save_state.gd" id="8_drfpy"]
+[ext_resource type="Resource" uid="uid://ce3m077vbf1hg" path="res://user_data/palettes/rainbow.tres" id="8_k62u4"]
+
+[sub_resource type="Resource" id="Resource_k62u4"]
+script = ExtResource("2_nfk4l")
+named_as = "brush 1"
 
 [sub_resource type="Resource" id="Resource_uif21"]
 script = ExtResource("2_nfk4l")
@@ -20,10 +24,6 @@ script = ExtResource("3_wwl6w")
 erase = true
 named_as = "poo"
 metadata/_custom_type_script = "uid://rrg3dhpf3gdf"
-
-[sub_resource type="Resource" id="Resource_k62u4"]
-script = ExtResource("2_nfk4l")
-named_as = "brush 1"
 
 [sub_resource type="Resource" id="Resource_nfk4l"]
 script = ExtResource("5_pfw8w")
@@ -82225,11 +82225,6 @@ Vector3i(95, 60, 11): SubResource("Resource_q0oxo")
 })
 dimensions = Vector3i(96, 96, 96)
 
-[sub_resource type="Resource" id="Resource_tet7k"]
-script = ExtResource("4_y6rvo")
-dimensions = Vector3i(32, 32, 32)
-position = Vector3i(31, 21, -56)
-
 [resource]
 script = ExtResource("8_drfpy")
 save_time = {
@@ -82242,7 +82237,7 @@ save_time = {
 "weekday": 1,
 "year": 2026
 }
-objects = Array[ExtResource("4_y6rvo")]([SubResource("Resource_j2poe"), SubResource("Resource_tet7k")])
+objects = Array[ExtResource("4_y6rvo")]([SubResource("Resource_j2poe")])
 palettes = Dictionary[int, ExtResource("6_2abl1")]({
 1: ExtResource("8_k62u4")
 })

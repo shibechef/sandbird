@@ -25,6 +25,7 @@ var copying_col_text_RID: RID
 var copying_vox_text_RID: RID
 var ray_dir_text_RID: RID
 var ray_dot_text_RID: RID
+var nearby_chunk_buffer_RID: RID
 
 var chunk_texture_lookup: Dictionary[Vector3i, int]
 var col_id_to_index_lookup: Dictionary[int, int]
@@ -36,6 +37,7 @@ var radiance_uniform: RDUniform
 var col_uniform: RDUniform
 var ray_dir_uniform: RDUniform
 var ray_dot_uniform: RDUniform
+var nearby_chunks_uniform: RDUniform
 
 var rd: RenderingDevice
 var radiance_shader_spirv: RDShaderSPIRV
@@ -76,6 +78,7 @@ func setup_compute_materials(chunks: int) -> void:
 	col_text_RID = rd.texture_create(col_text_format, RDTextureView.new())
 	copying_col_text_RID = rd.texture_create(copying_col_text_format, RDTextureView.new())	
 	copying_vox_text_RID = rd.texture_create(copying_vox_text_format, RDTextureView.new())	
+	nearby_chunk_buffer_RID = rd.storage_buffer_create(108)
 
 	voxel_uniform = RDUniform.new()	
 	voxel_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
@@ -88,6 +91,10 @@ func setup_compute_materials(chunks: int) -> void:
 	col_uniform = RDUniform.new()
 	col_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	col_uniform.add_id(col_text_RID)
+	
+	nearby_chunks_uniform = RDUniform.new()
+	nearby_chunks_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+	nearby_chunks_uniform.add_id(nearby_chunk_buffer_RID)
 		
 	var cascade_bytes = PackedFloat32Array()
 	cascade_bytes.resize(text_size * text_size * cascades)
@@ -102,27 +109,30 @@ func compute_radiance_texture(chunks: int) -> void:
 	var uniform_set_2_RID := rd.uniform_set_create([col_uniform], radiance_shader_RID, 2)
 	var uniform_set_3_RID := rd.uniform_set_create([ray_dir_uniform], radiance_shader_RID, 3)
 	var uniform_set_4_RID := rd.uniform_set_create([ray_dot_uniform], radiance_shader_RID, 4)
-	
+	var uniform_set_5_RID := rd.uniform_set_create([nearby_chunks_uniform], radiance_shader_RID, 5)
+		
 	for n in range(cascades - 1, -1, -1):
 		var chunk_width: int = roundi(pow(float(text_size*text_size) / 6.0, 1.0/3.0))
-		var push_constant := PackedInt32Array()
-		push_constant.push_back(initial_rays)
-		push_constant.push_back(initial_ray_length)
-		push_constant.push_back(chunk_width)
-		push_constant.push_back(n)
-		push_constant.push_back(cascades)
-		push_constant.push_back(0)
-		push_constant.push_back(0)
-		push_constant.push_back(0)
-		push_constant.push_back(0)
-		push_constant.push_back(0)
-		push_constant.push_back(0)
-		push_constant.push_back(0)
-		push_constant.push_back(0)
-		push_constant.push_back(0)
-		push_constant.push_back(0)
-		push_constant.push_back(0)
-		assert(push_constant.to_byte_array().size() % 16 == 0, "fix the damn push constant")
+
+		var push_constant: PackedByteArray
+		push_constant.resize(36)
+		push_constant.encode_s32(0, initial_rays)
+		push_constant.encode_s32(4, initial_ray_length)
+		push_constant.encode_s32(8, chunk_width)
+		push_constant.encode_s32(12, n)
+		push_constant.encode_s32(16, cascades)
+
+		var pva := PackedVector3Array()
+		pva.append(Vector3(0.0, 0.0, 0.0))
+		pva.append(Vector3(60.0, 60.0, 60.0))
+		push_constant.append_array(pva.to_byte_array())
+		
+		push_constant.resize(64)
+		
+		var nearby_chunks: PackedInt32Array
+		for b in 27:
+			nearby_chunks.append(0)
+		rd.buffer_update(nearby_chunk_buffer_RID, 0, 108, nearby_chunks.to_byte_array())
 		
 		var compute_list := rd.compute_list_begin()
 		var pipeline_RID := rd.compute_pipeline_create(radiance_shader_RID)
@@ -133,8 +143,9 @@ func compute_radiance_texture(chunks: int) -> void:
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_2_RID, 2)
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_3_RID, 3)
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_4_RID, 4)
-		rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.to_byte_array().size())
-
+		rd.compute_list_bind_uniform_set(compute_list, uniform_set_5_RID, 5)
+		rd.compute_list_set_push_constant(compute_list, push_constant, push_constant.size())
+		
 		rd.compute_list_dispatch(compute_list, 288, 288, 1)
 		rd.compute_list_add_barrier(compute_list)
 		rd.compute_list_end()
@@ -427,18 +438,21 @@ func test_shit_math() -> void:
 		var current_rays: int = initial_rays << (cascade * 2)
 		var sample_points: int = int(float(text_size * text_size) / float(current_rays))
 
-		print("cascade: ", cascade, ", rays per probe: ", current_rays, ", total probes: ", sample_points)
-					
+		#print("cascade: ", cascade, ", rays per probe: ", current_rays, ", total probes: ", sample_points)
+		var positions: Array[Vector3]
 		for index in tested_indices:
-			var pos := test_position_sampling(index, cascade)
-			
+			var pos = test_position_sampling(index, cascade)
+			if !positions.has(pos):
+				positions.append(pos)
+			continue
 			var invocation := Vector2i(index % text_size, floori(float(index) / float(text_size)))
 			var voxel_index: int = (invocation.x + invocation.y * text_size)
-				
+			
 			var ray_index: int = voxel_index % current_rays
 			var rays_per_face_axis: int = 1 << cascade
 			var offset: Vector3 = get_ray_direction(ray_index, current_rays, rays_per_face_axis)
-			print(rays_per_face_axis, " ", offset)
+			#print(rays_per_face_axis, " ", offset)
+		print(positions)
 
 func test_position_sampling(index: int, cascade: int) -> Vector3:
 	var invocation := Vector2i(index % text_size, floori(float(index) / float(text_size)))

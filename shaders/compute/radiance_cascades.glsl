@@ -1,7 +1,7 @@
 #[compute]
 #version 450
 
-layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+layout(local_size_x = 8, local_size_y = 6, local_size_z = 1) in;
 
 layout(set = 0, binding = 0, r16ui) uniform restrict uimage2DArray voxel_data;
 layout(set = 1, binding = 0, rgba32f) uniform restrict image2DArray cascade_data;
@@ -10,13 +10,18 @@ layout(set = 3, binding = 0, rgba32f) uniform restrict image2DArray ray_directio
 layout(set = 4, binding = 0, rg32f) uniform restrict image2DArray ray_dot_data;
 
 
+layout(set = 5, binding = 0, std430) restrict buffer NearbyChunks {
+    float chunks[27];
+} nearby_chunks;
+
 layout(push_constant, std430) uniform Params {
 	int starting_rays;
 	int starting_length;
     int vox_chunk_size;
     int cascade_index;
     int cascades;
-    int[8] nearby_chunks;
+    vec3 start_pos;
+    vec3 dimensions;
 } params;
 
 vec3 getEffectiveChunkSize(int cascade_index) {
@@ -58,15 +63,15 @@ vec3 rayTextToVoxelCoords(ivec2 text_pos, int cascade_index) {
     voxel_index = int(float(voxel_index) / 6.0 / float(1 << 2 * cascade_index));
 
     vec3 effective_chunk_size = getEffectiveChunkSize(cascade_index);
-    
-    vec3 center = vec3(0.5) * float(params.vox_chunk_size) / effective_chunk_size;
-    float x = float(voxel_index % int(effective_chunk_size.x));
-    float y = float(voxel_index % int(effective_chunk_size.x * effective_chunk_size.y)) / effective_chunk_size.x;
-    float z = float(voxel_index % int(effective_chunk_size.x * effective_chunk_size.y * effective_chunk_size.z)) / effective_chunk_size.x / effective_chunk_size.y;
+    vec3 dimensions = vec3(params.dimensions);
 
-    vec3 pos = vec3(x, y, z) * float(params.vox_chunk_size) / effective_chunk_size;
+    float x = float(voxel_index % int(dimensions.x));
+    float y = float(voxel_index % int(dimensions.x * dimensions.y)) / dimensions.x;
+    float z = float(voxel_index % int(dimensions.x * dimensions.y * dimensions.z)) / dimensions.x / dimensions.y;
 
-    return pos + center;
+    vec3 pos = vec3(params.start_pos) + vec3(x, y, z) * float(params.vox_chunk_size) / effective_chunk_size;
+
+    return pos + vec3(0.5);
 }
 
 ivec3 isCorner(int voxel_index, int cascade_index) {    
@@ -104,7 +109,7 @@ int voxelCoordsToIndex(vec3 coords, int cascade_index) {
     int rays = params.starting_rays << (cascade_index * 2);
     vec3 effective_chunk_size = getEffectiveChunkSize(cascade_index);
 
-    vec3 center = vec3(0.5) * float(params.vox_chunk_size) / effective_chunk_size;
+    vec3 center = vec3(0.5);
     coords -= center;
 
     coords *= effective_chunk_size / vec3(float(params.vox_chunk_size));
@@ -171,38 +176,47 @@ void main() {
     vec4 col = intersectRay(sample_pos, offset, params.cascade_index);
 
     int upper_cascade = params.cascade_index + 1;
-    int starting_upper_index = voxelCoordsToIndex(sample_pos, upper_cascade);
-    vec3 starting_upper_pos = rayTextToVoxelCoords(indexToTextPos(starting_upper_index), upper_cascade);
-    float x_bias = (sample_pos.x - starting_upper_pos.x);
-    float y_bias = (sample_pos.y - starting_upper_pos.y);
-    float z_bias = (sample_pos.z - starting_upper_pos.z);
-
-    ivec3 corner = isCorner(starting_upper_index, upper_cascade);
-    int[8] points = getNearbyPoints(starting_upper_index, upper_cascade, corner);
-    int point = 0;
-
     vec4 upper_cascade_color = vec4(0.0);
-    rays = params.cascade_index == params.cascades - 1 ? 0 : rays;
+    if (params.cascade_index != params.cascades - 1) {
+        int starting_upper_index = voxelCoordsToIndex(sample_pos, upper_cascade);
+        vec3 starting_upper_pos = rayTextToVoxelCoords(indexToTextPos(starting_upper_index), upper_cascade);
 
-    for (int z = 0; z < 2; z++) {
-        for (int y = 0; y < 2; y++) {
-            for (int x = 0; x < 2; x++) {
-                float bias = max(col.a, 0.0) * ((x == 0 ? 1.0 - x_bias : x_bias) + (y == 0 ? 1.0 - y_bias : y_bias) + (z == 0 ? 1.0 - z_bias : z_bias)) / 3.0;
-                if (upper_cascade != params.cascades) {
-                    for (int ray_num = 0; ray_num < int(float(rays) / 2.0); ray_num += 1) {
-                        vec4 dot_data = imageLoad(ray_dot_data, ivec3(ray_num, ray_index, params.cascade_index));
-                        ivec3 text_pos = ivec3(indexToTextPos(points[point] + int(dot_data.x)), upper_cascade);
-                        upper_cascade_color += imageLoad(cascade_data, text_pos) * bias * dot_data.y;
+        if (sample_pos == starting_upper_pos) {
+            for (int ray_num = 0; ray_num < int(float(rays) / 2.0); ray_num += 1) {
+                vec4 dot_data = imageLoad(ray_dot_data, ivec3(ray_num, ray_index, params.cascade_index));
+                ivec3 text_pos = ivec3(indexToTextPos(int(dot_data.x)), upper_cascade);
+                upper_cascade_color += imageLoad(cascade_data, text_pos) * .25 * dot_data.y;
+            }
+        }
+        else {
+            float x_bias = (sample_pos.x - starting_upper_pos.x);
+            float y_bias = (sample_pos.y - starting_upper_pos.y);
+            float z_bias = (sample_pos.z - starting_upper_pos.z);
+
+            ivec3 corner = isCorner(starting_upper_index, upper_cascade);
+            int[8] points = getNearbyPoints(starting_upper_index, upper_cascade, corner);
+            int point = 0;
+            for (int z = 0; z < 2; z++) {
+                for (int y = 0; y < 2; y++) {
+                    for (int x = 0; x < 2; x++) {
+                        float bias = max(col.a, 0.0) * ((x == 0 ? 1.0 - x_bias : x_bias) + (y == 0 ? 1.0 - y_bias : y_bias) + (z == 0 ? 1.0 - z_bias : z_bias)) / 3.0;
+                        if (upper_cascade != params.cascades) {
+                            for (int ray_num = 0; ray_num < int(float(rays) / 2.0); ray_num += 1) {
+                                vec4 dot_data = imageLoad(ray_dot_data, ivec3(ray_num, ray_index, params.cascade_index));
+                                ivec3 text_pos = ivec3(indexToTextPos(points[point] + int(dot_data.x)), upper_cascade);
+                                upper_cascade_color += imageLoad(cascade_data, text_pos) * bias * dot_data.y;
+                            }
+                        }
+                        point += 1;
                     }
                 }
-                point += 1;
             }
         }
     }
 
-    if (upper_cascade != params.cascades) {
-        col.rgb += upper_cascade_color.rgb / float(rays);
-    }
+    //col.rgb = vec3(.5);
+    //col.rgb += upper_cascade_color.rgb / float(rays);
 
-    imageStore(cascade_data, ivec3(gl_GlobalInvocationID.xy, params.cascade_index), col);
+    ivec2 save_coords = indexToTextPos(voxelCoordsToIndex(sample_pos, 0) + ray_index);
+    imageStore(cascade_data, ivec3(save_coords, params.cascade_index), col);
 }

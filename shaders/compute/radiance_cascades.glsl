@@ -1,7 +1,7 @@
 #[compute]
 #version 450
 
-layout(local_size_x = 8, local_size_y = 6, local_size_z = 1) in;
+layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 
 layout(set = 0, binding = 0, r16ui) uniform restrict uimage2DArray voxel_data;
 layout(set = 1, binding = 0, rgba32f) uniform restrict image2DArray cascade_data;
@@ -9,9 +9,8 @@ layout(set = 2, binding = 0, rgba32f) uniform restrict image2D col_data;
 layout(set = 3, binding = 0, rgba32f) uniform restrict image2DArray ray_direction_data;
 layout(set = 4, binding = 0, rg32f) uniform restrict image2DArray ray_dot_data;
 
-
 layout(set = 5, binding = 0, std430) restrict buffer NearbyChunks {
-    float chunks[27];
+    float chunks[8];
 } nearby_chunks;
 
 layout(push_constant, std430) uniform Params {
@@ -20,6 +19,7 @@ layout(push_constant, std430) uniform Params {
     int vox_chunk_size;
     int cascade_index;
     int cascades;
+    int invocations_sqrt;
     vec3 start_pos;
     vec3 dimensions;
 } params;
@@ -59,7 +59,7 @@ ivec2 indexToTextPos(int index) {
 
 vec3 rayTextToVoxelCoords(ivec2 text_pos, int cascade_index) {
     ivec3 radiance_text_size = imageSize(cascade_data);
-    int voxel_index = text_pos.x + text_pos.y * radiance_text_size.x;
+    int voxel_index = text_pos.x + text_pos.y * params.invocations_sqrt * 8;
     voxel_index = int(float(voxel_index) / 6.0 / float(1 << 2 * cascade_index));
 
     vec3 effective_chunk_size = getEffectiveChunkSize(cascade_index);
@@ -168,7 +168,7 @@ void main() {
 
     int rays = params.starting_rays << (params.cascade_index * 2);
 
-    int text_index = int(gl_GlobalInvocationID.x) + int(gl_GlobalInvocationID.y) * radiance_text_size.x;
+    int text_index = int(gl_GlobalInvocationID.x) + int(gl_GlobalInvocationID.y) * params.invocations_sqrt * 8;
     int ray_index = text_index % rays;
 
     vec3 sample_pos = rayTextToVoxelCoords(ivec2(gl_GlobalInvocationID.xy), params.cascade_index);
@@ -216,6 +216,7 @@ void main() {
 
     //col.rgb = vec3(.5);
     //col.rgb += upper_cascade_color.rgb / float(rays);
+    col.rgb = sample_pos / 96.0;
 
     ivec2 save_coords = indexToTextPos(voxelCoordsToIndex(sample_pos, 0) + ray_index);
     imageStore(cascade_data, ivec3(save_coords, params.cascade_index), col);

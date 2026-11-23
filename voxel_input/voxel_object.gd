@@ -55,7 +55,7 @@ func update_mesh_chunks() -> void:
 	WorkerThreadPool.wait_for_group_task_completion(id)
 	edited_chunks.clear()
 	
-	cascade_solver.compute_radiance_texture(1)
+	cascade_solver.compute_radiance_texture(Vector3.ONE * 10.0, Vector3.ONE * 80.0)
 	#var texture_array: Texture2DArray = get_texture_array()
 	#cascade_debug.set_shader_parameter("voxels", texture_array)
 
@@ -105,16 +105,11 @@ func change_voxels(voxels: Dictionary[Vector3i, VoxelData]) -> void:
 		if !edited_chunks.has(mesh_chunk):
 			edited_chunks.append(mesh_chunk)
 		
-		#var tima = Time.get_ticks_usec()
 		if voxels[pos] != null:
 			voxel_grid[pos] = voxels[pos]
 			cascade_solver.update_voxel_text(pos, voxels[pos])
 		else:
 			cascade_solver.update_voxel_text(pos, null)
-			
-		#print(float(Time.get_ticks_usec() - tima) / 1000.0, " hai")
-		
-		
 	
 func create_BB_outline() -> void:
 	var mesh_data = mesh_system.create_box(Vector3.ZERO, Vector3(dimensions) + Vector3.ONE * .005)

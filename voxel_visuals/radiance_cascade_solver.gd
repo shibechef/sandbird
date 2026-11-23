@@ -103,36 +103,45 @@ func setup_compute_materials(chunks: int) -> void:
 	for chunk in chunks:
 		rd.texture_update(radiance_text_RID, chunk, bytes_2)
 
-func compute_radiance_texture(chunks: int) -> void:	
+func compute_radiance_texture(from_pos: Vector3, to_pos: Vector3) -> void:	
 	var uniform_set_0_RID := rd.uniform_set_create([voxel_uniform], radiance_shader_RID, 0)
 	var uniform_set_1_RID := rd.uniform_set_create([radiance_uniform], radiance_shader_RID, 1)
 	var uniform_set_2_RID := rd.uniform_set_create([col_uniform], radiance_shader_RID, 2)
 	var uniform_set_3_RID := rd.uniform_set_create([ray_dir_uniform], radiance_shader_RID, 3)
 	var uniform_set_4_RID := rd.uniform_set_create([ray_dot_uniform], radiance_shader_RID, 4)
 	var uniform_set_5_RID := rd.uniform_set_create([nearby_chunks_uniform], radiance_shader_RID, 5)
-		
+	
+	var pairs: Array[Array] = get_cascade_bounds(from_pos, to_pos)
+	
 	for n in range(cascades - 1, -1, -1):
 		var chunk_width: int = roundi(pow(float(text_size*text_size) / 6.0, 1.0/3.0))
+		var rays: int = initial_rays << (n * 2)
+		var start_pos: Vector3 = pairs[n][0]
+		var dimensions: Vector3 = pairs[n][1]
+		var total_points: int = int(dimensions.x * dimensions.y * dimensions.z)
+		var invocations_sqrt: int = ceili(sqrt(float(rays * total_points) / 64.0))
+		print(start_pos, " ", rays, " ", dimensions,  " ", total_points, " ", invocations_sqrt)
 
 		var push_constant: PackedByteArray
-		push_constant.resize(36)
+		push_constant.resize(32)
 		push_constant.encode_s32(0, initial_rays)
 		push_constant.encode_s32(4, initial_ray_length)
 		push_constant.encode_s32(8, chunk_width)
 		push_constant.encode_s32(12, n)
 		push_constant.encode_s32(16, cascades)
+		push_constant.encode_s32(20, invocations_sqrt)
 
-		var pva := PackedVector3Array()
-		pva.append(Vector3(0.0, 0.0, 0.0))
-		pva.append(Vector3(60.0, 60.0, 60.0))
+		var pva := PackedVector4Array()
+		pva.append(Vector4(start_pos.x, start_pos.y, start_pos.z, 0.0))
+		pva.append(Vector4(dimensions.x, dimensions.y, dimensions.z, 0.0))
 		push_constant.append_array(pva.to_byte_array())
 		
 		push_constant.resize(64)
 		
 		var nearby_chunks: PackedInt32Array
-		for b in 27:
+		for b in 8:
 			nearby_chunks.append(0)
-		rd.buffer_update(nearby_chunk_buffer_RID, 0, 108, nearby_chunks.to_byte_array())
+		rd.buffer_update(nearby_chunk_buffer_RID, 0, 32, nearby_chunks.to_byte_array())
 		
 		var compute_list := rd.compute_list_begin()
 		var pipeline_RID := rd.compute_pipeline_create(radiance_shader_RID)
@@ -146,7 +155,7 @@ func compute_radiance_texture(chunks: int) -> void:
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_5_RID, 5)
 		rd.compute_list_set_push_constant(compute_list, push_constant, push_constant.size())
 		
-		rd.compute_list_dispatch(compute_list, 288, 288, 1)
+		rd.compute_list_dispatch(compute_list, invocations_sqrt, invocations_sqrt, 1)
 		rd.compute_list_add_barrier(compute_list)
 		rd.compute_list_end()
 					
@@ -482,6 +491,30 @@ func test_position_sampling(index: int, cascade: int) -> Vector3:
 	sample_pos = sample_pos + sample_center
 	
 	return sample_pos
+
+func get_cascade_bounds(start: Vector3, end: Vector3) -> Array:
+	var pairs: Array[Array]
+	var max_relative_chunk_size := Vector3(
+			1.0 if (cascades - 1) % 3 == 0 else 0.5,
+			.25 if (cascades - 1) % 3 == 2 else 1.0,
+			1.0 if (cascades - 1) % 3 == 0 else 0.5
+		)
+	max_relative_chunk_size /= float(1 << 2 * int(floor(float((cascades - 1)) / 3.0)))
+	
+	start = floor(start * max_relative_chunk_size) / max_relative_chunk_size
+	end = ceil(end * max_relative_chunk_size) / max_relative_chunk_size
+
+	for cascade in cascades:
+		var relative_chunk_size := Vector3(
+			1.0 if cascade % 3 == 0 else 0.5,
+			.25 if cascade % 3 == 2 else 1.0,
+			1.0 if cascade % 3 == 0 else 0.5
+		)
+		relative_chunk_size /= float(1 << 2 * int(floor(float(cascade) / 3.0)))
+		var dimensions: Vector3 = (end - start) * relative_chunk_size
+		pairs.append([start, dimensions])
+
+	return pairs
 
 func add_chunk(coords: Vector3i) -> void:
 	var chunk_num: int = missing_chunks.pop_back()

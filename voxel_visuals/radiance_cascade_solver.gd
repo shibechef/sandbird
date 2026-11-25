@@ -134,7 +134,7 @@ func compute_radiance_texture(from_pos: Vector3, to_pos: Vector3) -> void:
 	var end: Vector3 = ceil(to_pos * max_relative_chunk_size) / max_relative_chunk_size
 	var base_dimensions: Vector3i = end - start
 	var invocations_sqrt: int = base_dimensions.x * base_dimensions.y * base_dimensions.z * (initial_rays << ((cascades - 1) * 2))
-	invocations_sqrt = int(sqrt(float(invocations_sqrt)) / 8.0)
+	invocations_sqrt = int(sqrt(float(invocations_sqrt)) / 64.0)
 		
 	for n in range(cascades - 1, -1, -1):
 		var chunk_width: int = roundi(pow(float(text_size*text_size) / 6.0, 1.0/3.0))

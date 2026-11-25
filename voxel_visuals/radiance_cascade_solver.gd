@@ -17,6 +17,7 @@ var copying_col_text_format: RDTextureFormat
 var copying_vox_text_format: RDTextureFormat
 var ray_dir_text_format: RDTextureFormat
 var ray_dot_text_format: RDTextureFormat
+var radiance_inbetweens_text_format: RDTextureFormat
 
 var vox_text_RID: RID
 var radiance_text_RID: RID
@@ -25,6 +26,7 @@ var copying_col_text_RID: RID
 var copying_vox_text_RID: RID
 var ray_dir_text_RID: RID
 var ray_dot_text_RID: RID
+var radiance_inbetweens_text_RID: RID
 var nearby_chunk_buffer_RID: RID
 
 var chunk_texture_lookup: Dictionary[Vector3i, int]
@@ -37,6 +39,7 @@ var radiance_uniform: RDUniform
 var col_uniform: RDUniform
 var ray_dir_uniform: RDUniform
 var ray_dot_uniform: RDUniform
+var radiance_inbetweens_uniform: RDUniform
 var nearby_chunks_uniform: RDUniform
 
 var rd: RenderingDevice
@@ -60,7 +63,7 @@ func _ready():
 		
 	for i in 65536:
 		missing_colors.append(i)
-	var chunks: int = 1
+	var chunks: int = 5
 	for chunk in chunks:
 		missing_chunks.append(chunk)
 	rd = RenderingServer.get_rendering_device()
@@ -78,6 +81,7 @@ func setup_compute_materials(chunks: int) -> void:
 	col_text_RID = rd.texture_create(col_text_format, RDTextureView.new())
 	copying_col_text_RID = rd.texture_create(copying_col_text_format, RDTextureView.new())	
 	copying_vox_text_RID = rd.texture_create(copying_vox_text_format, RDTextureView.new())	
+	radiance_inbetweens_text_RID = rd.texture_create(radiance_inbetweens_text_format, RDTextureView.new())	
 	nearby_chunk_buffer_RID = rd.storage_buffer_create(108)
 
 	voxel_uniform = RDUniform.new()	
@@ -92,16 +96,23 @@ func setup_compute_materials(chunks: int) -> void:
 	col_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	col_uniform.add_id(col_text_RID)
 	
+	radiance_inbetweens_uniform = RDUniform.new()
+	radiance_inbetweens_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
+	radiance_inbetweens_uniform.add_id(radiance_inbetweens_text_RID)
+	
 	nearby_chunks_uniform = RDUniform.new()
 	nearby_chunks_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	nearby_chunks_uniform.add_id(nearby_chunk_buffer_RID)
 		
 	var cascade_bytes = PackedFloat32Array()
-	cascade_bytes.resize(text_size * text_size * cascades)
+	cascade_bytes.resize(text_size * text_size * 4)
 	cascade_bytes.fill(0.0) 
-	var bytes_2: PackedByteArray = cascade_bytes.to_byte_array() 
-	for chunk in chunks:
-		rd.texture_update(radiance_text_RID, chunk, bytes_2)
+	var bytes: PackedByteArray = cascade_bytes.to_byte_array() 
+	for chunk in chunks + 8:
+		rd.texture_update(radiance_text_RID, chunk, bytes)
+	
+	for chunk in 8:
+		rd.texture_update(radiance_inbetweens_text_RID, chunk, bytes)
 
 func compute_radiance_texture(from_pos: Vector3, to_pos: Vector3) -> void:	
 	var uniform_set_0_RID := rd.uniform_set_create([voxel_uniform], radiance_shader_RID, 0)
@@ -109,19 +120,26 @@ func compute_radiance_texture(from_pos: Vector3, to_pos: Vector3) -> void:
 	var uniform_set_2_RID := rd.uniform_set_create([col_uniform], radiance_shader_RID, 2)
 	var uniform_set_3_RID := rd.uniform_set_create([ray_dir_uniform], radiance_shader_RID, 3)
 	var uniform_set_4_RID := rd.uniform_set_create([ray_dot_uniform], radiance_shader_RID, 4)
-	var uniform_set_5_RID := rd.uniform_set_create([nearby_chunks_uniform], radiance_shader_RID, 5)
+	var uniform_set_5_RID := rd.uniform_set_create([radiance_inbetweens_uniform], radiance_shader_RID, 5)
+	var uniform_set_6_RID := rd.uniform_set_create([nearby_chunks_uniform], radiance_shader_RID, 6)
 	
-	var pairs: Array[Array] = get_cascade_bounds(from_pos, to_pos)
+	var max_relative_chunk_size := Vector3(
+		1.0 if (cascades - 1) % 3 == 0 else 0.5,
+		.25 if (cascades - 1) % 3 == 2 else 1.0,
+		1.0 if (cascades - 1) % 3 == 0 else 0.5
+	)
+	max_relative_chunk_size /= float(1 << 2 * int(floor(float((cascades - 1)) / 3.0)))
 	
+	var start: Vector3 = floor(from_pos * max_relative_chunk_size) / max_relative_chunk_size
+	var end: Vector3 = ceil(to_pos * max_relative_chunk_size) / max_relative_chunk_size
+	var base_dimensions: Vector3i = end - start
+	var invocations_sqrt: int = base_dimensions.x * base_dimensions.y * base_dimensions.z * (initial_rays << ((cascades - 1) * 2))
+	invocations_sqrt = int(sqrt(float(invocations_sqrt)) / 8.0)
+		
 	for n in range(cascades - 1, -1, -1):
 		var chunk_width: int = roundi(pow(float(text_size*text_size) / 6.0, 1.0/3.0))
-		var rays: int = initial_rays << (n * 2)
-		var start_pos: Vector3 = pairs[n][0]
-		var dimensions: Vector3 = pairs[n][1]
-		var total_points: int = int(dimensions.x * dimensions.y * dimensions.z)
-		var invocations_sqrt: int = ceili(sqrt(float(rays * total_points) / 64.0))
-		print(start_pos, " ", rays, " ", dimensions,  " ", total_points, " ", invocations_sqrt)
-
+		var start_pos: Vector3 = start
+		var dimensions: Vector3 = base_dimensions
 		var push_constant: PackedByteArray
 		push_constant.resize(32)
 		push_constant.encode_s32(0, initial_rays)
@@ -153,6 +171,7 @@ func compute_radiance_texture(from_pos: Vector3, to_pos: Vector3) -> void:
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_3_RID, 3)
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_4_RID, 4)
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_5_RID, 5)
+		rd.compute_list_bind_uniform_set(compute_list, uniform_set_6_RID, 6)
 		rd.compute_list_set_push_constant(compute_list, push_constant, push_constant.size())
 		
 		rd.compute_list_dispatch(compute_list, invocations_sqrt, invocations_sqrt, 1)
@@ -329,7 +348,7 @@ func setup_text_formats(chunks: int) -> void:
 	radiance_text_format.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
 	radiance_text_format.width = text_size
 	radiance_text_format.height = text_size
-	radiance_text_format.array_layers = chunks * cascades
+	radiance_text_format.array_layers = chunks + 8
 	radiance_text_format.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
 	radiance_text_format.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
@@ -390,7 +409,17 @@ func setup_text_formats(chunks: int) -> void:
 	ray_dot_text_format.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
 	RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
-
+	
+	radiance_inbetweens_text_format = RDTextureFormat.new()
+	radiance_inbetweens_text_format.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
+	radiance_inbetweens_text_format.width = text_size
+	radiance_inbetweens_text_format.height = text_size
+	radiance_inbetweens_text_format.array_layers = 8
+	radiance_inbetweens_text_format.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
+	radiance_inbetweens_text_format.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + \
+	RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + \
+	RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
+	
 func display_debug_visuals(cascade: int) -> void:
 	var mesh_instance := MeshInstance3D.new()
 	mesh_instance.mesh = ArrayMesh.new()
@@ -491,30 +520,6 @@ func test_position_sampling(index: int, cascade: int) -> Vector3:
 	sample_pos = sample_pos + sample_center
 	
 	return sample_pos
-
-func get_cascade_bounds(start: Vector3, end: Vector3) -> Array:
-	var pairs: Array[Array]
-	var max_relative_chunk_size := Vector3(
-			1.0 if (cascades - 1) % 3 == 0 else 0.5,
-			.25 if (cascades - 1) % 3 == 2 else 1.0,
-			1.0 if (cascades - 1) % 3 == 0 else 0.5
-		)
-	max_relative_chunk_size /= float(1 << 2 * int(floor(float((cascades - 1)) / 3.0)))
-	
-	start = floor(start * max_relative_chunk_size) / max_relative_chunk_size
-	end = ceil(end * max_relative_chunk_size) / max_relative_chunk_size
-
-	for cascade in cascades:
-		var relative_chunk_size := Vector3(
-			1.0 if cascade % 3 == 0 else 0.5,
-			.25 if cascade % 3 == 2 else 1.0,
-			1.0 if cascade % 3 == 0 else 0.5
-		)
-		relative_chunk_size /= float(1 << 2 * int(floor(float(cascade) / 3.0)))
-		var dimensions: Vector3 = (end - start) * relative_chunk_size
-		pairs.append([start, dimensions])
-
-	return pairs
 
 func add_chunk(coords: Vector3i) -> void:
 	var chunk_num: int = missing_chunks.pop_back()

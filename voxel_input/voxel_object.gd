@@ -55,7 +55,7 @@ func update_mesh_chunks() -> void:
 	WorkerThreadPool.wait_for_group_task_completion(id)
 	edited_chunks.clear()
 	
-	cascade_solver.compute_radiance_texture(Vector3.ZERO, Vector3.ONE * 95.0)
+	cascade_solver.compute_radiance_texture(Vector3.ONE * 10.0, Vector3.ONE * 80.0)
 	#var texture_array: Texture2DArray = get_texture_array()
 	#cascade_debug.set_shader_parameter("voxels", texture_array)
 

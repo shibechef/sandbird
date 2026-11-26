@@ -185,15 +185,13 @@ void main() {
         if (sample_pos == starting_upper_pos) {
             for (int ray_num = 0; ray_num < int(float(rays) / 2.0); ray_num += 1) {
                 vec4 dot_data = imageLoad(ray_dot_data, ivec3(ray_num, ray_index, params.cascade_index));
-                ivec3 text_pos = ivec3(indexToTextPos(int(dot_data.x)), upper_cascade);
-                //if (upper_cascade % 2 == 0) {
-                text_pos.z = upper_cascade;
-                upper_cascade_color += imageLoad(cascade_data, text_pos) * .25 * dot_data.y;
-                //}
-                //else {
-                //    text_pos.z = upper_cascade;
-                //    upper_cascade_color += imageLoad(cascade_data, text_pos) * .25 * dot_data.y;
-                //}
+                ivec3 text_pos = ivec3(indexToTextPos(int(dot_data.x)), 0);
+                if (upper_cascade % 2 == 0) {
+                    upper_cascade_color += imageLoad(cascade_data, text_pos) * .25 * dot_data.y;
+                }
+                else {
+                    upper_cascade_color += imageLoad(cascade_inbetweens, text_pos) * .25 * dot_data.y;
+                }
             }
         }
         else {
@@ -211,14 +209,13 @@ void main() {
                         if (upper_cascade != params.cascades) {
                             for (int ray_num = 0; ray_num < int(float(rays) / 2.0); ray_num += 1) {
                                 vec4 dot_data = imageLoad(ray_dot_data, ivec3(ray_num, ray_index, params.cascade_index));
-                                ivec3 text_pos = ivec3(indexToTextPos(points[point] + int(dot_data.x)), upper_cascade);
-                                //if (upper_cascade % 2 == 0) {
-                                upper_cascade_color += imageLoad(cascade_data, text_pos) * bias * dot_data.y;
-                                //}
-                                //else {
-                                //    text_pos.z = upper_cascade;
-                                //    upper_cascade_color += imageLoad(cascade_data, text_pos) * bias * dot_data.y;
-                                //}                            
+                                ivec3 text_pos = ivec3(indexToTextPos(points[point] + int(dot_data.x)), 0);
+                                if (upper_cascade % 2 == 0) {
+                                    upper_cascade_color += imageLoad(cascade_data, text_pos) * bias * dot_data.y;
+                                }
+                                else {
+                                    upper_cascade_color += imageLoad(cascade_inbetweens, text_pos) * bias * dot_data.y;
+                                }                            
                             }
                         }
                         point += 1;
@@ -234,10 +231,10 @@ void main() {
 
     ivec2 save_coords = indexToTextPos(voxelCoordsToIndex(sample_pos, params.cascade_index) + ray_index);
 
-    //if (params.cascade_index % 2 == 0) {
-    imageStore(cascade_data, ivec3(save_coords, params.cascade_index), col);
-    //}
-    //else {
-    //    imageStore(cascade_data, ivec3(save_coords, params.cascade_index), col);
-    //}
+    if (params.cascade_index % 2 == 0) {
+        imageStore(cascade_data, ivec3(save_coords, 0), col);
+    }
+    else {
+        imageStore(cascade_inbetweens, ivec3(save_coords, 0), col);
+    }
 }
